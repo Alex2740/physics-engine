@@ -3,6 +3,8 @@
 // If you are new to Dear ImGui, read documentation from the docs/ folder + read the top of imgui.cpp.
 // Read online: https://github.com/ocornut/imgui/tree/master/docs
 
+#include "engine/Particule.h"
+#include "engine/Vector3.h"
 #include "imgui.h"
 #include "imgui_impl_glfw.h"
 #include "imgui_impl_opengl3.h"
@@ -19,6 +21,25 @@
 #pragma comment(lib, "legacy_stdio_definitions")
 #endif
 
+void drawParticle(Particule& p)
+{
+    glClear(GL_COLOR_BUFFER_BIT);
+
+    // Drawing is done by specifying a sequence of vertices.  The way these
+    // vertices are connected (or not connected) depends on the argument to
+    // glBegin.  GL_POLYGON constructs a filled polygon.
+   
+    glEnable(GL_POINT_SMOOTH);
+    glPointSize(10.0f);
+    glBegin(GL_POINTS);
+    glVertex3f(p.position->x, p.position->y,p.position->z); glColor3f(255, 0, 0); 
+    glEnd();
+
+
+    // Flush drawing command buffer to make drawing happen as soon as possible.
+    glFlush();
+}
+
 static void glfw_error_callback(int error, const char* description)
 {
     fprintf(stderr, "Glfw Error %d: %s\n", error, description);
@@ -26,6 +47,14 @@ static void glfw_error_callback(int error, const char* description)
 
 int main(int, char**)
 {
+
+    float g = 10;
+    float startingY = 100;
+    float masse = 1;
+    float dt = 0.001f;
+    Vector3* gravity = new Vector3(0, -g * masse, 0);
+    Particule* p = new Particule(new Vector3(0, 0, 0), masse);
+
     // Setup window
     glfwSetErrorCallback(glfw_error_callback);
     if (!glfwInit())
@@ -94,7 +123,7 @@ int main(int, char**)
     // Our state
     bool show_demo_window = true;
     bool show_another_window = false;
-    ImVec4 clear_color = ImVec4(0.45f, 0.55f, 0.60f, 1.00f);
+    ImVec4 clear_color = ImVec4(0.0f, 0.0f, 0.0f, 0.0f);
 
     // Main loop
     while (!glfwWindowShouldClose(window))
@@ -156,6 +185,13 @@ int main(int, char**)
         glClearColor(clear_color.x * clear_color.w, clear_color.y * clear_color.w, clear_color.z * clear_color.w, clear_color.w);
         glClear(GL_COLOR_BUFFER_BIT);
         ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
+
+        
+        
+        p->integrate(gravity, dt);
+        
+        drawParticle(*p);
+        
 
         glfwSwapBuffers(window);
     }

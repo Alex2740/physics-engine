@@ -26,10 +26,10 @@ public:
     void setY(float _y);
     void setZ(float _z);
 
-    Vector3& operator=(const Vector3& other);
-    Vector3& operator+=(const Vector3& other);
+    Vector3 operator=(const Vector3& other);
+    Vector3 operator+=(const Vector3& other);
     Vector3 operator+(const Vector3& other);
-    Vector3& operator-=(const Vector3& other);
+    Vector3 operator-=(const Vector3& other);
     Vector3 operator-(const Vector3& other);
     Vector3 operator*(const float& other);
     Vector3 operator/(const float& other);

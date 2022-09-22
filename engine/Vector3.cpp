@@ -39,26 +39,26 @@ void Vector3::setZ(float _z)
 	setMagnitude();
 }
 
-Vector3& Vector3::operator=(const Vector3& other)
+Vector3 Vector3::operator=(const Vector3& other)
 {
-	x_ = other.x;
-	y_ = other.y;
-	y_ = other.y;
+	this->x_ = other.x;
+	this->y_ = other.y;
+	this->y_ = other.y;
 
 	setMagnitude();
 
 	return *this;
 }
 
-Vector3& Vector3::operator+=(const Vector3& other)
+Vector3 Vector3::operator+=(const Vector3& other)
 {
-	x_ += other.x;
-	y_ += other.y;
-	y_ += other.y;
+	this->x_ += other.x;
+	this->y_ += other.y;
+	this->y_ += other.y;
 
 	setMagnitude();
 
-	return *this;
+	return Vector3(this->x_ + other.x, this->y_ + other.y, this->z_ + other.z);
 }
 
 Vector3 Vector3::operator+(const Vector3& other)
@@ -68,7 +68,7 @@ Vector3 Vector3::operator+(const Vector3& other)
 	return result;
 }
 
-Vector3& Vector3::operator-=(const Vector3& other)
+Vector3 Vector3::operator-=(const Vector3& other)
 {
 	x_ -= other.x;
 	y_ -= other.y;
