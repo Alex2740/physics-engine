@@ -26,9 +26,6 @@
     <ClCompile Include="engine\Particule.cpp">
       <Filter>engine</Filter>
     </ClCompile>
-    <ClCompile Include="engine\Projet Moteur de Jeu.cpp">
-      <Filter>engine</Filter>
-    </ClCompile>
     <ClCompile Include="engine\Vector3.cpp">
       <Filter>engine</Filter>
     </ClCompile>

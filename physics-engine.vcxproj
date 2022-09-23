@@ -156,7 +156,6 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="engine\Particule.cpp" />
-    <ClCompile Include="engine\Projet Moteur de Jeu.cpp" />
     <ClCompile Include="engine\Vector3.cpp" />
     <ClCompile Include="imgui\imgui.cpp" />
     <ClCompile Include="imgui\imgui_demo.cpp" />
