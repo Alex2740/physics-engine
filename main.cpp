@@ -9,6 +9,7 @@
 #include "imgui_impl_glfw.h"
 #include "imgui_impl_opengl3.h"
 #include <stdio.h>
+#include <vector>
 #if defined(IMGUI_IMPL_OPENGL_ES2)
 #include <GLES2/gl2.h>
 #endif
@@ -21,22 +22,22 @@
 #pragma comment(lib, "legacy_stdio_definitions")
 #endif
 
-void drawParticle(Particule& p)
-{
-    //glClear(GL_COLOR_BUFFER_BIT);
+struct ColoredParticule {
+    Particule* particule;
+    int red;
+    int green;
+    int blue;
+};
 
-    // Drawing is done by specifying a sequence of vertices.  The way these
-    // vertices are connected (or not connected) depends on the argument to
-    // glBegin.  GL_POLYGON constructs a filled polygon.
-   
+void drawParticle(ColoredParticule cp)
+{   
     glEnable(GL_POINT_SMOOTH);
     glPointSize(10.0f);
     glBegin(GL_POINTS);
-    glVertex3f(p.position->x, p.position->y,p.position->z); glColor3f(255, 0, 0); 
+    glVertex3f(cp.particule->position->x, cp.particule->position->y, cp.particule->position->z);
+    glColor3f(cp.red, cp.green, cp.blue); 
     glEnd();
 
-
-    // Flush drawing command buffer to make drawing happen as soon as possible.
     glFlush();
 }
 
@@ -47,13 +48,10 @@ static void glfw_error_callback(int error, const char* description)
 
 int main(int, char**)
 {
-
     float g = 10;
-    float startingY = 100;
-    float masse = 100;
     float dt = 0.001f;
-    Vector3* gravity = new Vector3(0, -g * masse, 0);
-    Particule* p = new Particule(new Vector3(0, 0, 0), masse);
+
+    std::vector<ColoredParticule> particules = {};
 
     // Setup window
     glfwSetErrorCallback(glfw_error_callback);
@@ -84,7 +82,9 @@ int main(int, char**)
 #endif
 
     // Create window with graphics context
-    GLFWwindow* window = glfwCreateWindow(1280, 720, "Dear ImGui GLFW+OpenGL3 example", NULL, NULL);
+    GLFWmonitor* monitor = glfwGetPrimaryMonitor();
+    GLFWwindow* window = glfwCreateWindow(1280, 720, "Physic Engine Demo", monitor, NULL);
+
     if (window == NULL)
         return 1;
     glfwMakeContextCurrent(window);
@@ -105,81 +105,64 @@ int main(int, char**)
     ImGui_ImplGlfw_InitForOpenGL(window, true);
     ImGui_ImplOpenGL3_Init(glsl_version);
 
-    // Load Fonts
-    // - If no fonts are loaded, dear imgui will use the default font. You can also load multiple fonts and use ImGui::PushFont()/PopFont() to select them.
-    // - AddFontFromFileTTF() will return the ImFont* so you can store it if you need to select the font among multiple.
-    // - If the file cannot be loaded, the function will return NULL. Please handle those errors in your application (e.g. use an assertion, or display an error and quit).
-    // - The fonts will be rasterized at a given size (w/ oversampling) and stored into a texture when calling ImFontAtlas::Build()/GetTexDataAsXXXX(), which ImGui_ImplXXXX_NewFrame below will call.
-    // - Read 'docs/FONTS.md' for more instructions and details.
-    // - Remember that in C/C++ if you want to include a backslash \ in a string literal you need to write a double backslash \\ !
-    //io.Fonts->AddFontDefault();
-    //io.Fonts->AddFontFromFileTTF("../../misc/fonts/Roboto-Medium.ttf", 16.0f);
-    //io.Fonts->AddFontFromFileTTF("../../misc/fonts/Cousine-Regular.ttf", 15.0f);
-    //io.Fonts->AddFontFromFileTTF("../../misc/fonts/DroidSans.ttf", 16.0f);
-    //io.Fonts->AddFontFromFileTTF("../../misc/fonts/ProggyTiny.ttf", 10.0f);
-    //ImFont* font = io.Fonts->AddFontFromFileTTF("c:\\Windows\\Fonts\\ArialUni.ttf", 18.0f, NULL, io.Fonts->GetGlyphRangesJapanese());
-    //IM_ASSERT(font != NULL);
-
     // Our state
-    bool show_demo_window = true;
-    bool show_another_window = true;
     ImVec4 clear_color = ImVec4(0.0f, 0.0f, 0.0f, 0.0f);
+    float base_force = 10000;
 
     // Main loop
     while (!glfwWindowShouldClose(window))
     {
-        // Poll and handle events (inputs, window resize, etc.)
-        // You can read the io.WantCaptureMouse, io.WantCaptureKeyboard flags to tell if dear imgui wants to use your inputs.
-        // - When io.WantCaptureMouse is true, do not dispatch mouse input data to your main application, or clear/overwrite your copy of the mouse data.
-        // - When io.WantCaptureKeyboard is true, do not dispatch keyboard input data to your main application, or clear/overwrite your copy of the keyboard data.
-        // Generally you may always pass all inputs to dear imgui, and hide them from your application based on those two flags.
         glfwPollEvents();
 
-        // Start the Dear ImGui frame
         ImGui_ImplOpenGL3_NewFrame();
         ImGui_ImplGlfw_NewFrame();
         ImGui::NewFrame();
 
-        // 1. Show the big demo window (Most of the sample code is in ImGui::ShowDemoWindow()! You can browse its code to learn more about Dear ImGui!).
-        if (show_demo_window)
-            ImGui::ShowDemoWindow(&show_demo_window);
-
-        // 2. Show a simple window that we create ourselves. We use a Begin/End pair to create a named window.
         {
-            static float f = 0.0f;
-            static int counter = 0;
+            ImGui::Begin("Shooter !");
 
-            ImGui::Begin("Hello, world!");                          // Create a window called "Hello, world!" and append into it.
+            ImGui::Text("Choose the projectile.");
 
-            ImGui::Text("This is some useful text.");               // Display some text (you can use a format strings too)
-            ImGui::Checkbox("Demo Window", &show_demo_window);      // Edit bools storing our window open/close state
-            ImGui::Checkbox("Another Window", &show_another_window);
+            if (ImGui::Button("Dirt")) {
+                ColoredParticule cp = {
+                    new Particule(new Vector3(-1, -0.9f, 0), 5),
+                    255,
+                    255,
+                    255,
+                };
+                particules.push_back(cp);
+                Vector3* forces = new Vector3(base_force, -g * cp.particule->masse() + base_force, 0);
+                cp.particule->integrate(forces, dt);
+            }
 
-            ImGui::SliderFloat("float", &f, 0.0f, 1.0f);            // Edit 1 float using a slider from 0.0f to 1.0f
-            ImGui::ColorEdit3("clear color", (float*)&clear_color); // Edit 3 floats representing a color
+            if (ImGui::Button("Paper")) {
+                ColoredParticule cp = {
+                    new Particule(new Vector3(-1, -0.9f, 0), 3.5),
+                    255,
+                    255,
+                    255,
+                };
+                particules.push_back(cp);
+                Vector3* forces = new Vector3(base_force, -g * cp.particule->masse() + base_force, 0);
+                cp.particule->integrate(forces, dt);
+            }
 
-            if (ImGui::Button("Button"))                            // Buttons return true when clicked (most widgets return true when edited/activated)
-                counter++;
-            ImGui::SameLine();
-            ImGui::Text("counter = %d", counter);
+            if (ImGui::Button("Steel")) {
+                ColoredParticule cp = {
+                    new Particule(new Vector3(-1, -0.9f, 0), 10),
+                    255,
+                    255,
+                    255,
+                };
+                particules.push_back(cp);
+                Vector3* forces = new Vector3(base_force, -g * cp.particule->masse() + base_force, 0);
+                cp.particule->integrate(forces, dt);
+            }
 
-            ImGui::Text("Application average %.3f ms/frame (%.1f FPS)", 1000.0f / ImGui::GetIO().Framerate, ImGui::GetIO().Framerate);
-            ImGui::End();
-        }
-
-        // 3. Show another simple window.
-        if (show_another_window)
-        {
-            ImGui::Begin("Another Window", &show_another_window);   // Pass a pointer to our bool variable (the window will have a closing button that will clear the bool when clicked)
-            ImGui::Text("Hello from another window!");
-            if (ImGui::Button("Close Me"))
-                show_another_window = false;
             ImGui::End();
         }
 
         // Rendering
-
-
         ImGui::Render();
         int display_w, display_h;
         glfwGetFramebufferSize(window, &display_w, &display_h);
@@ -188,9 +171,20 @@ int main(int, char**)
         glClear(GL_COLOR_BUFFER_BIT);
         ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
 
-        p->integrate(gravity, dt);
-        drawParticle(*p);
-        
+        for (int i = 0; i < particules.size(); i++)
+        {
+            ColoredParticule cp = particules[i];
+
+            cp.particule->position->print();
+            if (cp.particule->position->y < -1.2) {
+                particules.erase(particules.begin() + i);
+            }
+
+            Vector3* gravity = new Vector3(0, -g * cp.particule->masse(), 0);
+            cp.particule->integrate(gravity, dt);
+
+            drawParticle(cp);
+        }
 
         glfwSwapBuffers(window);
     }
