@@ -138,9 +138,9 @@ float Vector3::Distance(const Vector3 a, const Vector3 b)
 	return (x - y).magnitude;
 }
 
-Vector3 Vector3::Zero()
+Vector3* Vector3::Zero()
 {
-	return Vector3(0, 0, 0);
+	return new Vector3(0, 0, 0);
 }
 
 void Vector3::print()

@@ -23,7 +23,7 @@
 
 void drawParticle(Particule& p)
 {
-    glClear(GL_COLOR_BUFFER_BIT);
+    //glClear(GL_COLOR_BUFFER_BIT);
 
     // Drawing is done by specifying a sequence of vertices.  The way these
     // vertices are connected (or not connected) depends on the argument to
@@ -50,7 +50,7 @@ int main(int, char**)
 
     float g = 10;
     float startingY = 100;
-    float masse = 1;
+    float masse = 100;
     float dt = 0.001f;
     Vector3* gravity = new Vector3(0, -g * masse, 0);
     Particule* p = new Particule(new Vector3(0, 0, 0), masse);
@@ -122,7 +122,7 @@ int main(int, char**)
 
     // Our state
     bool show_demo_window = true;
-    bool show_another_window = false;
+    bool show_another_window = true;
     ImVec4 clear_color = ImVec4(0.0f, 0.0f, 0.0f, 0.0f);
 
     // Main loop
@@ -178,6 +178,8 @@ int main(int, char**)
         }
 
         // Rendering
+
+
         ImGui::Render();
         int display_w, display_h;
         glfwGetFramebufferSize(window, &display_w, &display_h);
@@ -186,10 +188,7 @@ int main(int, char**)
         glClear(GL_COLOR_BUFFER_BIT);
         ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
 
-        
-        
         p->integrate(gravity, dt);
-        
         drawParticle(*p);
         
 

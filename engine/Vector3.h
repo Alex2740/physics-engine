@@ -41,7 +41,7 @@ public:
     static Vector3 Normalized(const Vector3 a);
     static float Distance(const Vector3 a, const Vector3 b);
 
-    static Vector3 Zero();
+    static Vector3* Zero();
 
     void print();
 };

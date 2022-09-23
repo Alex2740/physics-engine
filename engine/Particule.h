@@ -11,9 +11,9 @@ private:
 	float damping_ = 0.999f;
 
 public:
-	Vector3* position;
-	Vector3* velocity;
-	Vector3* acceleration;
+	Vector3* position = Vector3::Zero();
+	Vector3* velocity = Vector3::Zero();
+	Vector3* acceleration = Vector3::Zero();
 	
 	const float& inverseMasse = inverseMasse_;
 	const float& damping = damping_;
