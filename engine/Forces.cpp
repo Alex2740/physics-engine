@@ -10,7 +10,7 @@ Vector3* Forces::gravitation(Particule* src, Particule* dst) {
 
     float dist = sqrtf(powf(dist_x, 2) + powf(dist_y, 2) + powf(dist_z, 2));
 
-    if (dist < 0.01) dist = 0.01;
+    if (dist < 0.01) dist = 0.01f;
 
     float uni_x = dist_x / dist;
     float uni_y = dist_y / dist;
