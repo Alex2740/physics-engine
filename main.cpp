@@ -55,6 +55,8 @@ int main(int, char**)
     Vector3* gravity = new Vector3(0, -g * masse, 0);
     Particule* p = new Particule(new Vector3(0, 0, 0), masse);
 
+    p->addForce(gravity);
+
     // Setup window
     glfwSetErrorCallback(glfw_error_callback);
     if (!glfwInit())
@@ -188,7 +190,7 @@ int main(int, char**)
         glClear(GL_COLOR_BUFFER_BIT);
         ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
 
-        p->integrate(gravity, dt);
+        p->integrateForces(dt);
         drawParticle(*p);
         
 
