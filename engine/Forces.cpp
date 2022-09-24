@@ -1,4 +1,6 @@
 #include <cmath>
+#include <ostream>
+#include <fstream>
 #include "Forces.h"
 
 Vector3* Forces::gravitation(Particule* src, Particule* dst) {
@@ -18,6 +20,12 @@ Vector3* Forces::gravitation(Particule* src, Particule* dst) {
 
 
     float magnitude = Forces::GRAVITATION_CONST * src->masse() * dst->masse() / powf(dist, 2);
+
+    // std::filebuf fb;
+    // fb.open("../../log.txt", std::ios_base::app);
+    // std::ostream os(&fb);
+    // os << src->velocity->magnitude << " " << src->acceleration->magnitude << std::endl;
+    // fb.close();
 
     return new Vector3(magnitude * uni_x, magnitude * uni_y, magnitude * uni_z);
 }

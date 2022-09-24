@@ -55,8 +55,8 @@ int main(int, char**)
 
     // Vector3* gravity = new Vector3(0, -g * masse, 0);
     Particule* p = new Particule(new Vector3(0, 0, 0), masse);
-    Particule* p2 = new Particule(new Vector3(0.05f, 0.08f, 0), masse);
-    Particule* p3 = new Particule(new Vector3(-0.05f, -0.03f, 0), masse);
+    Particule* p2 = new Particule(new Vector3(0.0005f, 0.008f, 0), masse);
+    Particule* p3 = new Particule(new Vector3(-0.0005f, -0.00001f, 0), masse);
 
     // Setup window
     glfwSetErrorCallback(glfw_error_callback);
