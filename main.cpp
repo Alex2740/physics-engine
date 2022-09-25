@@ -50,13 +50,13 @@ int main(int, char**)
 {
     float g = 10;
     float startingY = 100;
-    float masse = 100;
+    float masse = 10;
     float dt = 0.001f;
 
     // Vector3* gravity = new Vector3(0, -g * masse, 0);
     Particule* p = new Particule(new Vector3(0, 0, 0), masse);
-    Particule* p2 = new Particule(new Vector3(0.0001f, 0.018f, 0), masse);
-    Particule* p3 = new Particule(new Vector3(-0.0005f, -0.001f, 0), masse);
+    Particule* p2 = new Particule(new Vector3(0.01f, 0.018f, 0), masse);
+    Particule* p3 = new Particule(new Vector3(-0.2f, -0.001f, 0), masse);
 
     // Setup window
     glfwSetErrorCallback(glfw_error_callback);
@@ -214,7 +214,9 @@ int main(int, char**)
         p3->integrateForces(dt);
         p3->forces.clear();
 
-
+        Forces::rebounce(p);
+        Forces::rebounce(p2);
+        Forces::rebounce(p3);
 
         drawParticle(*p);
         drawParticle(*p2, 255, 255, 0);

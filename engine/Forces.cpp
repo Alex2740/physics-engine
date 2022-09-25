@@ -12,8 +12,6 @@ Vector3* Forces::gravitation(Particule* src, Particule* dst) {
 
     float dist = sqrtf(powf(dist_x, 2) + powf(dist_y, 2) + powf(dist_z, 2));
 
-    if (dist < 0.01) dist = 0.01f;
-
     float uni_x = dist_x / dist;
     float uni_y = dist_y / dist;
     float uni_z = dist_z / dist;
@@ -28,4 +26,13 @@ Vector3* Forces::gravitation(Particule* src, Particule* dst) {
     // fb.close();
 
     return new Vector3(magnitude * uni_x, magnitude * uni_y, magnitude * uni_z);
+}
+
+void Forces::rebounce (Particule* p) {
+    if (p->position->x > 1 || p->position->x < -1) {
+        p->velocity = new Vector3(-p->velocity->x, p->velocity->y, p->velocity->z);
+    }
+    if (p->position->y > 1 || p->position->y < -1) {
+        p->velocity = new Vector3(p->velocity->x, -p->velocity->y, p->velocity->z);
+    }
 }
