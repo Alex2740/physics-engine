@@ -83,7 +83,7 @@ int main(int, char**)
 
     // Create window with graphics context
     GLFWmonitor* monitor = glfwGetPrimaryMonitor();
-    GLFWwindow* window = glfwCreateWindow(1280, 720, "Physic Engine Demo", monitor, NULL);
+    GLFWwindow* window = glfwCreateWindow(1280, 720, "Physic Engine Demo", NULL, NULL);
 
     if (window == NULL)
         return 1;
