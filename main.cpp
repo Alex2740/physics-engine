@@ -22,7 +22,7 @@
 #pragma comment(lib, "legacy_stdio_definitions")
 #endif
 
-void drawParticle(Particule& p)
+void drawParticle(Particule& p, GLfloat r=255, GLfloat g=0, GLfloat b=0)
 {
     //glClear(GL_COLOR_BUFFER_BIT);
 
@@ -33,7 +33,7 @@ void drawParticle(Particule& p)
     glEnable(GL_POINT_SMOOTH);
     glPointSize(10.0f);
     glBegin(GL_POINTS);
-    glVertex3f(p.position->x, p.position->y,p.position->z); glColor3f(255, 0, 0); 
+    glVertex3f(p.position->x, p.position->y,p.position->z); glColor3f(r, g, b); 
     glEnd();
 
 
@@ -55,8 +55,8 @@ int main(int, char**)
 
     // Vector3* gravity = new Vector3(0, -g * masse, 0);
     Particule* p = new Particule(new Vector3(0, 0, 0), masse);
-    Particule* p2 = new Particule(new Vector3(0.0005f, 0.008f, 0), masse);
-    Particule* p3 = new Particule(new Vector3(-0.0005f, -0.00001f, 0), masse);
+    Particule* p2 = new Particule(new Vector3(0.0001f, 0.018f, 0), masse);
+    Particule* p3 = new Particule(new Vector3(-0.0005f, -0.001f, 0), masse);
 
     // Setup window
     glfwSetErrorCallback(glfw_error_callback);
@@ -217,8 +217,8 @@ int main(int, char**)
 
 
         drawParticle(*p);
-        drawParticle(*p2);
-        drawParticle(*p3);
+        drawParticle(*p2, 255, 255, 0);
+        drawParticle(*p3, 0, 255);
         
 
         glfwSwapBuffers(window);

@@ -4,7 +4,7 @@
 #include "Particule.h"
 
 namespace Forces {
-    const float GRAVITATION_CONST = 0.00001f;
+    const float GRAVITATION_CONST = 0.00003f;
     Vector3* gravitation(Particule* p1, Particule* p2);
 }
 
