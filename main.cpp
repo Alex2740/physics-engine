@@ -175,7 +175,7 @@ int main(int, char**)
         {
             ColoredParticule cp = particules[i];
 
-            cp.particule->position->print();
+            // cp.particule->position->print();
             if (cp.particule->position->y < -1.2) {
                 particules.erase(particules.begin() + i);
             }
