@@ -12,27 +12,29 @@ private:
 	float damping_ = 0.999f;
 
 public:
-	Vector3* position = Vector3::Zero();
-	Vector3* velocity = Vector3::Zero();
-	Vector3* acceleration = Vector3::Zero();
+	Vector3 position = Vector3::Zero();
+	Vector3 velocity = Vector3::Zero();
+	Vector3 acceleration = Vector3::Zero();
 
-	std::vector<Vector3*> forces;
+	std::vector<Vector3> forces;
 	
 	const float& inverseMasse = inverseMasse_;
 	const float& damping = damping_;
 
 	Particule();
-	Particule(Vector3* _position, float _masse);
-	Particule(Vector3* _position, float _masse, float _damping);
+	Particule(Vector3 _position, float _masse);
+	Particule(Vector3 _position, float _masse, float _damping);
+
+	bool operator==(const Particule& other);
+	bool operator!=(const Particule& other);
 
 	void setMasse(float _masse);
 	void setInverseMasse(float _inverseMasse);
 
 	float masse();
 
-	//void integrate(Vector3* forces, float dt);
-	void integrate(Vector3* forces, float dt);
+	void integrate(Vector3 forces, float dt);
 
-	void addForce(Vector3* force);
+	void addForce(Vector3 force);
 	void integrateForces(float dt);
 };

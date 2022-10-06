@@ -23,13 +23,13 @@
 #pragma comment(lib, "legacy_stdio_definitions")
 #endif
 
-void drawParticle(Particule& p, GLfloat r=255, GLfloat g=0, GLfloat b=0)
+void drawParticle(Particule p, GLfloat r=255, GLfloat g=0, GLfloat b=0)
 {
     //glClear(GL_COLOR_BUFFER_BIT);
     glEnable(GL_POINT_SMOOTH);
     glPointSize(10.0f);
     glBegin(GL_POINTS);
-    glVertex3f(p.position->x, p.position->y,p.position->z);
+    glVertex3f(p.position.x, p.position.y,p.position.z);
     glColor3f(r, g, b); 
     glEnd();
 
@@ -47,9 +47,9 @@ int main(int, char**)
     float dt = 0.001f;
 
     // Vector3* gravity = new Vector3(0, -g * masse, 0);
-    Particule* p = new Particule(new Vector3(0, 0, 0), masse);
-    Particule* p2 = new Particule(new Vector3(0.01f, 0.018f, 0), masse);
-    Particule* p3 = new Particule(new Vector3(-0.2f, -0.001f, 0), masse);
+    Particule p = Particule(Vector3(0, 0, 0), masse);
+    Particule p2 = Particule(Vector3(0.01f, 0.018f, 0), masse);
+    Particule p3 = Particule(Vector3(-0.2f, -0.001f, 0), masse);
 
 
     // Setup window
@@ -163,36 +163,36 @@ int main(int, char**)
         glClear(GL_COLOR_BUFFER_BIT);
         ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
 
-        Vector3* gravitation = Forces::gravitation(p2, p);
-        Vector3* gravitation2 = Forces::gravitation(p, p2);
-        Vector3* gravitation3 = Forces::gravitation(p3, p);
-        Vector3* gravitation4 = Forces::gravitation(p3, p2);
-        Vector3* gravitation5 = Forces::gravitation(p, p3);
-        Vector3* gravitation6 = Forces::gravitation(p2, p3);
+        Vector3 gravitation = Forces::gravitation(p2, p);
+        Vector3 gravitation2 = Forces::gravitation(p, p2);
+        Vector3 gravitation3 = Forces::gravitation(p3, p);
+        Vector3 gravitation4 = Forces::gravitation(p3, p2);
+        Vector3 gravitation5 = Forces::gravitation(p, p3);
+        Vector3 gravitation6 = Forces::gravitation(p2, p3);
 
         
-        p->addForce(gravitation);
-        p->addForce(gravitation3);
-        p->integrateForces(dt);
-        p->forces.clear();
+        p.addForce(gravitation);
+        p.addForce(gravitation3);
+        p.integrateForces(dt);
+        p.forces.clear();
 
-        p2->addForce(gravitation2);
-        p2->addForce(gravitation4);
-        p2->integrateForces(dt);
-        p2->forces.clear();
+        p2.addForce(gravitation2);
+        p2.addForce(gravitation4);
+        p2.integrateForces(dt);
+        p2.forces.clear();
 
-        p3->addForce(gravitation5);
-        p3->addForce(gravitation6);
-        p3->integrateForces(dt);
-        p3->forces.clear();
+        p3.addForce(gravitation5);
+        p3.addForce(gravitation6);
+        p3.integrateForces(dt);
+        p3.forces.clear();
 
         Forces::rebounce(p);
         Forces::rebounce(p2);
         Forces::rebounce(p3);
 
-        drawParticle(*p);
-        drawParticle(*p2, 255, 255, 0);
-        drawParticle(*p3, 0, 255);
+        drawParticle(p);
+        drawParticle(p2, 255, 255, 0);
+        drawParticle(p3, 0, 255);
         
 
         glfwSwapBuffers(window);

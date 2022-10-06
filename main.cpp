@@ -23,7 +23,7 @@
 #endif
 
 struct ColoredParticule {
-    Particule* particule;
+    Particule particule;
     int red;
     int green;
     int blue;
@@ -34,7 +34,7 @@ void drawParticle(ColoredParticule cp)
     glEnable(GL_POINT_SMOOTH);
     glPointSize(10.0f);
     glBegin(GL_POINTS);
-    glVertex3f(cp.particule->position->x, cp.particule->position->y, cp.particule->position->z);
+    glVertex3f(cp.particule.position.x, cp.particule.position.y, cp.particule.position.z);
     glColor3f(cp.red, cp.green, cp.blue); 
     glEnd();
 
@@ -125,38 +125,38 @@ int main(int, char**)
 
             if (ImGui::Button("Dirt")) {
                 ColoredParticule cp = {
-                    new Particule(new Vector3(-1, -0.9f, 0), 5),
+                    Particule(Vector3(-1, -0.9f, 0), 5),
                     255,
                     255,
                     255,
                 };
                 particules.push_back(cp);
-                Vector3* forces = new Vector3(base_force, -g * cp.particule->masse() + base_force, 0);
-                cp.particule->integrate(forces, dt);
+                Vector3 forces = Vector3(base_force, -g * cp.particule.masse() + base_force, 0);
+                cp.particule.integrate(forces, dt);
             }
 
             if (ImGui::Button("Paper")) {
                 ColoredParticule cp = {
-                    new Particule(new Vector3(-1, -0.9f, 0), 3.5),
+                    Particule(Vector3(-1, -0.9f, 0), 3.5),
                     255,
                     255,
                     255,
                 };
                 particules.push_back(cp);
-                Vector3* forces = new Vector3(base_force, -g * cp.particule->masse() + base_force, 0);
-                cp.particule->integrate(forces, dt);
+                Vector3 forces = Vector3(base_force, -g * cp.particule.masse() + base_force, 0);
+                cp.particule.integrate(forces, dt);
             }
 
             if (ImGui::Button("Steel")) {
                 ColoredParticule cp = {
-                    new Particule(new Vector3(-1, -0.9f, 0), 10),
+                    Particule(Vector3(-1, -0.9f, 0), 10),
                     255,
                     255,
                     255,
                 };
                 particules.push_back(cp);
-                Vector3* forces = new Vector3(base_force, -g * cp.particule->masse() + base_force, 0);
-                cp.particule->integrate(forces, dt);
+                Vector3 forces = Vector3(base_force, -g * cp.particule.masse() + base_force, 0);
+                cp.particule.integrate(forces, dt);
             }
 
             ImGui::End();
@@ -175,13 +175,12 @@ int main(int, char**)
         {
             ColoredParticule cp = particules[i];
 
-            // cp.particule->position->print();
-            if (cp.particule->position->y < -1.2) {
+            if (cp.particule.position.y < -1.2) {
                 particules.erase(particules.begin() + i);
             }
 
-            Vector3* gravity = new Vector3(0, -g * cp.particule->masse(), 0);
-            cp.particule->integrate(gravity, dt);
+            Vector3 gravity = Vector3(0, -g * cp.particule.masse(), 0);
+            cp.particule.integrate(gravity, dt);
 
             drawParticle(cp);
         }
