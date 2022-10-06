@@ -186,9 +186,9 @@ int main(int, char**)
         p3.integrateForces(dt);
         p3.forces.clear();
 
-        Forces::rebounce(p);
-        Forces::rebounce(p2);
-        Forces::rebounce(p3);
+        Forces::rebounce(&p);
+        Forces::rebounce(&p2);
+        Forces::rebounce(&p3);
 
         drawParticle(p);
         drawParticle(p2, 255, 255, 0);

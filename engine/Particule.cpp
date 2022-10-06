@@ -36,8 +36,8 @@ bool Particule::operator==(const Particule& other)
 		&& (damping == other.damping)
 		&& (position == other.position)
 		&& (velocity == other.velocity)
-		&& (acceleration == other.acceleration)
-		&& (forces == other.forces);
+		&& (acceleration == other.acceleration);
+		// && (forces == other.forces);
 }
 
 bool Particule::operator!=(const Particule& other)

@@ -26,11 +26,11 @@ Vector3 Forces::gravitation(Particule src, Particule dst) {
     return Vector3(magnitude * uni_x, magnitude * uni_y, magnitude * uni_z);
 }
 
-void Forces::rebounce (Particule p) {
-    if (p.position.x > 1 || p.position.x < -1) {
-        p.velocity = Vector3(-p.velocity.x, p.velocity.y, p.velocity.z);
+void Forces::rebounce (Particule* p) {
+    if (p->position.x > 1 || p->position.x < -1) {
+        p->velocity = Vector3(-p->velocity.x, p->velocity.y, p->velocity.z);
     }
-    if (p.position.y > 1 || p.position.y < -1) {
-        p.velocity = Vector3(p.velocity.x, -p.velocity.y, p.velocity.z);
+    if (p->position.y > 1 || p->position.y < -1) {
+        p->velocity = Vector3(p->velocity.x, -p->velocity.y, p->velocity.z);
     }
 }
