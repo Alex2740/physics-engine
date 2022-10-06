@@ -24,9 +24,9 @@
 
 struct ColoredParticule {
     Particule particule;
-    int red;
-    int green;
-    int blue;
+    int red = 255;
+    int green = 255;
+    int blue = 255;
 };
 
 void drawParticle(ColoredParticule cp)
@@ -124,36 +124,24 @@ int main(int, char**)
             ImGui::Text("Choose the projectile.");
 
             if (ImGui::Button("Dirt")) {
-                ColoredParticule cp = {
-                    Particule(Vector3(-1, -0.9f, 0), 5),
-                    255,
-                    255,
-                    255,
-                };
+                ColoredParticule cp;
+                cp.particule = Particule(Vector3(-1, -0.9f, 0), 5);
                 particules.push_back(cp);
                 Vector3 forces = Vector3(base_force, -g * cp.particule.masse() + base_force, 0);
                 cp.particule.integrate(forces, dt);
             }
 
             if (ImGui::Button("Paper")) {
-                ColoredParticule cp = {
-                    Particule(Vector3(-1, -0.9f, 0), 3.5),
-                    255,
-                    255,
-                    255,
-                };
+                ColoredParticule cp;
+                cp.particule = Particule(Vector3(-1, -0.9f, 0), 3.5),
                 particules.push_back(cp);
                 Vector3 forces = Vector3(base_force, -g * cp.particule.masse() + base_force, 0);
                 cp.particule.integrate(forces, dt);
             }
 
             if (ImGui::Button("Steel")) {
-                ColoredParticule cp = {
-                    Particule(Vector3(-1, -0.9f, 0), 10),
-                    255,
-                    255,
-                    255,
-                };
+                ColoredParticule cp;
+                cp.particule = Particule(Vector3(-1, -0.9f, 0), 10);
                 particules.push_back(cp);
                 Vector3 forces = Vector3(base_force, -g * cp.particule.masse() + base_force, 0);
                 cp.particule.integrate(forces, dt);

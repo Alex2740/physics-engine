@@ -1,6 +1,4 @@
-#include <cmath>
-#include <ostream>
-#include <fstream>
+#include <math.h>
 #include "Forces.h"
 
 Vector3 Forces::gravitation(Particule src, Particule dst) {

@@ -18,6 +18,18 @@ Particule::Particule(Vector3 _position, float _masse, float _damping)
 	position = _position;
 }
 
+Particule Particule::operator=(const Particule& other)
+{
+	this->inverseMasse_ = other.inverseMasse;
+	this->damping_ = other.damping;
+	this->position = other.position;
+	this->velocity = other.velocity;
+	this->acceleration = other.acceleration;
+	this->forces = other.forces;
+
+	return *this;
+}
+
 bool Particule::operator==(const Particule& other)
 {
 	return (inverseMasse == other.inverseMasse)

@@ -25,6 +25,7 @@ public:
 	Particule(Vector3 _position, float _masse);
 	Particule(Vector3 _position, float _masse, float _damping);
 
+	Particule operator=(const Particule& other);
 	bool operator==(const Particule& other);
 	bool operator!=(const Particule& other);
 
