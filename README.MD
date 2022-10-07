@@ -118,10 +118,36 @@ For the actual `force` object, there are mutiple choices. Firstly:
   into considertaion.
 
 And if we do use a class, we can also decide if a `Force` is binded with a object or not. A force can:
-- either binded with a certain particle $p$, and is initilized with method `ASpectialForce(Partial p)`, and updated by using a `getForce(void)` method ;
-- or not binded with a certain particle, but as something more general, initialized with method `ASpecialForce(void)`, and updated by a getForce(Particle p) method.
+- either bound with a certain particle $p$, and is initilized with method `ASpectialForce(Partial p)`, and updated by using a `getForce(void)` method ;
+- or not bound with a certain particle, but as something more general, initialized with method `ASpecialForce(void)`, and updated by a getForce(Particle p) method.
 
 The former one can be more efficient if we introduce a `dirty` variable, while the second one should take less memory if we do the programming part properly.
+
+----
+### update 07 oct 2022
+Sad to notice that the combination of an abstract class and std::vector doesn't actually work:
+
+[c++ - Why can't we declare a std::vector? - Stack Overflow](https://stackoverflow.com/questions/2160920/why-cant-we-declare-a-stdvectorabstractclass)
+
+> You can't instantiate abstract classes, thus a vector of abstract classes can't work.
+
+So the actual code may look like:
+
+```c++
+class ParticleRegistry
+{
+private:
+    Particle* p;
+    std::vector<Force*> forceRegistry;
+    std::vector<Impulsion*> impulsionRegistry;
+    std::vector<Positionning*> positionningRegistry;
+public:
+    void update();
+}
+```
+
+
+
 
 ----
 ## Appendix
@@ -145,9 +171,9 @@ Maintenant si on utilise les registres de force et on essaie de calculer sépar�
   \vec a = - \vec g \\
   \vec v = \vec g \ \Delta t + \int - \vec a \ dt = \vec 0
   $$.
-
+  
   > au moins la vitesse est nulle à la fin de calcul...
-
+  
   maintenant, notons que si on n'introduit pas une variable globale qui sauvegarde la vitesse origine de la particule $\vec v_0 = \vec 0$, on aura malheureusement $\vec{v_0} \not = \vec 0$,
   $$
   \vec p = \vec {p_0} + \int_0^{\Delta t} \vec v \ dt
