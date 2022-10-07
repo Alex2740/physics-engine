@@ -16,11 +16,13 @@ namespace Force
         // the general force class
     protected:
         Particule* particule;
+        virtual bool isEqual(const Force& obj) const;
     public:
         Force();
         Force(Particule *p); // the call with particle is expected
         ~Force();
-        virtual Vector3 getForce();
+        virtual Vector3 getForce() = 0;
+        bool operator==(const Force& other);
     };
 
     class Gravity: Force
@@ -28,6 +30,8 @@ namespace Force
         // the gravity, as a example of Force implementation
     private:
         float val;
+    protected:
+        bool isEqual(const Force& obj) const override;
     public:
         Gravity(Particule *p);
         Vector3 getForce() override;
@@ -42,16 +46,17 @@ namespace Registry
         // containing a list of Force
         private:
         Particule* particule;
-        std::vector<Force::Force> forceRegistry;
+        std::vector<Force::Force*> forceRegistry;
         // reserved place for future registries
 
         public:
+        ParticuleRegistry();
         ParticuleRegistry(Particule* p);
         ~ParticuleRegistry();
-        void addForce(Force::Force f);
-        bool delForce(Force::Force f);
+        void addForce(Force::Force* f);
+        bool delForce(Force::Force* f);
 
-        std::vector<Force::Force> getRegist(void);
+        std::vector<Force::Force*> getRegist(void);
 
         void update(float dt);
     };
@@ -66,8 +71,8 @@ namespace Registry
         bool addParticule(Particule* p);
         bool delParticule(Particule* p);
 
-        bool addForce(Particule* p, Force::Force f);
-        void addForceAll(Force::Force f);
+        bool addForce(Particule* p, Force::Force* f);
+        void addForceAll(Force::Force* f);
 
         void updateAll(float dt); // update all the particles
     };
