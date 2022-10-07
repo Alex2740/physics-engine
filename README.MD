@@ -125,6 +125,9 @@ The former one can be more efficient if we introduce a `dirty` variable, while t
 
 ----
 ### update 07 oct 2022
+
+#### pointer issue (with abstract class)
+
 Sad to notice that the combination of an abstract class and std::vector doesn't actually work:
 
 [c++ - Why can't we declare a std::vector? - Stack Overflow](https://stackoverflow.com/questions/2160920/why-cant-we-declare-a-stdvectorabstractclass)
@@ -146,7 +149,11 @@ public:
 }
 ```
 
+#### memory distribution
 
+With the former chapter we now have a pointer as the input of the registry, which unfortunately leads to the problem of memory allocation. 
+
+So a `Force` can be created at the registration of a force `addForce` with the method `new`, then it will live until the register itself is deleted, thus I might just put something inside the `~Registry()`. 
 
 
 ----

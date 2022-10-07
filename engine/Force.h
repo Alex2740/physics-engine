@@ -25,7 +25,7 @@ namespace Force
         bool operator==(const Force& other);
     };
 
-    class Gravity: Force
+    class Gravity: public Force
     {
         // the gravity, as a example of Force implementation
     private:
@@ -59,6 +59,12 @@ namespace Registry
         std::vector<Force::Force*> getRegist(void);
 
         void update(float dt);
+        void free();  // a explicit free function,
+                      // since the ~Particule() methods
+                      // might be called otherwhere
+                      // when the object's copies
+                      // are destroyed, which is not
+                      // always the end of execution
     };
 
     class ParticuleRegistries
@@ -68,6 +74,8 @@ namespace Registry
 
         public:
         // add a new item in the registres
+        ~ParticuleRegistries();
+
         bool addParticule(Particule* p);
         bool delParticule(Particule* p);
 

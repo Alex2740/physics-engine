@@ -55,6 +55,7 @@ void Registry::ParticuleRegistry::addForce(Force::Force* f) {
 
 bool Registry::ParticuleRegistry::delForce(Force::Force* f) {
     this->forceRegistry.erase(std::remove(this->forceRegistry.begin(), this->forceRegistry.end(), f), this->forceRegistry.end());
+    delete f; // have to do this otherwise lost track of it
     return true;
 }
 
@@ -66,8 +67,13 @@ void Registry::ParticuleRegistry::update(float dt) {
     this->particule->integrate(sum, dt);
 }
 
+void Registry::ParticuleRegistry::free() {
+    for (auto p: this->forceRegistry) {
+        delete p;
+    }
+}
+
 bool Registry::ParticuleRegistries::addParticule(Particule* p) {
-    if (this->registries.count(p) == 0) return false;
 
     this->registries[p] = ParticuleRegistry(p);
     return true;
@@ -82,5 +88,18 @@ bool Registry::ParticuleRegistries::addForce(Particule* p, Force::Force* f) {
 void Registry::ParticuleRegistries::addForceAll(Force::Force* f) {
     for (auto p: this->registries) {
         addForce(p.first, f);
+    }
+}
+
+void Registry::ParticuleRegistries::updateAll(float dt) {
+    for (auto r: this->registries) {
+        r.second.update(dt);
+        // std::cout << "HERE" << std::endl;
+    }
+}
+
+Registry::ParticuleRegistries::~ParticuleRegistries() {
+    for (auto r: this->registries) {
+        r.second.free();
     }
 }

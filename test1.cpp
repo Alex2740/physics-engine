@@ -55,8 +55,11 @@ int main(int, char**)
 
     Registry::ParticuleRegistries prs = Registry::ParticuleRegistries();
 
-    // prs.addParticule(&p1);
-    // prs.addParticule(&p2);
+    prs.addParticule(&p1);
+    prs.addParticule(&p2);
+
+    prs.addForce(&p1, new Force::Gravity(&p1));
+    prs.addForce(&p2, new Force::Gravity(&p2));
 
     // Setup window
     glfwSetErrorCallback(glfw_error_callback);
@@ -170,6 +173,7 @@ int main(int, char**)
         glClear(GL_COLOR_BUFFER_BIT);
         ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
 
+        prs.updateAll(dt);
 
         drawParticle(p1);
         drawParticle(p2, 255, 255, 0);
