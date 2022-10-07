@@ -87,6 +87,22 @@ public:
     void updateAll();
 }
 ```
+
+Apart from that, it is mentioned in the class that other factor can be used to influence a particle's status. One of them is called "impulsion", and it works directly on the velocity instead of the acceleration. One can also imagine other factors which work the position directly. To leave space for future implementations, I think it's a good idea to expand the `ParticleForceRegistry` and add other registry types in it. The code will evetually be like:
+```c++
+class ParticleRegistry
+{
+private:
+    Particle* p;
+    std::vector<Force> forceRegistry;
+    std::vector<Impulsion> impulsionRegistry;
+    std::vector<Positionning> positionningRegistry;
+public:
+    void update();
+}
+```
+And the `update` function can take over the problem.
+
 ### Force
 
 > May the force be with you. 
@@ -106,6 +122,8 @@ And if we do use a class, we can also decide if a `Force` is binded with a objec
 - or not binded with a certain particle, but as something more general, initialized with method `ASpecialForce(void)`, and updated by a getForce(Particle p) method.
 
 The former one can be more efficient if we introduce a `dirty` variable, while the second one should take less memory if we do the programming part properly.
+
+----
 ## Appendix
 
 ### Problème de l'additivité de force avec l'opération de l'intégration
