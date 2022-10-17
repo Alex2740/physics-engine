@@ -5,8 +5,8 @@
 
 #include "engine/Particule.h"
 #include "engine/Vector3.h"
-#include "engine/Forces.h"
 #include "engine/Force.h"
+#include "engine/PhysicWorld.h"
 
 #include "imgui.h"
 #include "imgui_impl_glfw.h"
@@ -53,13 +53,13 @@ int main(int, char**)
     Particule p2 = Particule(Vector3(0.01f, 0.018f, 0), masse);
     Particule p3 = Particule(Vector3(-0.2f, -0.001f, 0), masse);
 
-    Registry::ParticuleRegistries prs = Registry::ParticuleRegistries();
+    PhysicWorld physicWorld = PhysicWorld();
 
-    prs.addParticule(&p1);
-    prs.addParticule(&p2);
+    physicWorld.AddParticule(&p1);
+    physicWorld.AddParticule(&p2);
 
-    prs.addForce(&p1, new Force::Gravity(&p1));
-    prs.addForce(&p2, new Force::Gravity(&p2));
+    physicWorld.AddForce(&p1, new Force::Gravity(&p1));
+    physicWorld.AddForce(&p2, new Force::Gravity(&p2));
 
     // Setup window
     glfwSetErrorCallback(glfw_error_callback);
@@ -173,7 +173,7 @@ int main(int, char**)
         glClear(GL_COLOR_BUFFER_BIT);
         ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
 
-        prs.updateAll(dt);
+        physicWorld.RunPhysics(dt);
 
         drawParticle(p1);
         drawParticle(p2, 255, 255, 0);
