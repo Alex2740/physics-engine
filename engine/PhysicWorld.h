@@ -2,6 +2,7 @@
 
 #include "Particule.h"
 #include "Force.h"
+#include "Registry.h"
 #include "ParticleContactResolver.h"
 #include "ParticleContact.h"
 
