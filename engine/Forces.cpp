@@ -1,6 +1,11 @@
+// This file will be deprecated in the future implementation
+
 #include <math.h>
 #include "Forces.h"
+#include "particule.h"
 
+
+[[deprecated]]
 Vector3 Forces::gravitation(Particule src, Particule dst) {
     if (src == dst) return Vector3::Zero();
 
@@ -33,4 +38,9 @@ void Forces::rebounce (Particule* p) {
     if (p->position.y > 1 || p->position.y < -1) {
         p->velocity = Vector3(p->velocity.x, -p->velocity.y, p->velocity.z);
     }
+
+
+    
+   
 }
+

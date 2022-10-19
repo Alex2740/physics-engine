@@ -1,3 +1,5 @@
+// This file will be deprecated in the future implementation
+
 #pragma once
 
 #include "Vector3.h"
