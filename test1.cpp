@@ -5,6 +5,9 @@
 
 #include "engine/Particule.h"
 #include "engine/Vector3.h"
+#include "engine/Forces.h"
+#include "engine/Force.h"
+
 #include "imgui.h"
 #include "imgui_impl_glfw.h"
 #include "imgui_impl_opengl3.h"
@@ -22,24 +25,19 @@
 #pragma comment(lib, "legacy_stdio_definitions")
 #endif
 
-struct ColoredParticule {
-    Particule particule;
-    int red = 200;
-    int green = 250;
-    int blue = 253;
-};
-
-void drawParticle(ColoredParticule cp)
-{   
+void drawParticle(Particule p, GLfloat r=255, GLfloat g=0, GLfloat b=0)
+{
+    //glClear(GL_COLOR_BUFFER_BIT);
     glEnable(GL_POINT_SMOOTH);
-    glPointSize(10.0f);
+    glPointSize(20.0f);
     glBegin(GL_POINTS);
-    glVertex3f(cp.particule.position.x, cp.particule.position.y, cp.particule.position.z);
-    glColor3f(cp.red, cp.white, cp.blue); 
+    glVertex3f(p.position.x, p.position.y,p.position.z);
+    glColor3f(r, g, b); 
     glEnd();
 
     glFlush();
 }
+
 
 static void glfw_error_callback(int error, const char* description)
 {
@@ -48,10 +46,23 @@ static void glfw_error_callback(int error, const char* description)
 
 int main(int, char**)
 {
-    float g = 10;
+    float masse = 10;
     float dt = 0.001f;
 
-    std::vector<ColoredParticule> particules = {};
+    // Vector3* gravity = new Vector3(0, -g * masse, 0);
+    Particule p1 = Particule(Vector3(0.01f, 0, 0), masse);
+    Particule p2 = Particule(Vector3(0.01f, 0.018f, 0), masse);
+    Particule p3 = Particule(Vector3(-0.2f, -0.001f, 0), masse);
+
+    Registry::ParticuleRegistries prs = Registry::ParticuleRegistries();
+
+    prs.addParticule(&p1);
+    prs.addParticule(&p2);
+    prs.addParticule(&p3);
+
+    prs.addForce(&p2, new Force::ParticuleDrag(&p2));
+    prs.addForce(&p1, new Force::Gravity(&p1));
+    prs.addForce(&p3, new Force::Gravity(&p3));
 
     // Setup window
     glfwSetErrorCallback(glfw_error_callback);
@@ -117,37 +128,43 @@ int main(int, char**)
         ImGui_ImplOpenGL3_NewFrame();
         ImGui_ImplGlfw_NewFrame();
         ImGui::NewFrame();
-
         {
-            ImGui::Begin("Shooter !");
+        // 1. Show the big demo window (Most of the sample code is in ImGui::ShowDemoWindow()! You can browse its code to learn more about Dear ImGui!).
+        // if (show_demo_window)
+        //     ImGui::ShowDemoWindow(&show_demo_window);
 
-            ImGui::Text("Choose the projectile.");
+        // // 2. Show a simple window that we create ourselves. We use a Begin/End pair to create a named window.
+        // {
+        //     static float f = 0.0f;
+        //     static int counter = 0;
 
-            if (ImGui::Button("Dirt")) {
-                ColoredParticule cp;
-                cp.particule = Particule(Vector3(-1, -0.9f, 0), 5);
-                particules.push_back(cp);
-                Vector3 forces = Vector3(base_force, -g * cp.particule.masse() + base_force, 0);
-                cp.particule.integrate(forces, dt);
-            }
+        //     ImGui::Begin("Hello, world!");                          // Create a window called "Hello, world!" and append into it.
 
-            if (ImGui::Button("Paper")) {
-                ColoredParticule cp;
-                cp.particule = Particule(Vector3(-1, -0.9f, 0), 3.5),
-                particules.push_back(cp);
-                Vector3 forces = Vector3(base_force, -g * cp.particule.masse() + base_force, 0);
-                cp.particule.integrate(forces, dt);
-            }
+        //     ImGui::Text("This is some useful text.");               // Display some text (you can use a format strings too)
+        //     ImGui::Checkbox("Demo Window", &show_demo_window);      // Edit bools storing our window open/close state
+        //     ImGui::Checkbox("Another Window", &show_another_window);
 
-            if (ImGui::Button("Steel")) {
-                ColoredParticule cp;
-                cp.particule = Particule(Vector3(-1, -0.9f, 0), 10);
-                particules.push_back(cp);
-                Vector3 forces = Vector3(base_force, -g * cp.particule.masse() + base_force, 0);
-                cp.particule.integrate(forces, dt);
-            }
+        //     ImGui::SliderFloat("float", &f, 0.0f, 1.0f);            // Edit 1 float using a slider from 0.0f to 1.0f
+        //     ImGui::ColorEdit3("clear color", (float*)&clear_color); // Edit 3 floats representing a color
 
-            ImGui::End();
+        //     if (ImGui::Button("Button"))                            // Buttons return true when clicked (most widgets return true when edited/activated)
+        //         counter++;
+        //     ImGui::SameLine();
+        //     ImGui::Text("counter = %d", counter);
+
+        //     ImGui::Text("Application average %.3f ms/frame (%.1f FPS)", 1000.0f / ImGui::GetIO().Framerate, ImGui::GetIO().Framerate);
+        //     ImGui::End();
+        // }
+
+        // // 3. Show another simple window.
+        // if (show_another_window)
+        // {
+        //     ImGui::Begin("Another Window", &show_another_window);   // Pass a pointer to our bool variable (the window will have a closing button that will clear the bool when clicked)
+        //     ImGui::Text("Hello from another window!");
+        //     if (ImGui::Button("Close Me"))
+        //         show_another_window = false;
+        //     ImGui::End();
+        // }
         }
 
         // Rendering
@@ -159,19 +176,12 @@ int main(int, char**)
         glClear(GL_COLOR_BUFFER_BIT);
         ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
 
-        for (int i = 0; i < particules.size(); i++)
-        {
-            ColoredParticule cp = particules[i];
+        prs.updateAll(dt);
 
-            if (cp.particule.position.y < -1.2) {
-                particules.erase(particules.begin() + i);
-            }
-
-            Vector3 gravity = Vector3(0, -g * cp.particule.masse(), 0);
-            cp.particule.integrate(gravity, dt);
-
-            drawParticle(cp);
-        }
+        drawParticle(p1,300,0,255);
+        drawParticle(p2, 255, 255, 0);
+        drawParticle(p3, 0, 255);
+        
 
         glfwSwapBuffers(window);
     }
