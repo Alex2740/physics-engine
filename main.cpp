@@ -35,7 +35,7 @@ void drawParticle(ColoredParticule cp)
     glPointSize(10.0f);
     glBegin(GL_POINTS);
     glVertex3f(cp.particule.position.x, cp.particule.position.y, cp.particule.position.z);
-    glColor3f(cp.red, cp.white, cp.blue); 
+    glColor3f(cp.red, cp.green, cp.blue); 
     glEnd();
 
     glFlush();
