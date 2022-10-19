@@ -26,14 +26,14 @@ void PhysicWorld::DeleteForce(Particule* particule, Force::Force* force)
 
 void PhysicWorld::RunPhysics(float duration)
 {
-	// Intégration des forces
+	// IntÃ©gration des forces
 	for (auto registry : particuleRegistries) {
 		registry.second.update(duration);
 	}
 
-	// Détection des contacts
+	// DÃ©tection des contacts
 
-	// Résolution des contacts
+	// RÃ©solution des contacts
 	ParticleContact* contactArray = NULL;
 	unsigned int numContact = 0;
 
