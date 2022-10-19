@@ -24,9 +24,9 @@
 
 struct ColoredParticule {
     Particule particule;
-    int red = 255;
-    int green = 255;
-    int blue = 255;
+    int red = 200;
+    int green = 250;
+    int blue = 253;
 };
 
 void drawParticle(ColoredParticule cp)
@@ -35,7 +35,7 @@ void drawParticle(ColoredParticule cp)
     glPointSize(10.0f);
     glBegin(GL_POINTS);
     glVertex3f(cp.particule.position.x, cp.particule.position.y, cp.particule.position.z);
-    glColor3f(cp.red, cp.green, cp.blue); 
+    glColor3f(cp.red, cp.white, cp.blue); 
     glEnd();
 
     glFlush();

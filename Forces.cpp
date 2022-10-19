@@ -4,6 +4,7 @@
 #include "Forces.h"
 #include "particule.h"
 
+
 [[deprecated]]
 Vector3 Forces::gravitation(Particule src, Particule dst) {
     if (src == dst) return Vector3::Zero();
