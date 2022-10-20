@@ -8,6 +8,8 @@ public :
 
 	float restitution;
 
+
+	ParticleCable(Particule* particules, float maxLength, float restitution);
 	unsigned int addContact(ParticleContact* contact, unsigned int limit) const;
 
 };

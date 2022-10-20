@@ -6,5 +6,7 @@ class NaiveParticleContactGenerator : public ParticleContactGenerator {
 
 	std::vector<Particule*> particles;
 
+	NaiveParticleContactGenerator();
+
 	unsigned int addContact(ParticleContact* contact, unsigned int limit) const;
 };

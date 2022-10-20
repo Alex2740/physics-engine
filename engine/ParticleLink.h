@@ -10,7 +10,8 @@ public :
 
 	float currentLength() const;
 
-	unsigned int addContact(ParticleContact* contact, unsigned int limit) const = 0;
+	ParticleLink(Particule* particules);
 
+	unsigned int addContact(ParticleContact* contact, unsigned int limit) const = 0;
 
 };
