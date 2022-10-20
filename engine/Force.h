@@ -37,12 +37,24 @@ namespace Force
         Vector3 getForce() override;
     };
 
-    class ParticuleDrag :public Force {
+    class ParticuleDrag: public Force {
     private:
         float k1=3;
         float k2=4;
     public:
-        ParticuleDrag(Particule* p);
+        ParticuleDrag(Particule* p, float k1, float k2);
+        Vector3 getForce() override;
+    };
+
+    class Spring: public Force {
+    // build a 'static' string between the two particle,
+    // the force will be the one p1 taken from p2;
+    private:
+        float k;
+        Vector3 dist;
+        Particule* particule2;
+    public:
+        Spring(Particule* p1, Particule* p2, float k);
         Vector3 getForce() override;
     };
 }

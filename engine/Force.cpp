@@ -29,12 +29,18 @@ bool Force::Gravity::isEqual(const Force& obj) const {
     return Force::isEqual(v) && v.val == val;
 }
 
-Force::ParticuleDrag::ParticuleDrag(Particule* p) {
+Force::ParticuleDrag::ParticuleDrag(Particule* p, float k1, float k2): Force(p) {
     this->k1 = k1;
     this->k2 = k2;
     this->particule = p;
 }
 
+Force::Spring::Spring(Particule* p1, Particule* p2, float k): Force(p1) {
+    this->particule = p1;
+    this->particule2 = p2;
+    this->k = k;
+    this->dist = p2->position - p1->position;
+}
 
 Vector3 Force::ParticuleDrag::getForce() {
     Vector3 v = this->particule->velocity;
@@ -50,4 +56,12 @@ Vector3 Force::ParticuleDrag::getForce() {
 
 Vector3 Force::Gravity::getForce() {
     return Vector3(0, this->val, 0);
+}
+
+Vector3 Force::Spring::getForce() {
+    Vector3 newDist = particule2->position - particule->position;
+    Vector3 diff = newDist - dist;
+    Vector3 dir = Vector3::Normalized(diff);
+    float magnitude = this->k * diff.magnitude;
+    return dir * magnitude;
 }
