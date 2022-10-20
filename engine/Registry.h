@@ -1,7 +1,10 @@
 // ######### REGISTRY #########
 
+#include <iostream>
+
 #include <Particule.h>
 #include <Force.h>
+#include "Vector3.h"
 
 namespace Registry
 {
@@ -21,6 +24,8 @@ namespace Registry
         void addForce(Force::Force* f);
        
         bool delForce(Force::Force* f);
+
+        Vector3 getGravityForce();
 
         std::vector<Force::Force*> getRegist(void);
 

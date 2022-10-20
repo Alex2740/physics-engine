@@ -39,4 +39,24 @@ void PhysicWorld::RunPhysics(float duration)
 
 	ParticleContactResolver resolver = ParticleContactResolver(numContact * 2);
 	resolver.resolveContacts(contactArray, numContact, duration);
+
+	// Résolution des contacts au repos
+	for (size_t i = 0; i < numContact; i++)
+	{
+		Particule** particule = contactArray[i].particules;
+		// Particule 1
+		Vector3 gravity1 = particleRegistries[particule[0]].getGravityForce();
+
+		if ((gravity1 * duration).magnitude > particule[0]->velocity.magnitude) {
+			particule[0]->velocity -= Vector3::Project(particule[0]->velocity, contactArray[i].contactNormal);
+		}
+
+
+		// Particule 2
+		Vector3 gravity2 = particleRegistries[particule[1]].getGravityForce();
+
+		if ((gravity2 * duration).magnitude > particule[1]->velocity.magnitude) {
+			particule[0]->velocity -= Vector3::Project(particule[1]->velocity, contactArray[i].contactNormal);
+		}
+	}
 }

@@ -4,9 +4,11 @@ void ParticleContact::resolve(float duration)
 {
 	resolveVelocity();
 	resolveInterpenetration();
+}
 
-	// Contact au repos
-	//acceleration_gravity * duration > velocity
+float ParticleContact::calculateSeparatingVelocity()
+{
+	return 0.0f;
 }
 
 void ParticleContact::resolveVelocity()
