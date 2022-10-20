@@ -4,30 +4,30 @@ PhysicWorld::PhysicWorld()
 {
 }
 
-void PhysicWorld::AddParticule(Particule* particule)
+void PhysicWorld::AddParticule(Particule* particle)
 {
-	particules.push_back(particule);
-
-	particuleRegistries[particule] = Registry::ParticuleRegistry(particule);
+	particleRegistries[particle] = Registry::ParticuleRegistry(particle);
 }
 
-void PhysicWorld::DeleteParticule(Particule* particule)
+void PhysicWorld::DeleteParticule(Particule* particle)
 {
+	particleRegistries.erase(particle);
 }
 
-void PhysicWorld::AddForce(Particule* particule, Force::Force* force)
+void PhysicWorld::AddForce(Particule* particle, Force::Force* force)
 {
-	particuleRegistries[particule].addForce(force);
+	particleRegistries[particle].addForce(force);
 }
 
-void PhysicWorld::DeleteForce(Particule* particule, Force::Force* force)
+void PhysicWorld::DeleteForce(Particule* particle, Force::Force* force)
 {
+	particleRegistries[particle].delForce(force);
 }
 
 void PhysicWorld::RunPhysics(float duration)
 {
 	// Intégration des forces
-	for (auto registry : particuleRegistries) {
+	for (auto registry : particleRegistries) {
 		registry.second.update(duration);
 	}
 

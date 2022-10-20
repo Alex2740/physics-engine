@@ -9,8 +9,7 @@
 class PhysicWorld
 {
 private:
-	std::vector<Particule*> particules;
-	std::map<Particule*, Registry::ParticuleRegistry> particuleRegistries;
+	std::map<Particule*, Registry::ParticuleRegistry> particleRegistries;
 
 public:
 	PhysicWorld();
