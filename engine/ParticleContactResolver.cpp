@@ -17,16 +17,18 @@ void ParticleContactResolver::resolveContacts(std::map<Particule*, Registry::Par
 		// ParticleContact contact = *contactArray.at(i);
 		contact->resolve(duration);
 	}
+
+	// Contact au repos
 	for (auto contact: contactArray)
 	{
 		Particule** particule = contact->particules;
+
 		// Particule 1
 		Vector3 gravity1 = particuleRegistries[particule[0]].getGravityForce();
 
 		if ((gravity1 * duration).magnitude > particule[0]->velocity.magnitude) {
 			particule[0]->velocity -= Vector3::Project(particule[0]->velocity, contact->contactNormal);
 		}
-
 
 		// Particule 2
 		Vector3 gravity2 = particuleRegistries[particule[1]].getGravityForce();

@@ -192,7 +192,6 @@ int main(int, char**)
         drawParticle(p2, 255, 255, 0);
         drawParticle(p3, 0, 255);
         
-
         glfwSwapBuffers(window);
     }
 

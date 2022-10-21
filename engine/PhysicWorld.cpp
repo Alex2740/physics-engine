@@ -42,19 +42,14 @@ void PhysicWorld::RunPhysics(float duration)
 	}
 
 	// Détection des contacts
-
-		// Résolution des contacts
-
 	unsigned int numContact = 4;
-	//ParticleContact contactArray[5];
 	std::vector<ParticleContact*> contactArray;
 
 	for (auto c : contactGenerators) {
 		c->addContact(contactArray, numContact);
 	}
 
-
+	// Résolution des contacts
 	ParticleContactResolver resolver = ParticleContactResolver(numContact * 2);
 	resolver.resolveContacts(this->particuleRegistries, contactArray, duration);
-	// Résolution des contacts au repos
 }

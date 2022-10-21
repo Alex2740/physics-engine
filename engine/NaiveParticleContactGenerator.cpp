@@ -15,7 +15,6 @@ unsigned int NaiveParticleContactGenerator::addContact(std::vector<ParticleConta
 			
 			float distance = Vector3::Distance(particles[i]->position, particles[j]->position);
 			
-
 			// Si les particule se touchent (ou si interpenetration), contact
 			if (distance <= 2 * radius && limit > 0) {
 
@@ -24,18 +23,16 @@ unsigned int NaiveParticleContactGenerator::addContact(std::vector<ParticleConta
 				currentContact->particules[0] = particles[i];
 				currentContact->particules[1] = particles[j];
 
-				// jsp quelle valeur faut mettre
+				// Collision elastique (pas de perte de quantite de mouvement)
 				currentContact->restitution = 1;
-				// A modifier, pas sûr de la formule
-				currentContact->penetration = 0;
-				currentContact->contactNormal = Vector3::Cross(particles[i]->position, particles[j]->position);
+		
+				currentContact->contactNormal = particles[j]->position - particles[i]->position;
+				currentContact->penetration = Vector3::Dot(particles[i]->position - particles[j]->position, currentContact->contactNormal);
 
-				
 				contact.push_back(currentContact);
 
 				limit--;
 			}
-
 		}
 	}
 	
