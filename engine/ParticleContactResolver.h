@@ -12,5 +12,5 @@ public:
 	ParticleContactResolver();
 	ParticleContactResolver(unsigned int max_iteration);
 
-	void resolveContacts(std::map<Particule*, Registry::ParticuleRegistry> particuleRegistries, std::vector<ParticleContact*> contactArray, unsigned int numContact, float duration);
+	void resolveContacts(std::map<Particule*, Registry::ParticuleRegistry> particuleRegistries, std::vector<ParticleContact*> contactArray, float duration);
 };

@@ -10,12 +10,11 @@ ParticleContactResolver::ParticleContactResolver(unsigned int max_iteration)
 	iteration = max_iteration;
 }
 
-void ParticleContactResolver::resolveContacts(std::map<Particule*, Registry::ParticuleRegistry> particuleRegistries, std::vector<ParticleContact*> contactArray, unsigned int numContact, float duration)
+void ParticleContactResolver::resolveContacts(std::map<Particule*, Registry::ParticuleRegistry> particuleRegistries, std::vector<ParticleContact*> contactArray, float duration)
 {
 	for (auto contact: contactArray)
 	{
 		// ParticleContact contact = *contactArray.at(i);
-
 		contact->resolve(duration);
 	}
 	for (auto contact: contactArray)

@@ -55,6 +55,6 @@ void PhysicWorld::RunPhysics(float duration)
 
 
 	ParticleContactResolver resolver = ParticleContactResolver(numContact * 2);
-	resolver.resolveContacts(this->particuleRegistries, contactArray, numContact, duration);
+	resolver.resolveContacts(this->particuleRegistries, contactArray, duration);
 	// Résolution des contacts au repos
 }
