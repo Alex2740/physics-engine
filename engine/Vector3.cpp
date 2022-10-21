@@ -133,11 +133,18 @@ Vector3 Vector3::Normalized(const Vector3 a)
 	return v / v.magnitude;
 }
 
-float Vector3::Distance(const Vector3 a, const Vector3 b)
+float Vector3::Distance(const Vector3 a, Vector3 b)
 {
 	Vector3 x = a;
 	Vector3 y = b;
 	return (x - y).magnitude;
+}
+
+Vector3 Vector3::Project(const Vector3 vector, const Vector3 onNormal)
+{
+	Vector3 normal = onNormal;
+	float coef = Dot(vector, normal) / (normal.magnitude * normal.magnitude);
+	return normal * coef;
 }
 
 Vector3 Vector3::Zero()

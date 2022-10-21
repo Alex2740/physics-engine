@@ -26,6 +26,17 @@ bool Registry::ParticuleRegistry::delForce(Force::Force* f) {
     return true;
 }
 
+Vector3 Registry::ParticuleRegistry::getGravityForce()
+{
+    for (int i = 0; i < forceRegistry.size(); i++) {
+        if (Force::Gravity* gravityForce = dynamic_cast<Force::Gravity*>(forceRegistry.at(i))) {
+            return gravityForce->getForce();
+        }
+    }
+    
+    return Vector3::Zero();
+}
+
 void Registry::ParticuleRegistry::update(float dt) {
     Vector3 sum = Vector3::Zero();
     for (int i = 0; i < this->forceRegistry.size(); i++) {

@@ -25,7 +25,7 @@
 #pragma comment(lib, "legacy_stdio_definitions")
 #endif
 
-void drawParticle(Particule p, GLfloat r=255, GLfloat g=0, GLfloat b=0)
+void drawParticle(Particule p, GLfloat r=255.0, GLfloat g=0.0, GLfloat b=0.0)
 {
     //glClear(GL_COLOR_BUFFER_BIT);
     glEnable(GL_POINT_SMOOTH);

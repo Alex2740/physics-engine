@@ -40,6 +40,7 @@ public:
     static Vector3 Cross(const Vector3 a, const Vector3 b);
     static Vector3 Normalized(const Vector3 a);
     static float Distance(const Vector3 a, const Vector3 b);
+    static Vector3 Project(const Vector3 vector, const Vector3 onNormal);
 
     static Vector3 Zero();
 
