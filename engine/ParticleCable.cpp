@@ -1,9 +1,9 @@
 #include "ParticleCable.h"
-#include "ParticleLink.h"
 #include "Vector3.h"
-#include <st>
+#include <stdio.h>
 
-ParticleCable::ParticleCable(Particule* particules, float maxLength, float restitution) : ParticleLink(particules)
+
+ParticleCable::ParticleCable(Particule* p1, Particule* p2, float maxLength, float restitution) : ParticleLink(p1, p2)
 {
 	this->maxLength = maxLength;
 	this->restitution = restitution;
@@ -21,17 +21,20 @@ unsigned int ParticleCable::addContact(ParticleContact* contact, unsigned int li
 	else {
 
 		ParticleContact* currentContact = new ParticleContact();
-		currentContact->particules = this->particle;
+		currentContact->particules[0] = this->particle[0];
+		currentContact->particules[1] = this->particle[1];
 		currentContact->restitution = this->restitution;
 		currentContact->penetration = 0;
-		currentContact->contactNormal = Vector3::Cross(this->particle[0], this->particle[1]);
+		currentContact->contactNormal = Vector3::Cross(this->particle[0]->position, this->particle[1]->position);
 
 		int i = 0;
-		while (contact[i] != nullptr) {
+		while (&contact[i] != nullptr) {
 			i++;
 		}
 
-		contact[i] = currentContact;
+		std::cout << "Contact cable" << std::endl;
+
+		contact[i] = *currentContact;
 
 		return limit - 1;
 	}

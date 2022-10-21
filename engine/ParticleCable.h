@@ -1,4 +1,9 @@
+#pragma once
+
 #include "ParticleLink.h"
+#include "ParticleContact.h"
+#include "Particule.h"
+
 
 class ParticleCable : public ParticleLink {
 
@@ -9,7 +14,7 @@ public :
 	float restitution;
 
 
-	ParticleCable(Particule* particules, float maxLength, float restitution);
+	ParticleCable(Particule* p1, Particule* p2, float maxLength, float restitution);
 	unsigned int addContact(ParticleContact* contact, unsigned int limit) const;
 
 };

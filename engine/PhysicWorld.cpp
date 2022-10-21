@@ -24,6 +24,10 @@ void PhysicWorld::DeleteForce(Particule* particule, Force::Force* force)
 {
 }
 
+void PhysicWorld::AddParticleLink(ParticleLink* link) {
+	this->contactGenerators.push_back(link);
+}
+
 void PhysicWorld::RunPhysics(float duration)
 {
 	// Intégration des forces
@@ -35,7 +39,12 @@ void PhysicWorld::RunPhysics(float duration)
 
 	// Résolution des contacts
 	ParticleContact* contactArray = NULL;
-	unsigned int numContact = 0;
+	unsigned int numContact = 5;
+
+
+	for (auto contactGenerator : this->contactGenerators) {
+		numContact = contactGenerator->addContact(contactArray, numContact);
+	}
 
 	ParticleContactResolver resolver = ParticleContactResolver(numContact * 2);
 	resolver.resolveContacts(contactArray, numContact, duration);

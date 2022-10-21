@@ -1,7 +1,7 @@
 #include "ParticleRod.h"
 #include "ParticleLink.h"
 
-ParticleRod::ParticleRod(Particule* particules, float length) : ParticleLink(Particule* particules)
+ParticleRod::ParticleRod(Particule* p1, Particule* p2, float length) : ParticleLink(p1,p2)
 {
 	this->length = length;
 }

@@ -5,12 +5,15 @@
 #include "Registry.h"
 #include "ParticleContactResolver.h"
 #include "ParticleContact.h"
+#include "ParticleLink.h"
+#include "ParticleContactGenerator.h"
 
 class PhysicWorld
 {
 private:
 	std::vector<Particule*> particules;
 	std::map<Particule*, Registry::ParticuleRegistry> particuleRegistries;
+	std::vector<ParticleContactGenerator*> contactGenerators;
 
 public:
 	PhysicWorld();
@@ -20,6 +23,8 @@ public:
 
 	void AddForce(Particule* particule, Force::Force* force);
 	void DeleteForce(Particule* particule, Force::Force* force);
+
+	void AddParticleLink(ParticleLink* link);
 
 	void RunPhysics(float duration);
 };
