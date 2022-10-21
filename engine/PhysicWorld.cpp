@@ -6,57 +6,55 @@ PhysicWorld::PhysicWorld()
 
 void PhysicWorld::AddParticule(Particule* particle)
 {
-	particleRegistries[particle] = Registry::ParticuleRegistry(particle);
+	particules.push_back(particle);
+	particuleRegistries[particle] = Registry::ParticuleRegistry(particle);
 }
 
 void PhysicWorld::DeleteParticule(Particule* particle)
 {
-	particleRegistries.erase(particle);
+	particuleRegistries.erase(particle);
 }
 
 void PhysicWorld::AddForce(Particule* particle, Force::Force* force)
 {
-	particleRegistries[particle].addForce(force);
+	particuleRegistries[particle].addForce(force);
 }
 
 void PhysicWorld::DeleteForce(Particule* particle, Force::Force* force)
 {
-	particleRegistries[particle].delForce(force);
+	particuleRegistries[particle].delForce(force);
+}
+
+void PhysicWorld::AddParticleLink(ParticleLink* link) {
+	this->contactGenerators.push_back(link);
+}
+
+void PhysicWorld::AddNaiveParticleGenerator(NaiveParticleContactGenerator* generator)
+{
+	this->contactGenerators.push_back(generator);
 }
 
 void PhysicWorld::RunPhysics(float duration)
 {
 	// Intégration des forces
-	for (auto registry : particleRegistries) {
+	for (auto registry : particuleRegistries) {
 		registry.second.update(duration);
 	}
 
 	// Détection des contacts
 
-	// Résolution des contacts
-	ParticleContact* contactArray = NULL;
-	unsigned int numContact = 0;
+		// Résolution des contacts
+
+	unsigned int numContact = 4;
+	//ParticleContact contactArray[5];
+	std::vector<ParticleContact*> contactArray;
+
+	for (auto c : contactGenerators) {
+		c->addContact(contactArray, numContact);
+	}
+
 
 	ParticleContactResolver resolver = ParticleContactResolver(numContact * 2);
-	resolver.resolveContacts(contactArray, numContact, duration);
-
+	resolver.resolveContacts(this->particuleRegistries, contactArray, numContact, duration);
 	// Résolution des contacts au repos
-	for (size_t i = 0; i < numContact; i++)
-	{
-		Particule** particule = contactArray[i].particules;
-		// Particule 1
-		Vector3 gravity1 = particleRegistries[particule[0]].getGravityForce();
-
-		if ((gravity1 * duration).magnitude > particule[0]->velocity.magnitude) {
-			particule[0]->velocity -= Vector3::Project(particule[0]->velocity, contactArray[i].contactNormal);
-		}
-
-
-		// Particule 2
-		Vector3 gravity2 = particleRegistries[particule[1]].getGravityForce();
-
-		if ((gravity2 * duration).magnitude > particule[1]->velocity.magnitude) {
-			particule[0]->velocity -= Vector3::Project(particule[1]->velocity, contactArray[i].contactNormal);
-		}
-	}
 }

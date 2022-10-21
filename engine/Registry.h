@@ -1,5 +1,5 @@
 // ######### REGISTRY #########
-
+#pragma once
 #include <iostream>
 
 #include <Particule.h>

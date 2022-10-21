@@ -1,3 +1,5 @@
+#pragma once
+
 #include "ParticleContactGenerator.h"
 #include "Particule.h"
 #include "ParticleContact.h"
@@ -10,7 +12,8 @@ public :
 
 	float currentLength() const;
 
-	unsigned int addContact(ParticleContact* contact, unsigned int limit) const = 0;
+	ParticleLink(Particule* p1, Particule* p2);
 
+	unsigned int addContact(std::vector<ParticleContact*>& contact, unsigned int limit) const = 0;
 
 };

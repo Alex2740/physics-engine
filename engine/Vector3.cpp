@@ -82,7 +82,8 @@ Vector3 Vector3::operator-=(const Vector3& other)
 
 Vector3 Vector3::operator-(const Vector3& other)
 {
-	Vector3 result;
+	Vector3 result = Vector3::Zero(); 
+	
 	result = *this;
 	result -= other;
 	return result;

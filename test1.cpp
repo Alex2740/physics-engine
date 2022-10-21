@@ -7,6 +7,9 @@
 #include "engine/Vector3.h"
 #include "engine/Force.h"
 #include "engine/PhysicWorld.h"
+#include "engine/ParticleCable.h"
+#include "engine/ParticleRod.h"
+#include "engine/NaiveParticleContactGenerator.h"
 
 #include "imgui.h"
 #include "imgui_impl_glfw.h"
@@ -49,9 +52,13 @@ int main(int, char**)
     float dt = 0.001f;
 
     // Vector3* gravity = new Vector3(0, -g * masse, 0);
-    Particule p1 = Particule(Vector3(0, 0, 0), masse);
-    Particule p2 = Particule(Vector3(0.01f, 0.018f, 0), masse);
+    Particule p1 = Particule(Vector3(0, 0.5f, 0), masse);
+    Particule p2 = Particule(Vector3(0.0f, -0.5f, 0), masse);
     Particule p3 = Particule(Vector3(-0.2f, -0.001f, 0), masse);
+
+    std::vector<Particule*> listParticles;
+    listParticles.push_back(&p1);
+    listParticles.push_back(&p2);
 
     PhysicWorld physicWorld = PhysicWorld();
 
@@ -59,7 +66,13 @@ int main(int, char**)
     physicWorld.AddParticule(&p2);
 
     physicWorld.AddForce(&p1, new Force::Gravity(&p1));
-    physicWorld.AddForce(&p2, new Force::Gravity(&p2));
+    //physicWorld.AddForce(&p2, new Force::Gravity(&p2));
+
+    NaiveParticleContactGenerator* test = new NaiveParticleContactGenerator();
+    test->radius = 0.01;
+    physicWorld.AddNaiveParticleGenerator(test);
+    test->particles = listParticles;
+
 
     // Setup window
     glfwSetErrorCallback(glfw_error_callback);
