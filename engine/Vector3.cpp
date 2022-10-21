@@ -43,7 +43,7 @@ Vector3 Vector3::operator=(const Vector3& other)
 {
 	this->x_ = other.x;
 	this->y_ = other.y;
-	this->z_ = other.y;
+	this->z_ = other.z;
 
 	setMagnitude();
 
@@ -81,7 +81,8 @@ Vector3 Vector3::operator-=(const Vector3& other)
 
 Vector3 Vector3::operator-(const Vector3& other)
 {
-	Vector3 result = *this;
+	Vector3 result = Vector3::Zero();
+	result = *this;
 	result -= other;
 	return result;
 }
