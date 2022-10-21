@@ -15,6 +15,6 @@ public :
 
 
 	ParticleCable(Particule* p1, Particule* p2, float maxLength, float restitution);
-	unsigned int addContact(ParticleContact* contact, unsigned int limit) const;
+	unsigned int addContact(std::vector<ParticleContact*>& contact, unsigned int limit) const;
 
 };

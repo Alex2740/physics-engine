@@ -1,10 +1,11 @@
 #pragma once
 
 #include "ParticleContact.h"
+#include <vector>
 
 class ParticleContactGenerator {
 
 	public : 
-	virtual unsigned int addContact(ParticleContact* contact, unsigned int limit) const = 0;
+	virtual unsigned int addContact(std::vector<ParticleContact*>& contact, unsigned int limit) const = 0;
 
 };

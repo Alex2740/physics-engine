@@ -6,13 +6,9 @@ ParticleRod::ParticleRod(Particule* p1, Particule* p2, float length) : ParticleL
 	this->length = length;
 }
 
-unsigned int ParticleRod::addContact(ParticleContact* contact, unsigned int limit) const
+unsigned int ParticleRod::addContact(std::vector<ParticleContact*>& contact, unsigned int limit) const
 {
 	float currentLength = this->currentLength();
-	int i = 0;
-	while (contact[i] != nullptr) {
-		i++;
-	}
 
 	// Si la distance est plus grande que la longueur de la tige, il y a contact
 	if (currentLength > length) {
@@ -21,11 +17,12 @@ unsigned int ParticleRod::addContact(ParticleContact* contact, unsigned int limi
 		// Pas sûr mais je pense que la restitution devrait être de 1 ?
 		currentContact->restitution = 1;
 		currentContact->penetration = 0;
-		currentContact->particules = this->particle;
-		currentContact->contactNormal = Vector3::Cross(this->particle[0], this->particle[1]);
-
-		contact[i] = currentContact;
-
+		currentContact->particules[0] = this->particle[0];
+		currentContact->particules[1] = this->particle[1];
+		currentContact->contactNormal = Vector3::Cross(this->particle[0]->position, this->particle[1]->position);
+		
+		contact.push_back(currentContact);
+		
 		return limit - 1;
 	}
 	// Sinon si elle est plus petite, il y a contact
@@ -35,13 +32,14 @@ unsigned int ParticleRod::addContact(ParticleContact* contact, unsigned int limi
 		// Pas sûr mais je pense que la restitution devrait être de 1 ?
 		currentContact->restitution = 1;
 		currentContact->penetration = 0;
-		currentContact->particules = this->particle;
+		currentContact->particules[0] = this->particle[0];
+		currentContact->particules[1] = this->particle[1];
 
 		// On inverse la normale
-		currentContact->contactNormal = Vector3::Cross(this->particle[0], this->particle[1]) * -1;
+		currentContact->contactNormal = Vector3::Cross(this->particle[0]->position, this->particle[1]->position) * -1;
 
-		contact[i] = currentContact;
-
+		contact.push_back(currentContact);
+		
 
 		return limit - 1;
 	}

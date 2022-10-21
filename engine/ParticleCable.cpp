@@ -9,10 +9,11 @@ ParticleCable::ParticleCable(Particule* p1, Particule* p2, float maxLength, floa
 	this->restitution = restitution;
 }
 
-unsigned int ParticleCable::addContact(ParticleContact* contact, unsigned int limit) const
+unsigned int ParticleCable::addContact(std::vector<ParticleContact*>& contact, unsigned int limit) const
 {
+	
 	float currentLength = this->currentLength();
-
+	//std::cout << currentLength << std::endl;
 	// Si la distance entre les 2 particules est inférieure à la distance max du cable, pas de contact
 	if (currentLength < this->maxLength) {
 		return limit;
@@ -27,14 +28,8 @@ unsigned int ParticleCable::addContact(ParticleContact* contact, unsigned int li
 		currentContact->penetration = 0;
 		currentContact->contactNormal = Vector3::Cross(this->particle[0]->position, this->particle[1]->position);
 
-		int i = 0;
-		while (&contact[i] != nullptr) {
-			i++;
-		}
 
-		std::cout << "Contact cable" << std::endl;
-
-		contact[i] = *currentContact;
+		contact.push_back(currentContact);
 
 		return limit - 1;
 	}

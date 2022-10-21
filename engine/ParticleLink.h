@@ -14,6 +14,6 @@ public :
 
 	ParticleLink(Particule* p1, Particule* p2);
 
-	unsigned int addContact(ParticleContact* contact, unsigned int limit) const = 0;
+	unsigned int addContact(std::vector<ParticleContact*>& contact, unsigned int limit) const = 0;
 
 };

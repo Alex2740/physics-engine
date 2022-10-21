@@ -28,6 +28,11 @@ void PhysicWorld::AddParticleLink(ParticleLink* link) {
 	this->contactGenerators.push_back(link);
 }
 
+void PhysicWorld::AddNaiveParticleGenerator(NaiveParticleContactGenerator* generator)
+{
+	this->contactGenerators.push_back(generator);
+}
+
 void PhysicWorld::RunPhysics(float duration)
 {
 	// Intégration des forces
@@ -37,15 +42,17 @@ void PhysicWorld::RunPhysics(float duration)
 
 	// Détection des contacts
 
-	// Résolution des contacts
-	ParticleContact* contactArray = NULL;
-	unsigned int numContact = 5;
+		// Résolution des contacts
 
+	unsigned int numContact = 4;
+	//ParticleContact contactArray[5];
+	std::vector<ParticleContact*> contactArray;
 
-	for (auto contactGenerator : this->contactGenerators) {
-		numContact = contactGenerator->addContact(contactArray, numContact);
+	for (auto c : contactGenerators) {
+		c->addContact(contactArray, numContact);
 	}
 
+
 	ParticleContactResolver resolver = ParticleContactResolver(numContact * 2);
-	resolver.resolveContacts(contactArray, numContact, duration);
+	//resolver.resolveContacts(contactArray, numContact, duration);
 }

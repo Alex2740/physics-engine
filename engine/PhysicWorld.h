@@ -7,6 +7,7 @@
 #include "ParticleContact.h"
 #include "ParticleLink.h"
 #include "ParticleContactGenerator.h"
+#include "NaiveParticleContactGenerator.h"
 
 class PhysicWorld
 {
@@ -25,6 +26,7 @@ public:
 	void DeleteForce(Particule* particule, Force::Force* force);
 
 	void AddParticleLink(ParticleLink* link);
+	void AddNaiveParticleGenerator(NaiveParticleContactGenerator* generator);
 
 	void RunPhysics(float duration);
 };
