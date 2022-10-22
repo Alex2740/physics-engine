@@ -48,9 +48,9 @@ Vector3 Force::ParticuleDrag::getForce() {
     if (magnitude == 0) {
         return Vector3::Zero();
     }
-    Vector3 vNormalise = Vector3(v.x / magnitude,v.y/magnitude,v.z/magnitude);
-    Vector3 ret = vNormalise * (k1 * v.magnitude + k2 * v.magnitude * v.magnitude);
-    printf("%f %f %f\n", vNormalise.x, vNormalise.y, vNormalise.z);
+    // Vector3 vNormalise = Vector3(v.x / magnitude,v.y/magnitude,v.z/magnitude);
+    // Vector3 ret = vNormalise * (k1 * v.magnitude + k2 * v.magnitude * v.magnitude);
+    // printf("%f %f %f\n", vNormalise.x, vNormalise.y, vNormalise.z);
     return ret;
 }
 
