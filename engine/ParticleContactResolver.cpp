@@ -12,29 +12,45 @@ ParticleContactResolver::ParticleContactResolver(unsigned int max_iteration)
 
 void ParticleContactResolver::resolveContacts(std::map<Particule*, Registry::ParticuleRegistry> particuleRegistries, std::vector<ParticleContact*> contactArray, float duration)
 {
-	for (auto contact: contactArray)
-	{
-		// ParticleContact contact = *contactArray.at(i);
-		contact->resolve(duration);
-	}
+	while (iteration > 0) {
+		float min = INFINITY;
+		unsigned index = -1;
 
-	// Contact au repos
-	for (auto contact: contactArray)
-	{
-		Particule** particule = contact->particules;
+		for (int i = 0; i < contactArray.size(); i++)
+		{
+			float separatingVelocity = contactArray[i]->calculateSeparatingVelocity();
+
+			if (separatingVelocity < min) {
+				if (separatingVelocity < 0 || contactArray[i]->penetration > 0) {
+					min = separatingVelocity;
+					index = i;
+				}
+			}
+		}
+
+		if (index == -1) break;
+
+		contactArray[index]->resolve(duration);
+
+		// Contact au repos
+		Particule** particules = contactArray[index]->particules;
 
 		// Particule 1
-		Vector3 gravity1 = particuleRegistries[particule[0]].getGravityForce();
+		Vector3 gravity1 = particuleRegistries[particules[0]].getGravityForce();
 
-		if ((gravity1 * duration).magnitude > particule[0]->velocity.magnitude) {
-			particule[0]->velocity -= Vector3::Project(particule[0]->velocity, contact->contactNormal);
+		if ((gravity1 * duration).magnitude > particules[0]->velocity.magnitude) {
+			particules[0]->velocity -= Vector3::Project(particules[0]->velocity, contactArray[index]->contactNormal);
 		}
 
 		// Particule 2
-		Vector3 gravity2 = particuleRegistries[particule[1]].getGravityForce();
+		if (particules[1]) {
+			Vector3 gravity2 = particuleRegistries[particules[1]].getGravityForce();
 
-		if ((gravity2 * duration).magnitude > particule[1]->velocity.magnitude) {
-			particule[0]->velocity -= Vector3::Project(particule[1]->velocity, contact->contactNormal);
+			if ((gravity2 * duration).magnitude > particules[1]->velocity.magnitude) {
+				particules[0]->velocity -= Vector3::Project(particules[1]->velocity, contactArray[index]->contactNormal);
+			}
 		}
+
+		iteration--;
 	}
 }

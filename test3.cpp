@@ -71,14 +71,11 @@ int main(int, char**)
 
     WallContactGenerator* test = new WallContactGenerator();
     test->particleRadius = 0.01;
-    test->a = 1.0f;
-    test->b = -0.1f;
+    test->normal = Vector3(1, 1, 0);
+    test->origine = Vector3(0, 0, 0);
     test->particules = listParticles;
-    test->orientation = -1;
     physicWorld.AddWallContactGenerator(test);
    
-
-
     // Setup window
     glfwSetErrorCallback(glfw_error_callback);
     if (!glfwInit())

@@ -26,17 +26,17 @@ void PhysicWorld::DeleteForce(Particule* particle, Force::Force* force)
 }
 
 void PhysicWorld::AddParticleLink(ParticleLink* link) {
-	this->contactGenerators.push_back(link);
+	contactGenerators.push_back(link);
 }
 
 void PhysicWorld::AddNaiveParticleGenerator(NaiveParticleContactGenerator* generator)
 {
-	this->contactGenerators.push_back(generator);
+	contactGenerators.push_back(generator);
 }
 
 void PhysicWorld::AddWallContactGenerator(WallContactGenerator* generator)
 {
-	this->contactGenerators.push_back(generator);
+	contactGenerators.push_back(generator);
 }
 
 void PhysicWorld::RunPhysics(float duration)
@@ -47,14 +47,14 @@ void PhysicWorld::RunPhysics(float duration)
 	}
 
 	// Détection des contacts
-	unsigned int numContact = 4;
+	unsigned int limitContact = 2048;
 	std::vector<ParticleContact*> contactArray;
 
 	for (auto c : contactGenerators) {
-		c->addContact(contactArray, numContact);
+		c->addContact(contactArray, limitContact);
 	}
 
 	// Résolution des contacts
-	ParticleContactResolver resolver = ParticleContactResolver(numContact * 2);
+	ParticleContactResolver resolver = ParticleContactResolver(contactArray.size() * 2);
 	resolver.resolveContacts(this->particuleRegistries, contactArray, duration);
 }

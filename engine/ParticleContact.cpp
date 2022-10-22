@@ -8,23 +8,65 @@ void ParticleContact::resolve(float duration)
 
 float ParticleContact::calculateSeparatingVelocity()
 {
-	return 0.0f;
+	Vector3 vrel = particules[0]->velocity;
+
+	// Si la deuxième particule est un mur
+	if (particules[1]) {
+		vrel -= particules[1]->velocity;
+	}
+
+	return Vector3::Dot(vrel, contactNormal);
 }
 
 void ParticleContact::resolveVelocity()
 {
-	Vector3 n = Vector3::Normalized(particules[0]->velocity);
-	Vector3 vrel = particules[0]->velocity - particules[1]->velocity;
-	float k = ((restitution + 1) * Vector3::Dot(vrel, n)) / ((particules[0]->inverseMasse + particules[1]->inverseMasse) * Vector3::Dot(n, n));
+	float separatingVelocity = calculateSeparatingVelocity();
 
-	particules[0]->velocity -= n * k * particules[0]->inverseMasse;
-	particules[1]->velocity += n * k * particules[1]->inverseMasse;
+	if (separatingVelocity > 0) return;
+
+	float totalInverseMasse = particules[0]->inverseMasse;
+	if (particules[1]) {
+		totalInverseMasse += particules[1]->inverseMasse;
+	}
+
+	if (totalInverseMasse <= 0) return;
+
+	float k = (restitution + 1) * separatingVelocity / totalInverseMasse;
+
+	Vector3 impulse = contactNormal * k;
+
+	particules[0]->velocity -= impulse * particules[0]->inverseMasse;
+
+	if (particules[1]) {
+		particules[1]->velocity += impulse * particules[1]->inverseMasse;
+	}
 }
 
 void ParticleContact::resolveInterpenetration()
 {
-	float totalMasse = particules[0]->masse() + particules[1]->masse();
+	if (penetration <= 0) return;
 
-	particules[0]->position += contactNormal * particules[1]->masse() / totalMasse * penetration;
-	particules[1]->position -= contactNormal * particules[0]->masse() / totalMasse * penetration;
+	float totalInverseMasse = particules[0]->inverseMasse;
+	if (particules[1]) {
+		totalInverseMasse += particules[1]->inverseMasse;
+	}
+
+	if (totalInverseMasse <= 0) return;
+
+	Vector3 mouvements[2];
+
+	mouvements[0] = contactNormal * particules[0]->inverseMasse * penetration / totalInverseMasse;
+
+	if (particules[1]) {
+		mouvements[1] = contactNormal * particules[1]->inverseMasse * penetration / totalInverseMasse;
+	}
+	else {
+		mouvements[1] = Vector3::Zero();
+	}
+	
+	particules[0]->position += mouvements[0];
+
+	if (particules[1]) {
+		particules[1]->position -= mouvements[1];
+	}
 }

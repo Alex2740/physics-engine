@@ -7,12 +7,8 @@ class WallContactGenerator : public ParticleContactGenerator{
 public:
 	float particleRadius;
 
-	float a;
-	float b;
-	// droite d'équation y = ax + b
-
-	int orientation = 1;
-	// Orientation du mur
+	Vector3 normal;
+	Vector3 origine;
 
 	std::vector<Particule*> particules;
 
