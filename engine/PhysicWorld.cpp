@@ -34,6 +34,11 @@ void PhysicWorld::AddNaiveParticleGenerator(NaiveParticleContactGenerator* gener
 	this->contactGenerators.push_back(generator);
 }
 
+void PhysicWorld::AddWallContactGenerator(WallContactGenerator* generator)
+{
+	this->contactGenerators.push_back(generator);
+}
+
 void PhysicWorld::RunPhysics(float duration)
 {
 	// Intégration des forces
