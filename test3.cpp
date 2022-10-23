@@ -77,11 +77,17 @@ int main(int, char**)
     physicWorld.AddForce(&p4, new Force::Gravity(&p4));
     
     physicWorld.AddForce(&p1, new Force::Spring(&p1, &p2, 3000.0f));
+    physicWorld.AddForce(&p2, new Force::Spring(&p2, &p1, 3000.0f));
     physicWorld.AddForce(&p1, new Force::Spring(&p1, &p3, 3000.0f));
+    physicWorld.AddForce(&p3, new Force::Spring(&p3, &p1, 3000.0f));
     physicWorld.AddForce(&p1, new Force::Spring(&p1, &p4, 3000.0f));
+    physicWorld.AddForce(&p4, new Force::Spring(&p4, &p1, 3000.0f));
     physicWorld.AddForce(&p3, new Force::Spring(&p3, &p2, 3000.0f));
+    physicWorld.AddForce(&p2, new Force::Spring(&p2, &p3, 3000.0f));
     physicWorld.AddForce(&p3, new Force::Spring(&p3, &p4, 3000.0f));
+    physicWorld.AddForce(&p4, new Force::Spring(&p4, &p3, 3000.0f));
     physicWorld.AddForce(&p2, new Force::Spring(&p2, &p4, 3000.0f));
+    physicWorld.AddForce(&p4, new Force::Spring(&p4, &p2, 3000.0f));
     
 
 
