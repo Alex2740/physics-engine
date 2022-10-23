@@ -26,8 +26,8 @@ unsigned int NaiveParticleContactGenerator::addContact(std::vector<ParticleConta
 				// Collision elastique (pas de perte de quantite de mouvement)
 				currentContact->restitution = 1;
 		
-				currentContact->contactNormal = particles[j]->position - particles[i]->position;
-				currentContact->penetration = Vector3::Dot(particles[i]->position - particles[j]->position, currentContact->contactNormal);
+				currentContact->contactNormal = Vector3::Normalized(particles[j]->position - particles[i]->position);
+				currentContact->penetration = -(currentContact->contactNormal.magnitude - 2 * radius);
 
 				contact.push_back(currentContact);
 

@@ -8,6 +8,7 @@
 #include "ParticleLink.h"
 #include "ParticleContactGenerator.h"
 #include "NaiveParticleContactGenerator.h"
+#include <WallContactGenerator.h>
 
 class PhysicWorld
 {
@@ -27,6 +28,7 @@ public:
 
 	void AddParticleLink(ParticleLink* link);
 	void AddNaiveParticleGenerator(NaiveParticleContactGenerator* generator);
+	void AddWallContactGenerator(WallContactGenerator* generator);
 
 	void RunPhysics(float duration);
 };
