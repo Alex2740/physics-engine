@@ -53,28 +53,48 @@ int main(int, char**)
     float dt = 0.001f;
 
     // Vector3* gravity = new Vector3(0, -g * masse, 0);
-    Particule p1 = Particule(Vector3(0, 0.5f, 0), masse);
-    Particule p2 = Particule(Vector3(0.2f, 0.5f, 0), masse);
-    Particule p3 = Particule(Vector3(-0.2f, -0.001f, 0), masse);
+    Particule p1 = Particule(Vector3(-0.1, 0.5f, 0), masse);
+    Particule p2 = Particule(Vector3(0.1f, 0.5f, 0), masse);
+    Particule p3 = Particule(Vector3(-0.1f, 0.4f, 0), masse);
+    Particule p4 = Particule(Vector3(0.1f, 0.4f, 0), masse);
 
     std::vector<Particule*> listParticles;
     listParticles.push_back(&p1);
     listParticles.push_back(&p2);
+    listParticles.push_back(&p3);
+    listParticles.push_back(&p4);
 
     PhysicWorld physicWorld = PhysicWorld();
 
     physicWorld.AddParticule(&p1);
     physicWorld.AddParticule(&p2);
+    physicWorld.AddParticule(&p3);
+    physicWorld.AddParticule(&p4);
 
     physicWorld.AddForce(&p1, new Force::Gravity(&p1));
     physicWorld.AddForce(&p2, new Force::Gravity(&p2));
+    physicWorld.AddForce(&p3, new Force::Gravity(&p3));
+    physicWorld.AddForce(&p4, new Force::Gravity(&p4));
+    
+    physicWorld.AddForce(&p1, new Force::Spring(&p1, &p2, 3000.0f));
+    physicWorld.AddForce(&p1, new Force::Spring(&p1, &p3, 3000.0f));
+    physicWorld.AddForce(&p1, new Force::Spring(&p1, &p4, 3000.0f));
+    physicWorld.AddForce(&p3, new Force::Spring(&p3, &p2, 3000.0f));
+    physicWorld.AddForce(&p3, new Force::Spring(&p3, &p4, 3000.0f));
+    physicWorld.AddForce(&p2, new Force::Spring(&p2, &p4, 3000.0f));
+    
 
+
+    //NaiveParticleContactGenerator* naif = new NaiveParticleContactGenerator();
+    //naif->particles = listParticles;
     WallContactGenerator* test = new WallContactGenerator();
     test->particleRadius = 0.01;
-    test->normal = Vector3(1, 1, 0);
+    test->normal = Vector3(0, 1, 0);
     test->origine = Vector3(0, 0, 0);
     test->particules = listParticles;
+    //naif->radius = 0.01f;
     physicWorld.AddWallContactGenerator(test);
+    //physicWorld.AddNaiveParticleGenerator(naif);
    
     // Setup window
     glfwSetErrorCallback(glfw_error_callback);
@@ -193,6 +213,7 @@ int main(int, char**)
         drawParticle(p1);
         drawParticle(p2, 255, 255, 0);
         drawParticle(p3, 0, 255);
+        drawParticle(p4, 0, 255);
         
         glfwSwapBuffers(window);
     }
