@@ -22,10 +22,15 @@ target_include_directories(test2 PUBLIC ./engine ./imgui ./imgui/libs/glfw/inclu
 target_link_directories(test2 PUBLIC imgui/libs/glfw/lib-vc2010-64 imgui/libs/glfw/lib-vc2010-32)
 target_link_libraries(test2 PRIVATE opengl32.lib glfw3.lib)
 
-add_executable(test3 test3.cpp ${ENGINES} ${IMGUI})
+add_executable(test3 "test3.cpp" ${ENGINES} ${IMGUI})
 target_include_directories(test3 PUBLIC ./engine ./imgui ./imgui/libs/glfw/include)
 target_link_directories(test3 PUBLIC imgui/libs/glfw/lib-vc2010-64 imgui/libs/glfw/lib-vc2010-32)
 target_link_libraries(test3 PRIVATE opengl32.lib glfw3.lib)
+
+add_executable(amas "amas.cpp" ${ENGINES} ${IMGUI})
+target_include_directories(amas PUBLIC ./engine ./imgui ./imgui/libs/glfw/include)
+target_link_directories(amas PUBLIC imgui/libs/glfw/lib-vc2010-64 imgui/libs/glfw/lib-vc2010-32)
+target_link_libraries(amas PRIVATE opengl32.lib glfw3.lib)
 
 SET(CMAKE_EXE_LINKER_FLAGS /NODEFAULTLIB:\"msvcrt.lib\")
 
