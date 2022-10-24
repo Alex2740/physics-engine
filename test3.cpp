@@ -88,13 +88,11 @@ int main(int, char**)
     physicWorld.AddForce(&p2, new Force::Spring(&p2, &p4, 3000.0f));
     physicWorld.AddForce(&p4, new Force::Spring(&p4, &p2, 3000.0f));
     
-    NaiveParticleContactGenerator* naif = new NaiveParticleContactGenerator();
-    naif->particles = listParticles;
-    naif->radius = 0.025f;
-    physicWorld.AddNaiveParticleGenerator(naif);
+    NaiveParticleContactGenerator* naif = new NaiveParticleContactGenerator(listParticles, 0.025f);
+    physicWorld.AddContactGenerator(naif);
 
-    WallContactGenerator* test = new WallContactGenerator(listParticles, Vector3(0, 1, 0), Vector3(0, 0, 0),0.01f);
-    physicWorld.AddContactGenerator(test);
+    WallContactGenerator* wall = new WallContactGenerator(listParticles, Vector3(0, 1, 0), Vector3(0, 0, 0),0.01f);
+    physicWorld.AddContactGenerator(wall);
    
     // Setup window
     glfwSetErrorCallback(glfw_error_callback);

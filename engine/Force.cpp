@@ -62,7 +62,7 @@ Vector3 Force::Spring::getForce() {
     Vector3 newDist;
     float diff;
     newDist = particule2->position - particule->position;
-    diff = newDist.magnitude - dist.magnitude;
+    diff = newDist.getMagnitude() - dist.getMagnitude();
     if (diff == 0) return Vector3::Zero();
     // std::cout << particule->position.x << " " << particule->position.y << std::endl;
     // std::cout << particule2->position.x << " " << particule2->position.y << std::endl;

@@ -85,38 +85,20 @@ int main(int, char**)
 
     physicWorld.AddForce(&white, new Force::Gravity(&white));
 
-    NaiveParticleContactGenerator* naif = new NaiveParticleContactGenerator();
-    naif->particles = listParticles;
-    naif->radius = particule_radius;
-    physicWorld.AddNaiveParticleGenerator(naif);
+    NaiveParticleContactGenerator* naif = new NaiveParticleContactGenerator(listParticles, particule_radius);
+    physicWorld.AddContactGenerator(naif);
 
-    WallContactGenerator* bottom_wall = new WallContactGenerator();
-    bottom_wall->particleRadius = particule_radius;
-    bottom_wall->origine = Vector3(0, -.8f, 0);
-    bottom_wall->normal = Vector3(0, 1, 0);
-    bottom_wall->particules = listParticles;
-    physicWorld.AddWallContactGenerator(bottom_wall);
+    WallContactGenerator* bottom_wall = new WallContactGenerator(listParticles, Vector3(0, 1, 0), Vector3(0, -.8f, 0), particule_radius);
+    physicWorld.AddContactGenerator(bottom_wall);
 
-    WallContactGenerator* top_wall = new WallContactGenerator();
-    top_wall->particleRadius = particule_radius;
-    top_wall->origine = Vector3(0, .8f, 0);
-    top_wall->normal = Vector3(0, -1, 0);
-    top_wall->particules = listParticles;
-    physicWorld.AddWallContactGenerator(top_wall);
+    WallContactGenerator* top_wall = new WallContactGenerator(listParticles, Vector3(0, -1, 0), Vector3(0, .8f, 0), particule_radius);
+    physicWorld.AddContactGenerator(top_wall);
 
-    WallContactGenerator* right_wall = new WallContactGenerator();
-    right_wall->particleRadius = particule_radius;
-    right_wall->origine = Vector3(.8f, 0, 0);
-    right_wall->normal = Vector3(-1, 0, 0);
-    right_wall->particules = listParticles;
-    physicWorld.AddWallContactGenerator(right_wall);
+    WallContactGenerator* right_wall = new WallContactGenerator(listParticles, Vector3(-1, 0, 0), Vector3(.8f, 0, 0), particule_radius);
+    physicWorld.AddContactGenerator(right_wall);
 
-    WallContactGenerator* left_wall = new WallContactGenerator();
-    left_wall->particleRadius = particule_radius;
-    left_wall->origine = Vector3(-.8f, 0, 0);
-    left_wall->normal = Vector3(1, 0, 0);
-    left_wall->particules = listParticles;
-    physicWorld.AddWallContactGenerator(left_wall);
+    WallContactGenerator* left_wall = new WallContactGenerator(listParticles, Vector3(1, 0, 0), Vector3(-.8f, 0, 0), particule_radius);
+    physicWorld.AddContactGenerator(left_wall);
 
     // Setup window
     glfwSetErrorCallback(glfw_error_callback);
