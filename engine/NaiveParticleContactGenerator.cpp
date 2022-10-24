@@ -27,7 +27,7 @@ unsigned int NaiveParticleContactGenerator::addContact(std::vector<ParticleConta
 				currentContact->restitution = 1;
 		
 				currentContact->contactNormal = Vector3::Normalized(particles[j]->position - particles[i]->position);
-				currentContact->penetration = -(currentContact->contactNormal.magnitude - 2 * radius);
+				currentContact->penetration = -(distance - 2 * radius);
 
 				contact.push_back(currentContact);
 
