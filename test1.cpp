@@ -32,7 +32,7 @@ void drawParticle(Particule p, GLfloat r=255.0, GLfloat g=0.0, GLfloat b=0.0)
 {
     //glClear(GL_COLOR_BUFFER_BIT);
     glEnable(GL_POINT_SMOOTH);
-    glPointSize(10.0f);
+    glPointSize(30.0f);
     glBegin(GL_POINTS);
     glVertex3f(p.position.x, p.position.y,p.position.z);
     glColor3f(r, g, b); 
@@ -48,7 +48,7 @@ static void glfw_error_callback(int error, const char* description)
 
 int main(int, char**)
 {
-    float masse = 10;
+    float masse = 100;
     float dt = 0.001f;
 
     // Vector3* gravity = new Vector3(0, -g * masse, 0);
@@ -69,7 +69,7 @@ int main(int, char**)
     //physicWorld.AddForce(&p2, new Force::Gravity(&p2));
 
     NaiveParticleContactGenerator* test = new NaiveParticleContactGenerator();
-    test->radius = 0.01;
+    test->radius = 0.025f;
     physicWorld.AddNaiveParticleGenerator(test);
     test->particles = listParticles;
 

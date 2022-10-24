@@ -33,7 +33,7 @@ void drawParticle(Particule p, GLfloat r=255.0, GLfloat g=0.0, GLfloat b=0.0)
 {
     //glClear(GL_COLOR_BUFFER_BIT);
     glEnable(GL_POINT_SMOOTH);
-    glPointSize(10.0f);
+    glPointSize(30.0f);
     glBegin(GL_POINTS);
     glVertex3f(p.position.x, p.position.y,p.position.z);
     glColor3f(r, g, b); 
@@ -49,14 +49,13 @@ static void glfw_error_callback(int error, const char* description)
 
 int main(int, char**)
 {
-    float masse = 10;
+    float masse = 100;
     float dt = 0.001f;
 
-    // Vector3* gravity = new Vector3(0, -g * masse, 0);
-    Particule p1 = Particule(Vector3(-0.1, 0.5f, 0), masse);
-    Particule p2 = Particule(Vector3(0.1f, 0.5f, 0), masse);
-    Particule p3 = Particule(Vector3(-0.1f, 0.4f, 0), masse);
-    Particule p4 = Particule(Vector3(0.1f, 0.4f, 0), masse);
+    Particule p1 = Particule(Vector3(-0.1, 0.8f, 0), masse);
+    Particule p2 = Particule(Vector3(0.1f, 0.8f, 0), masse);
+    Particule p3 = Particule(Vector3(-0.1f, 0.3f, 0), masse);
+    Particule p4 = Particule(Vector3(0.1f, 0.3f, 0), masse);
 
     std::vector<Particule*> listParticles;
     listParticles.push_back(&p1);
@@ -89,18 +88,17 @@ int main(int, char**)
     physicWorld.AddForce(&p2, new Force::Spring(&p2, &p4, 3000.0f));
     physicWorld.AddForce(&p4, new Force::Spring(&p4, &p2, 3000.0f));
     
+    NaiveParticleContactGenerator* naif = new NaiveParticleContactGenerator();
+    naif->particles = listParticles;
+    naif->radius = 0.025f;
+    physicWorld.AddNaiveParticleGenerator(naif);
 
-
-    //NaiveParticleContactGenerator* naif = new NaiveParticleContactGenerator();
-    //naif->particles = listParticles;
     WallContactGenerator* test = new WallContactGenerator();
-    test->particleRadius = 0.01;
+    test->particleRadius = 0.025f;
     test->normal = Vector3(0, 1, 0);
     test->origine = Vector3(0, 0, 0);
     test->particules = listParticles;
-    //naif->radius = 0.01f;
     physicWorld.AddWallContactGenerator(test);
-    //physicWorld.AddNaiveParticleGenerator(naif);
    
     // Setup window
     glfwSetErrorCallback(glfw_error_callback);
