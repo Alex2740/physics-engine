@@ -49,7 +49,7 @@ static void glfw_error_callback(int error, const char* description)
 
 int main(int, char**)
 {
-    float masse = 500;
+    float masse = 100;
     float dt = 0.001f;
     float particule_radius = .025f;
     //float particule_radius = .005f;

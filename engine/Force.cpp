@@ -49,7 +49,7 @@ Vector3 Force::ParticuleDrag::getForce() {
         return Vector3::Zero();
     }
     Vector3 vNormalise = Vector3(v.x / magnitude,v.y/magnitude,v.z/magnitude);
-    Vector3 ret = vNormalise * (k1 * v.magnitude + k2 * v.magnitude * v.magnitude);
+    Vector3 ret = vNormalise * (k1 * v.getMagnitude() + k2 * v.getMagnitude() * v.getMagnitude());
     // printf("%f %f %f\n", vNormalise.x, vNormalise.y, vNormalise.z);
     return ret;
 }
@@ -68,6 +68,6 @@ Vector3 Force::Spring::getForce() {
     // std::cout << particule2->position.x << " " << particule2->position.y << std::endl;
     // std::cout << newDist.x << " " << newDist.y << std::endl << std::endl;
     Vector3 dir = Vector3::Normalized(diff);
-    float magnitude = this->k * diff.magnitude;
+    float magnitude = this->k * diff.getMagnitude();
     return dir * magnitude;
 }

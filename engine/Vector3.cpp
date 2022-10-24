@@ -1,64 +1,37 @@
 #include "Vector3.h"
 
-void Vector3::setMagnitude()
-{
-	magnitude_ = sqrtf(Vector3::Dot(*this, *this));
-}
-
 Vector3::Vector3()
 {
 }
 
 Vector3::Vector3(float _x, float _y, float _z)
 {
-	x_ = _x;
-	y_ = _y;
-	z_ = _z;
-
-	setMagnitude();
+	x = _x;
+	y = _y;
+	z = _z;
 }
 
-void Vector3::setX(float _x)
+float Vector3::getMagnitude()
 {
-	x_ = _x;
-
-	setMagnitude();
-}
-
-void Vector3::setY(float _y)
-{
-	y_ = _y;
-
-	setMagnitude();
-}
-
-void Vector3::setZ(float _z)
-{
-	z_ = _z;
-
-	setMagnitude();
+	return sqrtf(Vector3::Dot(*this, *this));
 }
 
 Vector3 Vector3::operator=(const Vector3& other)
 {
-	this->x_ = other.x;
-	this->y_ = other.y;
-	this->z_ = other.z;
-
-	setMagnitude();
+	x = other.x;
+	y = other.y;
+	z = other.z;
 
 	return *this;
 }
 
 Vector3 Vector3::operator+=(const Vector3& other)
 {
-	this->x_ += other.x;
-	this->y_ += other.y;
-	this->z_ += other.z;
+	x += other.x;
+	y += other.y;
+	z += other.z;
 
-	setMagnitude();
-
-	return Vector3(this->x_ + other.x, this->y_ + other.y, this->z_ + other.z);
+	return Vector3(x + other.x, y + other.y, z + other.z);
 }
 
 Vector3 Vector3::operator+(const Vector3& other)
@@ -71,11 +44,9 @@ Vector3 Vector3::operator+(const Vector3& other)
 
 Vector3 Vector3::operator-=(const Vector3& other)
 {
-	x_ -= other.x;
-	y_ -= other.y;
-	z_ -= other.z;
-
-	setMagnitude();
+	x -= other.x;
+	y -= other.y;
+	z -= other.z;
 
 	return *this;
 }
@@ -131,20 +102,20 @@ Vector3 Vector3::Cross(const Vector3 a, const Vector3 b)
 Vector3 Vector3::Normalized(const Vector3 a)
 {
 	Vector3 v = a;
-	return v / v.magnitude;
+	return v / v.getMagnitude();
 }
 
 float Vector3::Distance(const Vector3 a, Vector3 b)
 {
 	Vector3 x = a;
 	Vector3 y = b;
-	return (x - y).magnitude;
+	return (x - y).getMagnitude();
 }
 
 Vector3 Vector3::Project(const Vector3 vector, const Vector3 onNormal)
 {
 	Vector3 normal = onNormal;
-	float coef = Dot(vector, normal) / (normal.magnitude * normal.magnitude);
+	float coef = Dot(vector, normal) / (normal.getMagnitude() * normal.getMagnitude());
 	return normal * coef;
 }
 
