@@ -64,13 +64,14 @@ int main(int, char**)
     Particule white = Particule(Vector3(0, .5f, 0), masse);
 
     std::vector<Particule*> listParticles;
+    listParticles.push_back(&white);
     listParticles.push_back(&b1);
     listParticles.push_back(&b2);
     listParticles.push_back(&b3);
     listParticles.push_back(&b4);
     listParticles.push_back(&b5);
     listParticles.push_back(&b6);
-    listParticles.push_back(&white);
+
 
     PhysicWorld physicWorld = PhysicWorld();
 
