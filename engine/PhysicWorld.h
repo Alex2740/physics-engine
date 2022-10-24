@@ -26,9 +26,8 @@ public:
 	void AddForce(Particule* particule, Force::Force* force);
 	void DeleteForce(Particule* particule, Force::Force* force);
 
-	void AddParticleLink(ParticleLink* link);
-	void AddNaiveParticleGenerator(NaiveParticleContactGenerator* generator);
-	void AddWallContactGenerator(WallContactGenerator* generator);
+	void AddContactGenerator(ParticleContactGenerator* generator);
+	
 
 	void RunPhysics(float duration);
 };

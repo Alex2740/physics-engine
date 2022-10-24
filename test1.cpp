@@ -68,11 +68,8 @@ int main(int, char**)
     physicWorld.AddForce(&p1, new Force::Gravity(&p1));
     //physicWorld.AddForce(&p2, new Force::Gravity(&p2));
 
-    NaiveParticleContactGenerator* test = new NaiveParticleContactGenerator();
-    test->radius = 0.01;
-    physicWorld.AddNaiveParticleGenerator(test);
-    test->particles = listParticles;
-
+    NaiveParticleContactGenerator* test = new NaiveParticleContactGenerator(listParticles, 0.01);
+    physicWorld.AddContactGenerator(test);
 
     // Setup window
     glfwSetErrorCallback(glfw_error_callback);

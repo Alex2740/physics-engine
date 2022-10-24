@@ -103,17 +103,15 @@ int main(int, char**)
     
 
 
-    NaiveParticleContactGenerator* naif = new NaiveParticleContactGenerator();
-    naif->particles = listParticles;
-    naif->radius = 0.01f;
+    NaiveParticleContactGenerator* naif = new NaiveParticleContactGenerator(listParticles, 0.05f);
 
-    WallContactGenerator* test = new WallContactGenerator();
-    test->particleRadius = 0.01f;
+    WallContactGenerator* test = new WallContactGenerator(listParticles, Vector3(0, 1, 0), Vector3(0, 0, 0), 0.05f);
+    test->particleRadius = 0.05f;
     test->normal = Vector3(0, 1, 0);
     test->origine = Vector3(0, 0, 0);
     test->particules = listParticles;
-    physicWorld.AddWallContactGenerator(test);
-    physicWorld.AddNaiveParticleGenerator(naif);
+    physicWorld.AddContactGenerator(test);
+    physicWorld.AddContactGenerator(naif);
    
     // Setup window
     glfwSetErrorCallback(glfw_error_callback);

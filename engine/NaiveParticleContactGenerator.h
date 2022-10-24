@@ -9,7 +9,7 @@ public:
 
 	std::vector<Particule*> particles;
 
-	NaiveParticleContactGenerator();
+	NaiveParticleContactGenerator(std::vector<Particule*> particles, float particleRadius);
 
 	unsigned int addContact(std::vector<ParticleContact*>& contact, unsigned int limit) const;
 };

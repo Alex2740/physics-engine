@@ -93,13 +93,9 @@ int main(int, char**)
 
     //NaiveParticleContactGenerator* naif = new NaiveParticleContactGenerator();
     //naif->particles = listParticles;
-    WallContactGenerator* test = new WallContactGenerator();
-    test->particleRadius = 0.01f;
-    test->normal = Vector3(0, 1, 0);
-    test->origine = Vector3(0, 0, 0);
-    test->particules = listParticles;
+    WallContactGenerator* test = new WallContactGenerator(listParticles, Vector3(0, 1, 0), Vector3(0, 0, 0),0.01f);
     //naif->radius = 0.01f;
-    physicWorld.AddWallContactGenerator(test);
+    physicWorld.AddContactGenerator(test);
     //physicWorld.AddNaiveParticleGenerator(naif);
    
     // Setup window
