@@ -103,10 +103,10 @@ int main(int, char**)
     
 
 
-    NaiveParticleContactGenerator* naif = new NaiveParticleContactGenerator(listParticles, 0.05f);
+    NaiveParticleContactGenerator* naif = new NaiveParticleContactGenerator(listParticles, 0.01f);
 
-    WallContactGenerator* test = new WallContactGenerator(listParticles, Vector3(0, 1, 0), Vector3(0, 0, 0), 0.05f);
-    test->particleRadius = 0.05f;
+    WallContactGenerator* test = new WallContactGenerator(listParticles, Vector3(0, 1, 0), Vector3(0, 0, 0), 0.01f);
+    test->particleRadius = 0.01f;
     test->normal = Vector3(0, 1, 0);
     test->origine = Vector3(0, 0, 0);
     test->particules = listParticles;
