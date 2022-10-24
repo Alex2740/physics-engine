@@ -42,7 +42,25 @@ This should build the files in the `./build/Debug` repository. For now the two d
 
 ## Brief explanation of our demo
 
-### shooter.exe
+The demo that we have shown in the first part is no longer available due to our changes to our structure. Instead we have added new demo to our physic engine.
+
+```diff
+- shooter.exe 
+- three_bodies.exe
++ amas.exe
+```
+
+### amas.exe
+
+This program show our progress with the newly implemented functionalities. We have added:
+
+- a new class `Force`, which can be derived into actual forces, like `Gravity`, or `ParticuleDrag`; in this particular example, there are five particles, which are bound by the gravity and strings (with give a tension) ;
+- the basic function of collision detection ; even though we have not implemented a general `Collider`, we did add a basic collision detection, which works with a definied radius for each particle.
+
+In this demo we can see how these particles bouncing on the floor, although the lack of a real `Collider` means the floor the temporaly invisible.
+
+
+### shooter.exe 
 
 This program demonstrate our code can simulate the different particles which are thrown away. Their trajectory should all be parabola, with different maximum height.
 
