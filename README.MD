@@ -57,8 +57,12 @@ This program show our progress with the newly implemented functionalities. We ha
 - a new class `Force`, which can be derived into actual forces, like `Gravity`, or `ParticuleDrag`; in this particular example, there are five particles, which are bound by the gravity and strings (with give a tension) ;
 - the basic function of collision detection ; even though we have not implemented a general `Collider`, we did add a basic collision detection, which works with a definied radius for each particle.
 
-In this demo we can see how these particles bouncing on the floor, although the lack of a real `Collider` means the floor the temporaly invisible.
+In this demo we can see five particles linked together by springs and influenced by gravity. Moreover, they are bouncing on a floor thanks to the WallContactGenerator.
+Although the lack of a real `Collider` means the floor the temporaly invisible.
 
+### pool.exe
+
+In this demo, we can see particles placed like on a pool table. One particle is heading towards the other and collide with them. This demo is useful to show the naive collision system with different particles interacting with each others.
 
 ### shooter.exe 
 
