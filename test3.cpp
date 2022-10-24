@@ -93,12 +93,8 @@ int main(int, char**)
     naif->radius = 0.025f;
     physicWorld.AddNaiveParticleGenerator(naif);
 
-    WallContactGenerator* test = new WallContactGenerator();
-    test->particleRadius = 0.025f;
-    test->normal = Vector3(0, 1, 0);
-    test->origine = Vector3(0, 0, 0);
-    test->particules = listParticles;
-    physicWorld.AddWallContactGenerator(test);
+    WallContactGenerator* test = new WallContactGenerator(listParticles, Vector3(0, 1, 0), Vector3(0, 0, 0),0.01f);
+    physicWorld.AddContactGenerator(test);
    
     // Setup window
     glfwSetErrorCallback(glfw_error_callback);

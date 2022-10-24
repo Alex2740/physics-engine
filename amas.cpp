@@ -10,6 +10,7 @@
 #include "engine/ParticleCable.h"
 #include "engine/ParticleRod.h"
 #include "engine/NaiveParticleContactGenerator.h"
+#include "engine/WallContactGenerator.h"
 
 #include "imgui.h"
 #include "imgui_impl_glfw.h"
@@ -32,7 +33,7 @@ void drawParticle(Particule p, GLfloat r=255.0, GLfloat g=0.0, GLfloat b=0.0)
 {
     //glClear(GL_COLOR_BUFFER_BIT);
     glEnable(GL_POINT_SMOOTH);
-    glPointSize(30.0f);
+    glPointSize(10.0f);
     glBegin(GL_POINTS);
     glVertex3f(p.position.x, p.position.y,p.position.z);
     glColor3f(r, g, b); 
@@ -48,29 +49,70 @@ static void glfw_error_callback(int error, const char* description)
 
 int main(int, char**)
 {
-    float masse = 100;
+    float masse = 10;
     float dt = 0.001f;
 
     // Vector3* gravity = new Vector3(0, -g * masse, 0);
-    Particule p1 = Particule(Vector3(0, 0.5f, 0), masse);
-    Particule p2 = Particule(Vector3(0.0f, -0.5f, 0), masse);
-    Particule p3 = Particule(Vector3(-0.2f, -0.001f, 0), masse);
+    Particule p1 = Particule(Vector3(-0.1, 0.5f, 0), masse);
+    Particule p2 = Particule(Vector3(0.1f, 0.5f, 0), masse);
+    Particule p3 = Particule(Vector3(-0.1f, 0.4f, 0), masse);
+    Particule p4 = Particule(Vector3(0.1f, 0.4f, 0), masse);
+    Particule p5 = Particule(Vector3(0.0f, 0.45f, 0), masse);
+    
 
     std::vector<Particule*> listParticles;
     listParticles.push_back(&p1);
     listParticles.push_back(&p2);
+    listParticles.push_back(&p3);
+    listParticles.push_back(&p4);
+    listParticles.push_back(&p5);
 
     PhysicWorld physicWorld = PhysicWorld();
 
     physicWorld.AddParticule(&p1);
     physicWorld.AddParticule(&p2);
+    physicWorld.AddParticule(&p3);
+    physicWorld.AddParticule(&p4);
+    physicWorld.AddParticule(&p5);
 
     physicWorld.AddForce(&p1, new Force::Gravity(&p1));
-    //physicWorld.AddForce(&p2, new Force::Gravity(&p2));
+    physicWorld.AddForce(&p2, new Force::Gravity(&p2));
+    physicWorld.AddForce(&p3, new Force::Gravity(&p3));
+    physicWorld.AddForce(&p4, new Force::Gravity(&p4));
+    physicWorld.AddForce(&p5, new Force::Gravity(&p5));
+    
+    physicWorld.AddForce(&p1, new Force::Spring(&p1, &p2, 3000.0f));
+    physicWorld.AddForce(&p2, new Force::Spring(&p2, &p1, 3000.0f));
+    physicWorld.AddForce(&p1, new Force::Spring(&p1, &p3, 3000.0f));
+    physicWorld.AddForce(&p3, new Force::Spring(&p3, &p1, 3000.0f));
+    physicWorld.AddForce(&p5, new Force::Spring(&p5, &p1, 3000.0f));
+    physicWorld.AddForce(&p1, new Force::Spring(&p1, &p5, 3000.0f));
+    physicWorld.AddForce(&p5, new Force::Spring(&p5, &p4, 3000.0f));
+    physicWorld.AddForce(&p4, new Force::Spring(&p4, &p5, 3000.0f));
 
-    NaiveParticleContactGenerator* test = new NaiveParticleContactGenerator(listParticles, 0.025f);
+    physicWorld.AddForce(&p3, new Force::Spring(&p3, &p5, 3000.0f));
+    physicWorld.AddForce(&p5, new Force::Spring(&p5, &p3, 3000.0f));
+
+    physicWorld.AddForce(&p2, new Force::Spring(&p2, &p5, 3000.0f));
+    physicWorld.AddForce(&p5, new Force::Spring(&p5, &p2, 3000.0f));
+
+    physicWorld.AddForce(&p3, new Force::Spring(&p3, &p4, 3000.0f));
+    physicWorld.AddForce(&p4, new Force::Spring(&p4, &p3, 3000.0f));
+    physicWorld.AddForce(&p2, new Force::Spring(&p2, &p4, 3000.0f));
+    physicWorld.AddForce(&p4, new Force::Spring(&p4, &p2, 3000.0f));
+    
+
+
+    NaiveParticleContactGenerator* naif = new NaiveParticleContactGenerator(listParticles, 0.05f);
+
+    WallContactGenerator* test = new WallContactGenerator(listParticles, Vector3(0, 1, 0), Vector3(0, 0, 0), 0.05f);
+    test->particleRadius = 0.05f;
+    test->normal = Vector3(0, 1, 0);
+    test->origine = Vector3(0, 0, 0);
+    test->particules = listParticles;
     physicWorld.AddContactGenerator(test);
-
+    physicWorld.AddContactGenerator(naif);
+   
     // Setup window
     glfwSetErrorCallback(glfw_error_callback);
     if (!glfwInit())
@@ -135,6 +177,44 @@ int main(int, char**)
         ImGui_ImplOpenGL3_NewFrame();
         ImGui_ImplGlfw_NewFrame();
         ImGui::NewFrame();
+        {
+        // 1. Show the big demo window (Most of the sample code is in ImGui::ShowDemoWindow()! You can browse its code to learn more about Dear ImGui!).
+        // if (show_demo_window)
+        //     ImGui::ShowDemoWindow(&show_demo_window);
+
+        // // 2. Show a simple window that we create ourselves. We use a Begin/End pair to create a named window.
+        // {
+        //     static float f = 0.0f;
+        //     static int counter = 0;
+
+        //     ImGui::Begin("Hello, world!");                          // Create a window called "Hello, world!" and append into it.
+
+        //     ImGui::Text("This is some useful text.");               // Display some text (you can use a format strings too)
+        //     ImGui::Checkbox("Demo Window", &show_demo_window);      // Edit bools storing our window open/close state
+        //     ImGui::Checkbox("Another Window", &show_another_window);
+
+        //     ImGui::SliderFloat("float", &f, 0.0f, 1.0f);            // Edit 1 float using a slider from 0.0f to 1.0f
+        //     ImGui::ColorEdit3("clear color", (float*)&clear_color); // Edit 3 floats representing a color
+
+        //     if (ImGui::Button("Button"))                            // Buttons return true when clicked (most widgets return true when edited/activated)
+        //         counter++;
+        //     ImGui::SameLine();
+        //     ImGui::Text("counter = %d", counter);
+
+        //     ImGui::Text("Application average %.3f ms/frame (%.1f FPS)", 1000.0f / ImGui::GetIO().Framerate, ImGui::GetIO().Framerate);
+        //     ImGui::End();
+        // }
+
+        // // 3. Show another simple window.
+        // if (show_another_window)
+        // {
+        //     ImGui::Begin("Another Window", &show_another_window);   // Pass a pointer to our bool variable (the window will have a closing button that will clear the bool when clicked)
+        //     ImGui::Text("Hello from another window!");
+        //     if (ImGui::Button("Close Me"))
+        //         show_another_window = false;
+        //     ImGui::End();
+        // }
+        }
 
         // Rendering
         ImGui::Render();
@@ -150,6 +230,8 @@ int main(int, char**)
         drawParticle(p1);
         drawParticle(p2, 255, 255, 0);
         drawParticle(p3, 0, 255);
+        drawParticle(p4, 0, 255);
+        drawParticle(p5, 0, 255);
         
         glfwSwapBuffers(window);
     }

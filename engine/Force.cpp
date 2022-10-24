@@ -60,14 +60,14 @@ Vector3 Force::Gravity::getForce() {
 
 Vector3 Force::Spring::getForce() {
     Vector3 newDist;
-    Vector3 diff;
+    float diff;
     newDist = particule2->position - particule->position;
-    diff = newDist - dist;
-    if (diff == Vector3::Zero()) return Vector3::Zero();
+    diff = newDist.magnitude - dist.magnitude;
+    if (diff == 0) return Vector3::Zero();
     // std::cout << particule->position.x << " " << particule->position.y << std::endl;
     // std::cout << particule2->position.x << " " << particule2->position.y << std::endl;
     // std::cout << newDist.x << " " << newDist.y << std::endl << std::endl;
-    Vector3 dir = Vector3::Normalized(diff);
-    float magnitude = this->k * diff.getMagnitude();
+    Vector3 dir = Vector3::Normalized(newDist);
+    float magnitude = this->k * diff;
     return dir * magnitude;
 }

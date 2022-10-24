@@ -1,8 +1,11 @@
 #include "NaiveParticleContactGenerator.h"
 #include "Vector3.h"
 
-NaiveParticleContactGenerator::NaiveParticleContactGenerator() {
 
+NaiveParticleContactGenerator::NaiveParticleContactGenerator(std::vector<Particule*> particles, float particleRadius)
+{
+	this->particles = particles;
+	this->radius = particleRadius;
 }
 
 unsigned int NaiveParticleContactGenerator::addContact(std::vector<ParticleContact*>& contact, unsigned int limit) const

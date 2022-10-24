@@ -25,16 +25,7 @@ void PhysicWorld::DeleteForce(Particule* particle, Force::Force* force)
 	particuleRegistries[particle].delForce(force);
 }
 
-void PhysicWorld::AddParticleLink(ParticleLink* link) {
-	contactGenerators.push_back(link);
-}
-
-void PhysicWorld::AddNaiveParticleGenerator(NaiveParticleContactGenerator* generator)
-{
-	contactGenerators.push_back(generator);
-}
-
-void PhysicWorld::AddWallContactGenerator(WallContactGenerator* generator)
+void PhysicWorld::AddContactGenerator(ParticleContactGenerator* generator)
 {
 	contactGenerators.push_back(generator);
 }
