@@ -10,6 +10,7 @@
 #include "engine/ParticleCable.h"
 #include "engine/ParticleRod.h"
 #include "engine/NaiveParticleContactGenerator.h"
+#include "engine/WallContactGenerator.h"
 
 #include "imgui.h"
 #include "imgui_impl_glfw.h"
@@ -28,14 +29,14 @@
 #pragma comment(lib, "legacy_stdio_definitions")
 #endif
 
-void drawParticle(Particule p, GLfloat r=255.0, GLfloat g=0.0, GLfloat b=0.0)
+void drawParticle(Particule p, GLfloat r = 255.0, GLfloat g = 0.0, GLfloat b = 0.0)
 {
     //glClear(GL_COLOR_BUFFER_BIT);
     glEnable(GL_POINT_SMOOTH);
     glPointSize(30.0f);
     glBegin(GL_POINTS);
-    glVertex3f(p.position.x, p.position.y,p.position.z);
-    glColor3f(r, g, b); 
+    glVertex3f(p.position.x, p.position.y, p.position.z);
+    glColor3f(r, g, b);
     glEnd();
 
     glFlush();
@@ -50,26 +51,72 @@ int main(int, char**)
 {
     float masse = 100;
     float dt = 0.001f;
+    float particule_radius = .025f;
+    //float particule_radius = .005f;
 
-    // Vector3* gravity = new Vector3(0, -g * masse, 0);
-    Particule p1 = Particule(Vector3(0, 0.5f, 0), masse);
-    Particule p2 = Particule(Vector3(0.0f, -0.5f, 0), masse);
-    Particule p3 = Particule(Vector3(-0.2f, -0.001f, 0), masse);
+    Particule b1 = Particule(Vector3(0, -.49f, 0), masse);
+    Particule b2 = Particule(Vector3(-.03f, -.55f, 0), masse);
+    Particule b3 = Particule(Vector3(.03f, -.55f, 0), masse);
+    Particule b4 = Particule(Vector3(-.06f, -.61f, 0), masse);
+    Particule b5 = Particule(Vector3(0, -.61f, 0), masse);
+    Particule b6 = Particule(Vector3(.06f, -.61f, 0), masse);
+
+    Particule white = Particule(Vector3(0, .5f, 0), masse);
 
     std::vector<Particule*> listParticles;
-    listParticles.push_back(&p1);
-    listParticles.push_back(&p2);
+    listParticles.push_back(&white);
+    listParticles.push_back(&b1);
+    listParticles.push_back(&b2);
+    listParticles.push_back(&b3);
+    listParticles.push_back(&b4);
+    listParticles.push_back(&b5);
+    listParticles.push_back(&b6);
+
 
     PhysicWorld physicWorld = PhysicWorld();
 
-    physicWorld.AddParticule(&p1);
-    physicWorld.AddParticule(&p2);
+    physicWorld.AddParticule(&b1);
+    physicWorld.AddParticule(&b2);
+    physicWorld.AddParticule(&b3);
+    physicWorld.AddParticule(&b4);
+    physicWorld.AddParticule(&b5);
+    physicWorld.AddParticule(&b6);
+    physicWorld.AddParticule(&white);
 
-    physicWorld.AddForce(&p1, new Force::Gravity(&p1));
-    //physicWorld.AddForce(&p2, new Force::Gravity(&p2));
+    physicWorld.AddForce(&white, new Force::Gravity(&white));
 
-    NaiveParticleContactGenerator* test = new NaiveParticleContactGenerator(listParticles, 0.025f);
-    physicWorld.AddContactGenerator(test);
+    NaiveParticleContactGenerator* naif = new NaiveParticleContactGenerator();
+    naif->particles = listParticles;
+    naif->radius = particule_radius;
+    physicWorld.AddNaiveParticleGenerator(naif);
+
+    WallContactGenerator* bottom_wall = new WallContactGenerator();
+    bottom_wall->particleRadius = particule_radius;
+    bottom_wall->origine = Vector3(0, -.8f, 0);
+    bottom_wall->normal = Vector3(0, 1, 0);
+    bottom_wall->particules = listParticles;
+    physicWorld.AddWallContactGenerator(bottom_wall);
+
+    WallContactGenerator* top_wall = new WallContactGenerator();
+    top_wall->particleRadius = particule_radius;
+    top_wall->origine = Vector3(0, .8f, 0);
+    top_wall->normal = Vector3(0, -1, 0);
+    top_wall->particules = listParticles;
+    physicWorld.AddWallContactGenerator(top_wall);
+
+    WallContactGenerator* right_wall = new WallContactGenerator();
+    right_wall->particleRadius = particule_radius;
+    right_wall->origine = Vector3(.8f, 0, 0);
+    right_wall->normal = Vector3(-1, 0, 0);
+    right_wall->particules = listParticles;
+    physicWorld.AddWallContactGenerator(right_wall);
+
+    WallContactGenerator* left_wall = new WallContactGenerator();
+    left_wall->particleRadius = particule_radius;
+    left_wall->origine = Vector3(-.8f, 0, 0);
+    left_wall->normal = Vector3(1, 0, 0);
+    left_wall->particules = listParticles;
+    physicWorld.AddWallContactGenerator(left_wall);
 
     // Setup window
     glfwSetErrorCallback(glfw_error_callback);
@@ -147,10 +194,15 @@ int main(int, char**)
 
         physicWorld.RunPhysics(dt);
 
-        drawParticle(p1);
-        drawParticle(p2, 255, 255, 0);
-        drawParticle(p3, 0, 255);
-        
+        drawParticle(b1, 255, 255, 0);
+        drawParticle(b2, 0, 0, 255);
+        drawParticle(b3, 255, 0, 0);
+        drawParticle(b4, 100, 0, 200);
+        drawParticle(b5, 200, 100, 0);
+        drawParticle(b6, 0, 255, 0);
+
+        drawParticle(white, 255, 255, 255);
+
         glfwSwapBuffers(window);
     }
 

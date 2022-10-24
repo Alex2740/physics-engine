@@ -27,6 +27,11 @@ target_include_directories(test3 PUBLIC ./engine ./imgui ./imgui/libs/glfw/inclu
 target_link_directories(test3 PUBLIC imgui/libs/glfw/lib-vc2010-64 imgui/libs/glfw/lib-vc2010-32)
 target_link_libraries(test3 PRIVATE opengl32.lib glfw3.lib)
 
+add_executable(pool pool.cpp ${ENGINES} ${IMGUI})
+target_include_directories(pool PUBLIC ./engine ./imgui ./imgui/libs/glfw/include)
+target_link_directories(pool PUBLIC imgui/libs/glfw/lib-vc2010-64 imgui/libs/glfw/lib-vc2010-32)
+target_link_libraries(pool PRIVATE opengl32.lib glfw3.lib)
+
 add_executable(amas "amas.cpp" ${ENGINES} ${IMGUI})
 target_include_directories(amas PUBLIC ./engine ./imgui ./imgui/libs/glfw/include)
 target_link_directories(amas PUBLIC imgui/libs/glfw/lib-vc2010-64 imgui/libs/glfw/lib-vc2010-32)

@@ -38,7 +38,7 @@ void ParticleContactResolver::resolveContacts(std::map<Particule*, Registry::Par
 		// Particule 1
 		Vector3 gravity1 = particuleRegistries[particules[0]].getGravityForce();
 
-		if ((gravity1 * duration).magnitude > particules[0]->velocity.magnitude) {
+		if ((gravity1 * duration).getMagnitude() > particules[0]->velocity.getMagnitude()) {
 			particules[0]->velocity -= Vector3::Project(particules[0]->velocity, contactArray[index]->contactNormal);
 		}
 
@@ -46,7 +46,7 @@ void ParticleContactResolver::resolveContacts(std::map<Particule*, Registry::Par
 		if (particules[1]) {
 			Vector3 gravity2 = particuleRegistries[particules[1]].getGravityForce();
 
-			if ((gravity2 * duration).magnitude > particules[1]->velocity.magnitude) {
+			if ((gravity2 * duration).getMagnitude() > particules[1]->velocity.getMagnitude()) {
 				particules[0]->velocity -= Vector3::Project(particules[1]->velocity, contactArray[index]->contactNormal);
 			}
 		}
