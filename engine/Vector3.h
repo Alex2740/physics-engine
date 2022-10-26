@@ -22,8 +22,8 @@ public:
     Vector3 operator-(const Vector3& other);
     Vector3 operator*(const float& other);
     Vector3 operator/(const float& other);
-    bool operator==(const Vector3& other);
-    bool operator!=(const Vector3& other);
+    bool operator==(const Vector3& other) const;
+    bool operator!=(const Vector3& other) const;
 
     static float Dot(const Vector3 a, const Vector3 b);
     static Vector3 Cross(const Vector3 a, const Vector3 b);

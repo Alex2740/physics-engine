@@ -8,7 +8,7 @@ link_directories(${CMAKE_SOURCE_DIR}/imgui/libs/glfw/lib-vs2010-32)
 link_directories(${CMAKE_SOURCE_DIR}/imgui/libs/glfw/lib-vs2010-64)
 
 
-set(ENGINES ./engine/Registry.cpp ./engine/Registry.h ./engine/Force.cpp ./engine/Forces.cpp ./engine/Particule.cpp ./engine/Vector3.cpp ./engine/Force.h ./engine/Forces.h ./engine/Particule.h ./engine/Vector3.h ./engine/PhysicWorld.h ./engine/PhysicWorld.cpp ./engine/ParticleContact.cpp ./engine/ParticleContact.h ./engine/ParticleContactResolver.h ./engine/ParticleContactResolver.cpp ./engine/ParticleLink.h ./engine/ParticleLink.cpp ./engine/ParticleCable.h ./engine/ParticleCable.cpp ./engine/ParticleRod.h ./engine/ParticleRod.cpp ./engine/NaiveParticleContactGenerator.h ./engine/NaiveParticleContactGenerator.cpp ./engine/WallContactGenerator.cpp ./engine/WallContactGenerator.h)
+set(ENGINES ./engine/Registry.cpp ./engine/Registry.h ./engine/Force.cpp ./engine/Particule.cpp ./engine/Vector3.cpp ./engine/Force.h ./engine/Particule.h ./engine/Vector3.h ./engine/PhysicWorld.h ./engine/PhysicWorld.cpp ./engine/ParticleContact.cpp ./engine/ParticleContact.h ./engine/ParticleContactResolver.h ./engine/ParticleContactResolver.cpp ./engine/ParticleLink.h ./engine/ParticleLink.cpp ./engine/ParticleCable.h ./engine/ParticleCable.cpp ./engine/ParticleRod.h ./engine/ParticleRod.cpp ./engine/NaiveParticleContactGenerator.h ./engine/NaiveParticleContactGenerator.cpp ./engine/WallContactGenerator.cpp ./engine/WallContactGenerator.h)
 
 set(IMGUI ./imgui/imgui.cpp ./imgui/imgui_demo.cpp ./imgui/imgui_draw.cpp ./imgui/imgui_tables.cpp ./imgui/imgui_widgets.cpp ./imgui/imgui_impl_glfw.cpp ./imgui/imgui_impl_opengl3.cpp)
 

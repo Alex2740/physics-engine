@@ -49,15 +49,15 @@ static void glfw_error_callback(int error, const char* description)
 
 int main(int, char**)
 {
-    float masse = 10;
+    float masse = 10.0f;
     float dt = 0.001f;
 
     // Vector3* gravity = new Vector3(0, -g * masse, 0);
-    Particule p1 = Particule(Vector3(-0.1, 0.5f, 0), masse);
-    Particule p2 = Particule(Vector3(0.1f, 0.5f, 0), masse);
-    Particule p3 = Particule(Vector3(-0.1f, 0.4f, 0), masse);
-    Particule p4 = Particule(Vector3(0.1f, 0.4f, 0), masse);
-    Particule p5 = Particule(Vector3(0.0f, 0.45f, 0), masse);
+    Particule p1 = Particule(Vector3(-0.1, 0.5f, 0.0f), masse);
+    Particule p2 = Particule(Vector3(0.1f, 0.5f, 0.0f), masse);
+    Particule p3 = Particule(Vector3(-0.1f, 0.4f, 0.0f), masse);
+    Particule p4 = Particule(Vector3(0.1f, 0.4f, 0.0f), masse);
+    Particule p5 = Particule(Vector3(0.0f, 0.45f, 0.0f), masse);
     
 
     std::vector<Particule*> listParticles;

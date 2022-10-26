@@ -76,12 +76,12 @@ Vector3 Vector3::operator/(const float& other)
 	return Vector3(newX, newY, newZ);
 }
 
-bool Vector3::operator==(const Vector3& other)
+bool Vector3::operator==(const Vector3& other) const
 {
 	return (x == other.x) && (y == other.y) && (z == other.z);
 }
 
-bool Vector3::operator!=(const Vector3& other)
+bool Vector3::operator!=(const Vector3& other) const
 {
 	return !(*this == other);
 }
@@ -102,6 +102,9 @@ Vector3 Vector3::Cross(const Vector3 a, const Vector3 b)
 Vector3 Vector3::Normalized(const Vector3 a)
 {
 	Vector3 v = a;
+	if (v.getMagnitude() == 0) {
+		return Vector3::Zero();
+	}
 	return v / v.getMagnitude();
 }
 
@@ -115,6 +118,11 @@ float Vector3::Distance(const Vector3 a, Vector3 b)
 Vector3 Vector3::Project(const Vector3 vector, const Vector3 onNormal)
 {
 	Vector3 normal = onNormal;
+	Vector3 zero = Vector3::Zero();
+	if (onNormal == zero)
+	{
+		return Vector3::Zero();
+	}
 	float coef = Dot(vector, normal) / (normal.getMagnitude() * normal.getMagnitude());
 	return normal * coef;
 }
