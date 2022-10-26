@@ -1,7 +1,6 @@
 #pragma once
 
 #include "ParticleContactGenerator.h"
-#include "Particule.h"
 
 class WallContactGenerator : public ParticleContactGenerator{
 public:

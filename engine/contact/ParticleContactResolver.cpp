@@ -5,7 +5,7 @@ ParticleContactResolver::ParticleContactResolver()
 	iteration = 64;
 }
 
-ParticleContactResolver::ParticleContactResolver(unsigned long max_iteration)
+ParticleContactResolver::ParticleContactResolver(int max_iteration)
 {
 	iteration = max_iteration;
 }

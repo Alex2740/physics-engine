@@ -10,7 +10,7 @@ protected:
 
 public:
 	ParticleContactResolver();
-	ParticleContactResolver(unsigned long max_iteration);
+	ParticleContactResolver(int max_iteration);
 
 	void resolveContacts(std::map<Particule*, Registry::ParticuleRegistry> particuleRegistries, std::vector<ParticleContact*> contactArray, float duration);
 };

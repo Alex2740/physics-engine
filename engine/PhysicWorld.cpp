@@ -46,6 +46,6 @@ void PhysicWorld::RunPhysics(float duration)
 	}
 
 	// Résolution des contacts
-	ParticleContactResolver resolver = ParticleContactResolver(contactArray.size() * 2);
+	ParticleContactResolver resolver = ParticleContactResolver(static_cast<int>(contactArray.size()) * 2);
 	resolver.resolveContacts(this->particuleRegistries, contactArray, duration);
 }

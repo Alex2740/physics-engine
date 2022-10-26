@@ -3,17 +3,15 @@
 // If you are new to Dear ImGui, read documentation from the docs/ folder + read the top of imgui.cpp.
 // Read online: https://github.com/ocornut/imgui/tree/master/docs
 
-#include "engine/Particule.h"
-#include "engine/Vector3.h"
-#include "engine/Force.h"
-#include "engine/PhysicWorld.h"
-#include "engine/ParticleCable.h"
-#include "engine/ParticleRod.h"
-#include "engine/NaiveParticleContactGenerator.h"
+#include "Particule.h"
+#include "Vector3.h"
+#include "Force.h"
+#include "PhysicWorld.h"
 
 #include "imgui.h"
 #include "imgui_impl_glfw.h"
 #include "imgui_impl_opengl3.h"
+
 #include <stdio.h>
 #include <vector>
 #if defined(IMGUI_IMPL_OPENGL_ES2)
@@ -28,11 +26,11 @@
 #pragma comment(lib, "legacy_stdio_definitions")
 #endif
 
-void drawParticle(Particule p, GLfloat r=255.0, GLfloat g=0.0, GLfloat b=0.0)
+void drawParticle(Particule p, GLfloat r=255, GLfloat g=0, GLfloat b=0)
 {
     //glClear(GL_COLOR_BUFFER_BIT);
     glEnable(GL_POINT_SMOOTH);
-    glPointSize(30.0f);
+    glPointSize(10.0f);
     glBegin(GL_POINTS);
     glVertex3f(p.position.x, p.position.y,p.position.z);
     glColor3f(r, g, b); 
@@ -48,17 +46,13 @@ static void glfw_error_callback(int error, const char* description)
 
 int main(int, char**)
 {
-    float masse = 100;
+    float masse = 10;
     float dt = 0.001f;
 
     // Vector3* gravity = new Vector3(0, -g * masse, 0);
-    Particule p1 = Particule(Vector3(0, 0.5f, 0), masse);
-    Particule p2 = Particule(Vector3(0.0f, -0.5f, 0), masse);
+    Particule p1 = Particule(Vector3(0, 0, 0), masse);
+    Particule p2 = Particule(Vector3(0.2f, 0.018f, 0), masse);
     Particule p3 = Particule(Vector3(-0.2f, -0.001f, 0), masse);
-
-    std::vector<Particule*> listParticles;
-    listParticles.push_back(&p1);
-    listParticles.push_back(&p2);
 
     PhysicWorld physicWorld = PhysicWorld();
 
@@ -66,10 +60,11 @@ int main(int, char**)
     physicWorld.AddParticule(&p2);
 
     physicWorld.AddForce(&p1, new Force::Gravity(&p1));
-    //physicWorld.AddForce(&p2, new Force::Gravity(&p2));
+    // physicWorld.AddForce(&p2, new Force::Gravity(&p2));
+    // physicWorld.AddForce(&p2, new Force::Gravity(&p2));
 
-    NaiveParticleContactGenerator* test = new NaiveParticleContactGenerator(listParticles, 0.025f);
-    physicWorld.AddContactGenerator(test);
+    physicWorld.AddForce(&p1, new Force::Spring(&p1, &p3, 3000));
+    physicWorld.AddForce(&p1, new Force::Spring(&p1, &p2, 1000));
 
     // Setup window
     glfwSetErrorCallback(glfw_error_callback);

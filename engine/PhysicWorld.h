@@ -3,12 +3,12 @@
 #include "Particule.h"
 #include "Force.h"
 #include "Registry.h"
-#include "ParticleContactResolver.h"
-#include "ParticleContact.h"
-#include "ParticleLink.h"
-#include "ParticleContactGenerator.h"
-#include "NaiveParticleContactGenerator.h"
-#include <WallContactGenerator.h>
+#include "contact/ParticleContactResolver.h"
+#include "contact/ParticleContact.h"
+#include "contact/ParticleLink.h"
+#include "contact/ParticleContactGenerator.h"
+#include "contact/NaiveParticleContactGenerator.h"
+#include "contact/WallContactGenerator.h"
 
 class PhysicWorld
 {

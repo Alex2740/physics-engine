@@ -5,10 +5,17 @@
 
 #include "engine/Particule.h"
 #include "engine/Vector3.h"
-#include "engine/Forces.h"
+#include "engine/Force.h"
+#include "engine/PhysicWorld.h"
+#include "engine/contact/ParticleCable.h"
+#include "engine/contact/ParticleRod.h"
+#include "engine/contact/NaiveParticleContactGenerator.h"
+#include "engine/contact/WallContactGenerator.h"
+
 #include "imgui.h"
 #include "imgui_impl_glfw.h"
 #include "imgui_impl_opengl3.h"
+
 #include <stdio.h>
 #include <vector>
 #if defined(IMGUI_IMPL_OPENGL_ES2)
@@ -23,7 +30,7 @@
 #pragma comment(lib, "legacy_stdio_definitions")
 #endif
 
-void drawParticle(Particule p, GLfloat r=255, GLfloat g=0, GLfloat b=0)
+void drawParticle(Particule p, GLfloat r=255.0, GLfloat g=0.0, GLfloat b=0.0)
 {
     //glClear(GL_COLOR_BUFFER_BIT);
     glEnable(GL_POINT_SMOOTH);
@@ -43,15 +50,70 @@ static void glfw_error_callback(int error, const char* description)
 
 int main(int, char**)
 {
-    float masse = 10;
+    float masse = 10.0f;
     float dt = 0.001f;
 
     // Vector3* gravity = new Vector3(0, -g * masse, 0);
-    Particule p = Particule(Vector3(0, 0, 0), masse);
-    Particule p2 = Particule(Vector3(0.01f, 0.018f, 0), masse);
-    Particule p3 = Particule(Vector3(-0.2f, -0.001f, 0), masse);
+    Particule p1 = Particule(Vector3(-0.1, 0.5f, 0.0f), masse);
+    Particule p2 = Particule(Vector3(0.1f, 0.5f, 0.0f), masse);
+    Particule p3 = Particule(Vector3(-0.1f, 0.4f, 0.0f), masse);
+    Particule p4 = Particule(Vector3(0.1f, 0.4f, 0.0f), masse);
+    Particule p5 = Particule(Vector3(0.0f, 0.45f, 0.0f), masse);
+    
+
+    std::vector<Particule*> listParticles;
+    listParticles.push_back(&p1);
+    listParticles.push_back(&p2);
+    listParticles.push_back(&p3);
+    listParticles.push_back(&p4);
+    listParticles.push_back(&p5);
+
+    PhysicWorld physicWorld = PhysicWorld();
+
+    physicWorld.AddParticule(&p1);
+    physicWorld.AddParticule(&p2);
+    physicWorld.AddParticule(&p3);
+    physicWorld.AddParticule(&p4);
+    physicWorld.AddParticule(&p5);
+
+    physicWorld.AddForce(&p1, new Force::Gravity(&p1));
+    physicWorld.AddForce(&p2, new Force::Gravity(&p2));
+    physicWorld.AddForce(&p3, new Force::Gravity(&p3));
+    physicWorld.AddForce(&p4, new Force::Gravity(&p4));
+    physicWorld.AddForce(&p5, new Force::Gravity(&p5));
+    
+    physicWorld.AddForce(&p1, new Force::Spring(&p1, &p2, 3000.0f));
+    physicWorld.AddForce(&p2, new Force::Spring(&p2, &p1, 3000.0f));
+    physicWorld.AddForce(&p1, new Force::Spring(&p1, &p3, 3000.0f));
+    physicWorld.AddForce(&p3, new Force::Spring(&p3, &p1, 3000.0f));
+    physicWorld.AddForce(&p5, new Force::Spring(&p5, &p1, 3000.0f));
+    physicWorld.AddForce(&p1, new Force::Spring(&p1, &p5, 3000.0f));
+    physicWorld.AddForce(&p5, new Force::Spring(&p5, &p4, 3000.0f));
+    physicWorld.AddForce(&p4, new Force::Spring(&p4, &p5, 3000.0f));
+
+    physicWorld.AddForce(&p3, new Force::Spring(&p3, &p5, 3000.0f));
+    physicWorld.AddForce(&p5, new Force::Spring(&p5, &p3, 3000.0f));
+
+    physicWorld.AddForce(&p2, new Force::Spring(&p2, &p5, 3000.0f));
+    physicWorld.AddForce(&p5, new Force::Spring(&p5, &p2, 3000.0f));
+
+    physicWorld.AddForce(&p3, new Force::Spring(&p3, &p4, 3000.0f));
+    physicWorld.AddForce(&p4, new Force::Spring(&p4, &p3, 3000.0f));
+    physicWorld.AddForce(&p2, new Force::Spring(&p2, &p4, 3000.0f));
+    physicWorld.AddForce(&p4, new Force::Spring(&p4, &p2, 3000.0f));
+    
 
 
+    NaiveParticleContactGenerator* naif = new NaiveParticleContactGenerator(listParticles, 0.01f);
+
+    WallContactGenerator* test = new WallContactGenerator(listParticles, Vector3(0, 1, 0), Vector3(0, 0, 0), 0.01f);
+    test->particleRadius = 0.01f;
+    test->normal = Vector3(0, 1, 0);
+    test->origine = Vector3(0, 0, 0);
+    test->particules = listParticles;
+    physicWorld.AddContactGenerator(test);
+    physicWorld.AddContactGenerator(naif);
+   
     // Setup window
     glfwSetErrorCallback(glfw_error_callback);
     if (!glfwInit())
@@ -116,7 +178,7 @@ int main(int, char**)
         ImGui_ImplOpenGL3_NewFrame();
         ImGui_ImplGlfw_NewFrame();
         ImGui::NewFrame();
-
+        {
         // 1. Show the big demo window (Most of the sample code is in ImGui::ShowDemoWindow()! You can browse its code to learn more about Dear ImGui!).
         // if (show_demo_window)
         //     ImGui::ShowDemoWindow(&show_demo_window);
@@ -153,6 +215,7 @@ int main(int, char**)
         //         show_another_window = false;
         //     ImGui::End();
         // }
+        }
 
         // Rendering
         ImGui::Render();
@@ -163,38 +226,14 @@ int main(int, char**)
         glClear(GL_COLOR_BUFFER_BIT);
         ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
 
-        Vector3 gravitation = Forces::gravitation(p2, p);
-        Vector3 gravitation2 = Forces::gravitation(p, p2);
-        Vector3 gravitation3 = Forces::gravitation(p3, p);
-        Vector3 gravitation4 = Forces::gravitation(p3, p2);
-        Vector3 gravitation5 = Forces::gravitation(p, p3);
-        Vector3 gravitation6 = Forces::gravitation(p2, p3);
+        physicWorld.RunPhysics(dt);
 
-        
-        p.addForce(gravitation);
-        p.addForce(gravitation3);
-        p.integrateForces(dt);
-        p.forces.clear();
-
-        p2.addForce(gravitation2);
-        p2.addForce(gravitation4);
-        p2.integrateForces(dt);
-        p2.forces.clear();
-
-        p3.addForce(gravitation5);
-        p3.addForce(gravitation6);
-        p3.integrateForces(dt);
-        p3.forces.clear();
-
-        Forces::rebounce(&p);
-        Forces::rebounce(&p2);
-        Forces::rebounce(&p3);
-
-        drawParticle(p);
+        drawParticle(p1);
         drawParticle(p2, 255, 255, 0);
         drawParticle(p3, 0, 255);
+        drawParticle(p4, 0, 255);
+        drawParticle(p5, 0, 255);
         
-
         glfwSwapBuffers(window);
     }
 

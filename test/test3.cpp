@@ -3,18 +3,19 @@
 // If you are new to Dear ImGui, read documentation from the docs/ folder + read the top of imgui.cpp.
 // Read online: https://github.com/ocornut/imgui/tree/master/docs
 
-#include "engine/Particule.h"
-#include "engine/Vector3.h"
-#include "engine/Force.h"
-#include "engine/PhysicWorld.h"
-#include "engine/ParticleCable.h"
-#include "engine/ParticleRod.h"
-#include "engine/NaiveParticleContactGenerator.h"
-#include "engine/WallContactGenerator.h"
+#include "Particule.h"
+#include "Vector3.h"
+#include "Force.h"
+#include "PhysicWorld.h"
+#include "contact/ParticleCable.h"
+#include "contact/ParticleRod.h"
+#include "contact/NaiveParticleContactGenerator.h"
+#include "contact/WallContactGenerator.h"
 
 #include "imgui.h"
 #include "imgui_impl_glfw.h"
 #include "imgui_impl_opengl3.h"
+
 #include <stdio.h>
 #include <vector>
 #if defined(IMGUI_IMPL_OPENGL_ES2)
@@ -33,7 +34,7 @@ void drawParticle(Particule p, GLfloat r=255.0, GLfloat g=0.0, GLfloat b=0.0)
 {
     //glClear(GL_COLOR_BUFFER_BIT);
     glEnable(GL_POINT_SMOOTH);
-    glPointSize(10.0f);
+    glPointSize(30.0f);
     glBegin(GL_POINTS);
     glVertex3f(p.position.x, p.position.y,p.position.z);
     glColor3f(r, g, b); 
@@ -49,23 +50,19 @@ static void glfw_error_callback(int error, const char* description)
 
 int main(int, char**)
 {
-    float masse = 10.0f;
+    float masse = 100.0f;
     float dt = 0.001f;
 
-    // Vector3* gravity = new Vector3(0, -g * masse, 0);
-    Particule p1 = Particule(Vector3(-0.1, 0.5f, 0.0f), masse);
-    Particule p2 = Particule(Vector3(0.1f, 0.5f, 0.0f), masse);
-    Particule p3 = Particule(Vector3(-0.1f, 0.4f, 0.0f), masse);
-    Particule p4 = Particule(Vector3(0.1f, 0.4f, 0.0f), masse);
-    Particule p5 = Particule(Vector3(0.0f, 0.45f, 0.0f), masse);
-    
+    Particule p1 = Particule(Vector3(-0.1, 0.8f, 0.0f), masse);
+    Particule p2 = Particule(Vector3(0.1f, 0.8f, 0.0f), masse);
+    Particule p3 = Particule(Vector3(-0.1f, 0.3f, 0.0f), masse);
+    Particule p4 = Particule(Vector3(0.1f, 0.3f, 0.0f), masse);
 
     std::vector<Particule*> listParticles;
     listParticles.push_back(&p1);
     listParticles.push_back(&p2);
     listParticles.push_back(&p3);
     listParticles.push_back(&p4);
-    listParticles.push_back(&p5);
 
     PhysicWorld physicWorld = PhysicWorld();
 
@@ -73,45 +70,30 @@ int main(int, char**)
     physicWorld.AddParticule(&p2);
     physicWorld.AddParticule(&p3);
     physicWorld.AddParticule(&p4);
-    physicWorld.AddParticule(&p5);
 
     physicWorld.AddForce(&p1, new Force::Gravity(&p1));
     physicWorld.AddForce(&p2, new Force::Gravity(&p2));
     physicWorld.AddForce(&p3, new Force::Gravity(&p3));
     physicWorld.AddForce(&p4, new Force::Gravity(&p4));
-    physicWorld.AddForce(&p5, new Force::Gravity(&p5));
     
     physicWorld.AddForce(&p1, new Force::Spring(&p1, &p2, 3000.0f));
     physicWorld.AddForce(&p2, new Force::Spring(&p2, &p1, 3000.0f));
     physicWorld.AddForce(&p1, new Force::Spring(&p1, &p3, 3000.0f));
     physicWorld.AddForce(&p3, new Force::Spring(&p3, &p1, 3000.0f));
-    physicWorld.AddForce(&p5, new Force::Spring(&p5, &p1, 3000.0f));
-    physicWorld.AddForce(&p1, new Force::Spring(&p1, &p5, 3000.0f));
-    physicWorld.AddForce(&p5, new Force::Spring(&p5, &p4, 3000.0f));
-    physicWorld.AddForce(&p4, new Force::Spring(&p4, &p5, 3000.0f));
-
-    physicWorld.AddForce(&p3, new Force::Spring(&p3, &p5, 3000.0f));
-    physicWorld.AddForce(&p5, new Force::Spring(&p5, &p3, 3000.0f));
-
-    physicWorld.AddForce(&p2, new Force::Spring(&p2, &p5, 3000.0f));
-    physicWorld.AddForce(&p5, new Force::Spring(&p5, &p2, 3000.0f));
-
+    physicWorld.AddForce(&p1, new Force::Spring(&p1, &p4, 3000.0f));
+    physicWorld.AddForce(&p4, new Force::Spring(&p4, &p1, 3000.0f));
+    physicWorld.AddForce(&p3, new Force::Spring(&p3, &p2, 3000.0f));
+    physicWorld.AddForce(&p2, new Force::Spring(&p2, &p3, 3000.0f));
     physicWorld.AddForce(&p3, new Force::Spring(&p3, &p4, 3000.0f));
     physicWorld.AddForce(&p4, new Force::Spring(&p4, &p3, 3000.0f));
     physicWorld.AddForce(&p2, new Force::Spring(&p2, &p4, 3000.0f));
     physicWorld.AddForce(&p4, new Force::Spring(&p4, &p2, 3000.0f));
     
-
-
-    NaiveParticleContactGenerator* naif = new NaiveParticleContactGenerator(listParticles, 0.01f);
-
-    WallContactGenerator* test = new WallContactGenerator(listParticles, Vector3(0, 1, 0), Vector3(0, 0, 0), 0.01f);
-    test->particleRadius = 0.01f;
-    test->normal = Vector3(0, 1, 0);
-    test->origine = Vector3(0, 0, 0);
-    test->particules = listParticles;
-    physicWorld.AddContactGenerator(test);
+    NaiveParticleContactGenerator* naif = new NaiveParticleContactGenerator(listParticles, 0.025f);
     physicWorld.AddContactGenerator(naif);
+
+    WallContactGenerator* wall = new WallContactGenerator(listParticles, Vector3(0, 1, 0), Vector3(0, 0, 0),0.01f);
+    physicWorld.AddContactGenerator(wall);
    
     // Setup window
     glfwSetErrorCallback(glfw_error_callback);
@@ -231,7 +213,6 @@ int main(int, char**)
         drawParticle(p2, 255, 255, 0);
         drawParticle(p3, 0, 255);
         drawParticle(p4, 0, 255);
-        drawParticle(p5, 0, 255);
         
         glfwSwapBuffers(window);
     }
