@@ -14,7 +14,7 @@ unsigned int ParticleRod::addContact(std::vector<ParticleContact*>& contact, uns
 	if (currentLength > length) {
 
 		ParticleContact* currentContact = new ParticleContact();
-		// Pas sûr mais je pense que la restitution devrait être de 1 ?
+		// Pas sÃ»r mais je pense que la restitution devrait Ãªtre de 1 ?
 		currentContact->restitution = 1;
 		currentContact->penetration = 0;
 		currentContact->particules[0] = this->particle[0];
@@ -29,7 +29,7 @@ unsigned int ParticleRod::addContact(std::vector<ParticleContact*>& contact, uns
 	else if (currentLength < length) {
 
 		ParticleContact* currentContact = new ParticleContact();
-		// Pas sûr mais je pense que la restitution devrait être de 1 ?
+		// Pas sÃ»r mais je pense que la restitution devrait Ãªtre de 1 ?
 		currentContact->restitution = 1;
 		currentContact->penetration = 0;
 		currentContact->particules[0] = this->particle[0];

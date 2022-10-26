@@ -11,8 +11,8 @@ NaiveParticleContactGenerator::NaiveParticleContactGenerator(std::vector<Particu
 unsigned int NaiveParticleContactGenerator::addContact(std::vector<ParticleContact*>& contact, unsigned int limit) const
 {
 
-	// On itère sur les paires de particules
-	// On ne revérifie pas 2 fois la même paire
+	// On itÃ¨re sur les paires de particules
+	// On ne revÃ©rifie pas 2 fois la mÃªme paire
 	for (int i = 0; i < particles.size(); i++) {
 		for (int j = i + 1; j < particles.size(); j++) {
 			

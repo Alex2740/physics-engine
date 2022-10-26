@@ -10,7 +10,7 @@ float ParticleContact::calculateSeparatingVelocity()
 {
 	Vector3 vrel = particules[0]->velocity;
 
-	// Si la deuxième particule est un mur
+	// Si la deuxiÃ¨me particule est un mur
 	if (particules[1]) {
 		vrel -= particules[1]->velocity;
 	}

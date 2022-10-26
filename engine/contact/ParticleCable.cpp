@@ -14,7 +14,7 @@ unsigned int ParticleCable::addContact(std::vector<ParticleContact*>& contact, u
 	
 	float currentLength = this->currentLength();
 	//std::cout << currentLength << std::endl;
-	// Si la distance entre les 2 particules est inférieure à la distance max du cable, pas de contact
+	// Si la distance entre les 2 particules est infÃ©rieure Ã  la distance max du cable, pas de contact
 	if (currentLength < this->maxLength) {
 		return limit;
 	}
