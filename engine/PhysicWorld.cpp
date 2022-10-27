@@ -4,6 +4,17 @@ PhysicWorld::PhysicWorld()
 {
 }
 
+PhysicWorld::~PhysicWorld()
+{
+	// clear up memories
+	for (auto p: this->particuleRegistries) {
+		p.second.free();
+	}
+	for (auto p: this->contactGenerators) {
+		delete p;
+	}
+}
+
 void PhysicWorld::AddParticule(Particule* particle)
 {
 	particules.push_back(particle);

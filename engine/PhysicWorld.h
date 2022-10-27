@@ -19,6 +19,7 @@ private:
 
 public:
 	PhysicWorld();
+	~PhysicWorld();
 
 	void AddParticule(Particule* particule);
 	void DeleteParticule(Particule* particule);
