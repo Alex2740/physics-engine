@@ -2,35 +2,39 @@
 
 #include <math.h>
 
-WallContactGenerator::WallContactGenerator(std::vector<Particule*> particules, Vector3 normal, Vector3 origine, float particleRadius)
+WallContactGenerator::WallContactGenerator(std::vector<Particule*> particules, Vector3 normal, Vector3 origine, float wallRadius)
 {
 	this->particules = particules;
-	this->normal = normal;
+	this->normal = Vector3::Normalized(normal);
 	this->origine = origine;
-	this->particleRadius = particleRadius;
+	this->wallRadius = wallRadius;
+
+	if (this->normal == Vector3::Zero()) {
+		throw std::runtime_error("invalid \"normal\" value");
+	}
 }
 
-unsigned int WallContactGenerator::addContact(std::vector<ParticleContact*>& contact, unsigned int limit) const
+unsigned int WallContactGenerator::addContact(std::vector<ParticleContact*>& contact, unsigned int limit)
 {
 	for (Particule* p : this->particules) {
 
-		Vector3 realNormal = Vector3::Normalized(normal);
+		float distance = Vector3::Dot(normal, p->position - origine) - wallRadius;
 
-		float distance = Vector3::Dot(realNormal, p->position - origine) - particleRadius;
-
-		if (distance <= 0 && limit > 0) {
+		if (distance <= 0) {
 			
-			ParticleContact* currentContact = new ParticleContact();
+			ParticleContact* currentContact = new ParticleContact(); //TODO check if it's freed later
 			currentContact->particules[0] = p;
 
 			// Collision elastique (pas de perte de quantite de mouvement)
 			currentContact->restitution = 1;
 
-			currentContact->contactNormal = realNormal;
+			currentContact->contactNormal = normal;
 			currentContact->penetration = distance;
 
 			contact.push_back(currentContact);
+
 			limit--;
+			if (limit == 0) break; // a break is more efficient here
 		}
 	}
 
