@@ -11,7 +11,7 @@ NaiveParticleContactGenerator::NaiveParticleContactGenerator(std::vector<Particu
     this->radius = particleRadius;
 }
 
-unsigned int NaiveParticleContactGenerator::addContact(std::vector<ParticleContact*>& contact, unsigned int limit) const
+unsigned int NaiveParticleContactGenerator::addContact(std::vector<ParticleContact*>& contact, unsigned int limit)
 {
 
     // On itère sur les paires de particules
