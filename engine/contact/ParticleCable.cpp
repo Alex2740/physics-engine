@@ -26,6 +26,9 @@ unsigned int ParticleCable::addContact(std::vector<ParticleContact*>& contact, u
 		currentContact->particules[1] = this->particle[1];
 		currentContact->restitution = this->restitution;
 		currentContact->penetration = 0;
+
+		// TODO: potential blow out: this value can be zero
+		// while it should never be
 		currentContact->contactNormal = Vector3::Cross(this->particle[0]->position, this->particle[1]->position);
 
 
