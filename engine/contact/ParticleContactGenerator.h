@@ -6,6 +6,6 @@
 class ParticleContactGenerator {
 
 	public : 
-	virtual unsigned int addContact(std::vector<ParticleContact*>& contact, unsigned int limit) const = 0;
+	virtual unsigned int addContact(std::vector<ParticleContact*>& contact, unsigned int limit) = 0;
 
 };

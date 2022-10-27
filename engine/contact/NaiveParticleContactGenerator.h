@@ -11,5 +11,5 @@ public:
 
 	NaiveParticleContactGenerator(std::vector<Particule*> particles, float particleRadius);
 
-	unsigned int addContact(std::vector<ParticleContact*>& contact, unsigned int limit) const;
+	unsigned int addContact(std::vector<ParticleContact*>& contact, unsigned int limit) override;
 };
