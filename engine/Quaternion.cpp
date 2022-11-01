@@ -1,6 +1,6 @@
 #include "Quaternion.h"
 
-#include <cmath>
+
 
 Quaternion::Quaternion(float _w, float _x, float _y, float _z)
 {
@@ -8,6 +8,31 @@ Quaternion::Quaternion(float _w, float _x, float _y, float _z)
     x = _x;
     y = _y;
     z = _z;
+}
+
+Quaternion::Quaternion(float _w, Vector3 v)
+{
+    w = _w;
+    x = v.x;
+    y = v.y;
+    z = v.z;
+}
+
+Quaternion::Quaternion(Vector3 euler)
+// (roll, putch, yaw)
+// code from https://en.wikipedia.org/wiki/Conversion_between_quaternions_and_Euler_angles
+{
+    float cr = cosf(euler.x * 0.5f);
+    float sr = sinf(euler.x * 0.5f);
+    float cp = cosf(euler.y * 0.5f);
+    float sp = sinf(euler.y * 0.5f);
+    float cy = cosf(euler.z * 0.5f);
+    float sy = sinf(euler.z * 0.5f);
+
+    w = cr * cp * cy + sr * sp * sy;
+    x = sr * cp * cy - cr * sp * sy;
+    y = cr * sp * cy + sr * cp * sy;
+    z = cr * cp * sy - sr * sp * cy;
 }
 
 Quaternion::~Quaternion()
@@ -27,13 +52,13 @@ Quaternion& Quaternion::operator+=(const Quaternion& other) {
 }
 
 Quaternion Quaternion::operator+(const Quaternion& other) {
-    return Quaternion(x + other.x,
+    return Quaternion(w + other.w,
+                      x + other.x,
                       y + other.y,
-                      z + other.z,
-                      w + other.w);
+                      z + other.z);
 }
 
-Quaternion Quaternion::operator*=(const Quaternion& other) {
+Quaternion& Quaternion::operator*=(const Quaternion& other) {
     float tmpW, tmpX, tmpY, tmpZ;
     tmpW = w;
     tmpX = x;
@@ -59,13 +84,92 @@ Quaternion Quaternion::operator*(const Quaternion& other) {
     return Quaternion(tmpW, tmpX, tmpY, tmpZ);
 }
 
+Quaternion Quaternion::operator/(const float divider) {
+    return Quaternion(w / divider, x / divider, y / divider, z / divider);
+}
+
 bool Quaternion::operator==(const Quaternion& other) const {
     return (this->w == other.w 
         &&  this->x == other.x
         &&  this->y == other.y
         &&  this->z == other.z);
 }
+
 bool Quaternion::operator!=(const Quaternion& other) const {
     return (!(*this == other));
 }
 
+bool Quaternion::isUniform(Quaternion q) {
+    // test the quaternion is roughly uniform
+    return (std::abs(q.getMagnitude() - 1) < 4 * std::numeric_limits<float>::epsilon());
+}
+
+Quaternion Quaternion::conjugation(Quaternion q) {
+    return Quaternion(q.w, -q.x, -q.y, -q.z);
+}
+
+float Quaternion::dot(Quaternion p, Quaternion q) {
+    return (p.w * q.w
+          + p.x * q.x
+          + p.y * q.y
+          + p.z * q.z);
+}
+
+Quaternion Quaternion::inverse(Quaternion q) {
+    return Quaternion::conjugation(q) / Quaternion::dot(q, q);
+}
+
+Quaternion Quaternion::rotateByVector(Vector3 v) {
+    this->rotateByQuaternion(Quaternion(0, v));
+    return *this;
+}
+
+Quaternion Quaternion::rotateByQuaternion(Quaternion q) {
+    if (!(Quaternion::isUniform(q))) throw std::invalid_argument("the quaternion input doesn't seem to be valid with a magnitude of 1");
+
+    Quaternion qInv = Quaternion::inverse(q);
+
+    *this = q * (*this) * qInv;
+    return *this;
+}
+
+Vector3 Quaternion::toEuler() {
+    // code from https://en.wikipedia.org/wiki/Conversion_between_quaternions_and_Euler_angles
+    Vector3 angles;
+
+    // roll (x-axis rotation)
+    float sinr_cosp = 2 * (w * x + y * z);
+    float cosr_cosp = 1 - 2 * (x * x + y * y);
+    angles.x = std::atan2f(sinr_cosp, cosr_cosp);
+
+    // pitch (y-axis rotation)
+    float sinp = 2 * (w * y - z * x);
+    if (std::abs(sinp) >= 1)
+        angles.y = std::copysignf(M_PI / 2.0f, sinp); // use 90 degrees if out of range
+    else
+        angles.y = std::asinf(sinp);
+
+    // yaw (z-axis rotation)
+    float siny_cosp = 2 * (w * z + x * y);
+    float cosy_cosp = 1 - 2 * (y * y + z * z);
+    angles.z = std::atan2f(siny_cosp, cosy_cosp);
+
+    return angles;
+}
+
+Quaternion Quaternion::Zero() {
+    return Quaternion(0, 0, 0, 0);
+}
+
+std::string Quaternion::getString() {
+    std::ostringstream oss;
+    // TODO: precision doesn't work for some reason
+    oss << std::fixed << std::setprecision(2);
+    oss << "[ " << std::to_string(w);
+    oss << " (" << std::to_string(x);
+    oss << " " << std::to_string(y);
+    oss << " " << std::to_string(z);
+    oss << ")]";
+    // std::cout << oss.str() << std::endl;
+    return oss.str();
+}
