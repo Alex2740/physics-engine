@@ -23,6 +23,8 @@ set(ENGINES
     ./engine/contact/WallContactGenerator.cpp
     ./engine/contact/WallContactGenerator.h
 
+    ./engine/Quaternion.cpp
+    ./engine/Quaternion.h
     ./engine/Registry.cpp
     ./engine/Registry.h
     ./engine/Force.cpp
@@ -51,6 +53,11 @@ add_executable(test3 ./test/test3.cpp ${ENGINES} ${IMGUI})
 target_include_directories(test3 PUBLIC ${CMAKE_SOURCE_DIR}/engine ${CMAKE_SOURCE_DIR}/imgui imgui/libs/glfw/include)
 target_link_directories(test3 PUBLIC imgui/libs/glfw/lib-vc2010-64 imgui/libs/glfw/lib-vc2010-32)
 target_link_libraries(test3 PRIVATE opengl32.lib glfw3.lib)
+
+add_executable(test_quat ./test/test_quat.cpp ${ENGINES} ${IMGUI})
+target_include_directories(test_quat PUBLIC ${CMAKE_SOURCE_DIR}/engine ${CMAKE_SOURCE_DIR}/imgui imgui/libs/glfw/include)
+target_link_directories(test_quat PUBLIC imgui/libs/glfw/lib-vc2010-64 imgui/libs/glfw/lib-vc2010-32)
+target_link_libraries(test_quat PRIVATE opengl32.lib glfw3.lib)
 
 add_executable(pool ./demo/pool.cpp ${ENGINES} ${IMGUI})
 target_include_directories(pool PUBLIC ${CMAKE_SOURCE_DIR}/engine ${CMAKE_SOURCE_DIR}/imgui imgui/libs/glfw/include)
