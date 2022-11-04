@@ -145,7 +145,7 @@ Vector3 Quaternion::toEuler() {
     // pitch (y-axis rotation)
     float sinp = 2 * (w * y - z * x);
     if (std::abs(sinp) >= 1)
-        angles.y = std::copysignf(M_PI / 2.0f, sinp); // use 90 degrees if out of range
+        angles.y = std::copysignf(M_PI / 2, sinp); // use 90 degrees if out of range
     else
         angles.y = std::asinf(sinp);
 
@@ -158,7 +158,7 @@ Vector3 Quaternion::toEuler() {
 }
 
 Quaternion Quaternion::Zero() {
-    return Quaternion(0, 0, 0, 0);
+    return Quaternion(0., 0., 0, 0);
 }
 
 std::string Quaternion::getString() {
