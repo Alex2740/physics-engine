@@ -33,6 +33,12 @@ set(ENGINES
     ./engine/Vector3.h
     ./engine/PhysicWorld.cpp
     ./engine/PhysicWorld.h
+    ./engine/Matrix3.cpp
+    ./engine/Matrix3.h
+    ./engine/Matrix4.cpp
+    ./engine/Matrix4.h
+    ./engine/Transform.h
+    ./engine/Transform.cpp
 )
 
 set(IMGUI ./imgui/imgui.cpp ./imgui/imgui_demo.cpp ./imgui/imgui_draw.cpp ./imgui/imgui_tables.cpp ./imgui/imgui_widgets.cpp ./imgui/imgui_impl_glfw.cpp ./imgui/imgui_impl_opengl3.cpp)
