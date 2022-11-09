@@ -97,6 +97,16 @@ void Matrix4::invert()
 	setInverse(*this);
 }
 
+Vector3 Matrix4::worldToLocal(Vector3& world, Matrix4& transform)
+{
+	return transform.transformInverse(world);
+}
+
+Vector3 Matrix4::localToWorld(Vector3& local, Matrix4& transform)
+{
+	return transform.transform(local);
+}
+
 void Matrix4::setOrientationPosition(Quaternion& quaternion, Vector3& position)
 {
 	data[0] = 1 - (2 * quaternion.y * quaternion.y + 2 * quaternion.z * quaternion.z);

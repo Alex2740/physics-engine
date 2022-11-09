@@ -132,6 +132,8 @@ Vector3 Vector3::Zero()
 	return Vector3(0, 0, 0);
 }
 
+
+
 void Vector3::print()
 {
 	std::cout << "Vector3(" << x << "f, " << y << "f, " << z << "f)" << std::endl;

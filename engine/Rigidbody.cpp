@@ -29,10 +29,13 @@ void RigidBody::Intergrate(float dt)
 
 void RigidBody::AddForce(const Vector3& force)
 {
+	// Utile pour des force comme la gravité qui s'applique au centre de masse et n'influence pas la rotation
+	forceAccum += force;
 }
 
 void RigidBody::AddForceAtPoint(const Vector3& force, const Vector3& worldPoint)
 {
+
 }
 
 void RigidBody::AddForceAtBodyPoint(const Vector3& force, const Vector3& localPoint)
@@ -41,6 +44,8 @@ void RigidBody::AddForceAtBodyPoint(const Vector3& force, const Vector3& localPo
 
 void RigidBody::ClearAccumulator()
 {
+	forceAccum = Vector3::Zero();
+	torqueAccum = Vector3::Zero();
 }
 
 void RigidBody::CalculateDerivedData()
