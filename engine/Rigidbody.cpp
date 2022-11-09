@@ -1,5 +1,10 @@
 #include "Rigidbody.h"
 
+Vector3 RigidBody::getPointInWorldSpace(Vector3 point)
+{
+	return Matrix4::localToWorld(point, transformMatrix);
+}
+
 void RigidBody::Intergrate(float dt)
 {
 	// MaJ de la position
@@ -35,11 +40,19 @@ void RigidBody::AddForce(const Vector3& force)
 
 void RigidBody::AddForceAtPoint(const Vector3& force, const Vector3& worldPoint)
 {
+	Vector3 point = worldPoint;
 
+	point -= position;
+
+	forceAccum += force;
+	torqueAccum += Vector3::Cross(point, force);
 }
 
 void RigidBody::AddForceAtBodyPoint(const Vector3& force, const Vector3& localPoint)
 {
+	Vector3 worldPoint = getPointInWorldSpace(localPoint);
+
+	AddForceAtPoint(force, worldPoint);
 }
 
 void RigidBody::ClearAccumulator()

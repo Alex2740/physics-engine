@@ -24,6 +24,8 @@ private :
 	Matrix3 inverseInertiaTensorLocal;
 	Matrix3 inverseInertiaTensorWorld;
 
+	Vector3 getPointInWorldSpace(Vector3 point);
+
 public : 
 	
 	void Intergrate(float dt);
