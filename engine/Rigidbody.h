@@ -21,6 +21,9 @@ private :
 	Vector3 forceAccum;
 	Vector3 torqueAccum;
 
+	Matrix3 inverseInertiaTensorLocal;
+	Matrix3 inverseInertiaTensorWorld;
+
 public : 
 	
 	void Intergrate(float dt);
