@@ -4,9 +4,10 @@
 #include <map>
 #include <math.h>
 
+#include "IForceAppliable.h"
 #include "Vector3.h"
 
-class Particule
+class Particule : IForceAppliable
 {
 private:
 	float inverseMasse_ = 0;
@@ -16,8 +17,6 @@ public:
 	Vector3 position = Vector3::Zero();
 	Vector3 velocity = Vector3::Zero();
 	Vector3 acceleration = Vector3::Zero();
-
-	std::vector<Vector3> forces;
 	
 	const float& inverseMasse = inverseMasse_;
 	const float& damping = damping_;
@@ -36,7 +35,4 @@ public:
 	float masse();
 
 	void integrate(Vector3 forces, float dt);
-
-	void addForce(Vector3 force);
-	void integrateForces(float dt);
 };

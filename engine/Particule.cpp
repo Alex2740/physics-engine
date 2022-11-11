@@ -25,7 +25,6 @@ Particule Particule::operator=(const Particule& other)
 	this->position = other.position;
 	this->velocity = other.velocity;
 	this->acceleration = other.acceleration;
-	this->forces = other.forces;
 
 	return *this;
 }
@@ -69,24 +68,4 @@ void Particule::integrate(Vector3 forces, float dt)
 	velocity = velocity * powf(damping, dt);
 	velocity += acceleration * dt;
 	
-}
-
-void Particule::addForce(Vector3 force) {
-	// add a force into the particle regist,
-	// which will be applied in every future
-	// integrate calculus by calling
-	// Particule::integrateForces(float dt)
-	Particule::forces.push_back(force);
-}
-
-void Particule::integrateForces(float dt) {
-	// try to enable the system to deal with multiple
-	// forces at the same time
-	position += velocity * dt + acceleration * 0.5 * dt * dt;
-	acceleration = Vector3::Zero();
-	for (auto f: Particule::forces) {
-		acceleration += f * inverseMasse;
-	}
-	velocity = velocity * powf(damping, dt);
-	velocity += acceleration * dt;
 }
