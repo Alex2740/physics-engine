@@ -84,6 +84,11 @@ Quaternion Quaternion::operator*(const Quaternion& other) {
     return Quaternion(tmpW, tmpX, tmpY, tmpZ);
 }
 
+Quaternion Quaternion::operator*(const float other)
+{
+    return Quaternion(w * other, x * other, y * other, z * other);
+}
+
 Quaternion Quaternion::operator/(const float divider) {
     return Quaternion(w / divider, x / divider, y / divider, z / divider);
 }

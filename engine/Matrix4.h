@@ -19,5 +19,8 @@ public:
 	Matrix4 inverse();
 	void invert();
 
+	static Vector3 worldToLocal(Vector3& world, Matrix4& transform);
+	static Vector3 localToWorld(Vector3& local, Matrix4& transform);
+
 	void setOrientationPosition(Quaternion& quaternion, Vector3& position);
 };

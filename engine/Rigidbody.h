@@ -21,6 +21,11 @@ private :
 	Vector3 forceAccum;
 	Vector3 torqueAccum;
 
+	Matrix3 inverseInertiaTensorLocal;
+	Matrix3 inverseInertiaTensorWorld;
+
+	Vector3 getPointInWorldSpace(Vector3 point);
+
 public : 
 	
 	void Intergrate(float dt);
