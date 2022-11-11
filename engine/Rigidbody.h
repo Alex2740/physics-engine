@@ -28,9 +28,9 @@ private :
 
 public : 
 	
-	void Intergrate(float dt);
+	void integrate(float dt);
 
-	void AddForce(const Vector3& force);
+	void addForce(const Vector3& force);
 
 	void AddForceAtPoint(const Vector3& force, const Vector3& worldPoint);
 

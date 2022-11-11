@@ -5,7 +5,7 @@ Vector3 RigidBody::getPointInWorldSpace(Vector3 point)
 	return Matrix4::localToWorld(point, transformMatrix);
 }
 
-void RigidBody::Intergrate(float dt)
+void RigidBody::integrate(float dt)
 {
 	// MaJ de la position
 	position += velocity * dt;
@@ -31,7 +31,7 @@ void RigidBody::Intergrate(float dt)
 	ClearAccumulator();
 }
 
-void RigidBody::AddForce(const Vector3& force)
+void RigidBody::addForce(const Vector3& force)
 {
 	// Utile pour des force comme la gravité qui s'applique au centre de masse et n'influence pas la rotation
 	forceAccum += force;
