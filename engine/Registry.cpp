@@ -1,7 +1,6 @@
 #include <Registry.h>
 
 Registry::ParticuleRegistry::ParticuleRegistry() {
-    // this should boom too
 }
 
 Registry::ParticuleRegistry::ParticuleRegistry(Particule* p) {
@@ -51,33 +50,59 @@ void Registry::ParticuleRegistry::free() {
     }
 }
 
-bool Registry::ParticuleRegistries::addParticule(Particule* p) {
+// ##### RIGIDBODY #######
 
-    this->registries[p] = ParticuleRegistry(p);
-    return true;
+
+Registry::RigidRegistry::RigidRegistry() {
 }
 
-bool Registry::ParticuleRegistries::addForce(Particule* p, Force::Force* f) {
-    if (this->registries.count(p) == 0) return false;
-    this->registries[p].addForce(f);
-    return true;
+Registry::RigidRegistry::RigidRegistry(RigidBody* r) {
+    this->rigidbody = r;
 }
 
-void Registry::ParticuleRegistries::addForceAll(Force::Force* f) {
-    for (auto p: this->registries) {
-        addForce(p.first, f);
+void Registry::RigidRegistry::addForce(Force::Force* f) {
+    this->forceRegistry.push_back(f);
+}
+
+void Registry::RigidRegistry::addForceLocalPoint(Force::Force* f, Vector3 coord) {
+    this->forceRegistry.push_back(f);
+    this->forceApplyType[f] = 1;
+    this->forceApplyPoint[f] = coord;
+}
+
+void Registry::RigidRegistry::addForceWorldPoint(Force::Force* f, Vector3 coord) {
+    this->forceRegistry.push_back(f);
+    this->forceApplyType[f] = 2;
+    this->forceApplyPoint[f] = coord;
+}
+
+void Registry::RigidRegistry::update(float dt) {
+    this->rigidbody->ClearAccumulator();
+    for (auto f: forceRegistry) {
+        Vector3 tmpForce = f->getForce();
+        Vector3 tmpCoord;
+        switch (this->forceApplyType[f])
+        {
+        case 0:
+            rigidbody->addForce(tmpForce);
+            break;
+        case 1:
+            tmpCoord = forceApplyPoint[f];
+            rigidbody->AddForceAtBodyPoint(tmpForce, tmpCoord);
+            break;
+        case 2:
+            tmpCoord = forceApplyPoint[f];
+            rigidbody->AddForceAtPoint(tmpForce, tmpCoord);
+            break;
+        default:
+            std::invalid_argument("unexpected value found in rigistry, possibly from a wrong way to introduce a force ath the first time");
+            break;
+        }
     }
+    this->rigidbody->integrate(dt);
+    this->rigidbody->ClearAccumulator(); // not necessary. but in case
 }
 
-void Registry::ParticuleRegistries::updateAll(float dt) {
-    for (auto r: this->registries) {
-        r.second.update(dt);
-        // std::cout << "HERE" << std::endl;
-    }
-}
-
-Registry::ParticuleRegistries::~ParticuleRegistries() {
-    for (auto r: this->registries) {
-        r.second.free();
-    }
+void free() {
+    // TODO
 }

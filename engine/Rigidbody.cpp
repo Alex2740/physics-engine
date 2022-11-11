@@ -17,7 +17,7 @@ void RigidBody::integrate(float dt)
 	CalculateDerivedData();
 
 	// Calcul accélération linéaire
-	Vector3 linearAcceleration = forceAccum * inverseMasse;
+	Vector3 linearAcceleration = acceleration * inverseMasse;
 
 	// Calcul accélération angulaire
 	Vector3 angularAcceleration = inverseInertiaTensorWorld.transform(torqueAccum);
@@ -34,7 +34,7 @@ void RigidBody::integrate(float dt)
 void RigidBody::addForce(const Vector3& force)
 {
 	// Utile pour des force comme la gravité qui s'applique au centre de masse et n'influence pas la rotation
-	forceAccum += force;
+	acceleration += force;
 }
 
 void RigidBody::AddForceAtPoint(const Vector3& force, const Vector3& worldPoint)
@@ -43,7 +43,7 @@ void RigidBody::AddForceAtPoint(const Vector3& force, const Vector3& worldPoint)
 
 	point -= position;
 
-	forceAccum += force;
+	acceleration += force;
 	torqueAccum += Vector3::Cross(point, force);
 }
 
@@ -56,7 +56,7 @@ void RigidBody::AddForceAtBodyPoint(const Vector3& force, const Vector3& localPo
 
 void RigidBody::ClearAccumulator()
 {
-	forceAccum = Vector3::Zero();
+	acceleration = Vector3::Zero();
 	torqueAccum = Vector3::Zero();
 }
 

@@ -1,24 +1,23 @@
 #pragma once
 
+#include "IForceAppliable.h"
 #include "Vector3.h"
 #include "Quaternion.h"
 #include "Matrix4.h"
 #include "Matrix3.h"
 
-class RigidBody {
+class RigidBody: IForceAppliable {
 
 private : 
 	float inverseMasse;
 	float linearDamping;
-	Vector3 position;
-	Vector3 velocity;
 
 	Quaternion orientation;
 	Vector3 rotation;
 	Matrix4 transformMatrix;
 
 	float angularDamping;
-	Vector3 forceAccum;
+	// Vector3 acceleration;
 	Vector3 torqueAccum;
 
 	Matrix3 inverseInertiaTensorLocal;
@@ -27,6 +26,9 @@ private :
 	Vector3 getPointInWorldSpace(Vector3 point);
 
 public : 
+	Vector3 position;
+	Vector3 velocity;
+	Vector3 acceleration;
 	
 	void integrate(float dt);
 
@@ -41,6 +43,5 @@ public :
 private :
 
 	void CalculateDerivedData();
-
 
 };

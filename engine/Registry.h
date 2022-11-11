@@ -2,8 +2,9 @@
 #pragma once
 #include <iostream>
 
-#include <Particule.h>
-#include <Force.h>
+#include "Rigidbody.h"
+#include "Particule.h"
+#include "Force.h"
 #include "Vector3.h"
 
 namespace Registry
@@ -21,13 +22,13 @@ namespace Registry
         ParticuleRegistry();
         ParticuleRegistry(Particule* p);
         ~ParticuleRegistry();
-        void addForce(Force::Force* f);
        
+        void addForce(Force::Force* f);
         bool delForce(Force::Force* f);
 
         Vector3 getGravityForce();
 
-        std::vector<Force::Force*> getRegist(void);
+        std::vector<Force::Force*> getRegist();
 
         void update(float dt);
         void free();  // a explicit free function,
@@ -38,22 +39,30 @@ namespace Registry
                       // always the end of execution
     };
 
-    class ParticuleRegistries
+    class RigidRegistry
     {
         private:
-        std::map<Particule*, ParticuleRegistry> registries;
+        RigidBody* rigidbody;
+        std::vector<Force::Force*> forceRegistry;
+        std::map<Force::Force*, int> forceApplyType;
+        // 0 for no special point
+        // 1 for local point
+        // 2 for world point
+        std::map<Force::Force*, Vector3> forceApplyPoint;
 
         public:
-        // add a new item in the registres
-        ~ParticuleRegistries();
+        RigidRegistry();
+        RigidRegistry(RigidBody* rb);
+        ~RigidRegistry();
 
-        bool addParticule(Particule* p);
-        bool delParticule(Particule* p);
+        void addForce(Force::Force* f);
+        void delForce(Force::Force* f);
 
-        bool addForce(Particule* p, Force::Force* f);
-        void addForceAll(Force::Force* f);
+        void addForceLocalPoint(Force::Force* f, Vector3 coord);
+        void addForceWorldPoint(Force::Force* f, Vector3 coord);
 
-        void updateAll(float dt); // update all the particles
+        void update(float dt);
+        void free();
     };
 }
 
