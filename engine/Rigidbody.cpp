@@ -16,25 +16,24 @@ void RigidBody::Intergrate(float dt)
 
 	CalculateDerivedData();
 
-	// Calcul accélération linéaire
+	// Calcul accÃ©lÃ©ration linÃ©aire
 	Vector3 linearAcceleration = forceAccum * inverseMasse;
 
-	// Calcul accélération angulaire
+	// Calcul accÃ©lÃ©ration angulaire
 	Vector3 angularAcceleration = inverseInertiaTensorWorld.transform(torqueAccum);
 
-	// Calcul vélocité linéaire
+	// Calcul vÃ©locitÃ© linÃ©aire
 	velocity = velocity * powf(linearDamping, dt) + linearAcceleration * dt;
 
-	// Calcul vélocité angulaire
+	// Calcul vÃ©locitÃ© angulaire
 	rotation = rotation * powf(angularDamping, dt) + angularAcceleration * dt;
-
 
 	ClearAccumulator();
 }
 
 void RigidBody::AddForce(const Vector3& force)
 {
-	// Utile pour des force comme la gravité qui s'applique au centre de masse et n'influence pas la rotation
+	// Utile pour des force comme la gravitÃ© qui s'applique au centre de masse et n'influence pas la rotation
 	forceAccum += force;
 }
 
@@ -63,7 +62,7 @@ void RigidBody::ClearAccumulator()
 
 void RigidBody::CalculateDerivedData()
 {
-	// normaliser orietnation à cause des imprécisions numériques ?
+	// normaliser orietnation Ã  cause des imprÃ©cisions numÃ©riques ?
 
 	// Calcul matrice de transformation
 
@@ -84,9 +83,9 @@ void RigidBody::CalculateDerivedData()
 	
 
 
-	// Calcul de l'inverse de la matrice du tenseur d'inertie dans les coordonnées globale
+	// Calcul de l'inverse de la matrice du tenseur d'inertie dans les coordonnÃ©es globale
 	// I(-1)' = MbI(-1)Mb(-1)
-	// Mb matrice 3x3 (rotation, on ne s'intéresse pas à la translation)
+	// Mb matrice 3x3 (rotation, on ne s'intÃ©resse pas Ã  la translation)
 
 	// Calcul MbI(-1)
 	float i0 = transformMatrix.data[0] * inverseInertiaTensorLocal.data[0]
@@ -127,7 +126,7 @@ void RigidBody::CalculateDerivedData()
 
 
 	//Calcul MbI(-1)Mb(-1) = I(-1)'
-	// Les deux bases sont orthonormées, donc la matrice Mb est orthogonale
+	// Les deux bases sont orthonormÃ©es, donc la matrice Mb est orthogonale
 	// On a alors Mb(-1) = (t)Mb, ce qui simplifie le calcul
 
 	inverseInertiaTensorWorld.data[0] = i0 * transformMatrix.data[0]
