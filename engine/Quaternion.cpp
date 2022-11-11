@@ -165,10 +165,10 @@ std::string Quaternion::getString() {
     std::ostringstream oss;
     // TODO: precision doesn't work for some reason
     oss << std::fixed << std::setprecision(2);
-    oss << "[ " << std::to_string(w);
-    oss << " (" << std::to_string(x);
-    oss << " " << std::to_string(y);
-    oss << " " << std::to_string(z);
+    oss << "[ " << w;
+    oss << " (" << x;
+    oss << " " << y;
+    oss << " " << z;
     oss << ")]";
     // std::cout << oss.str() << std::endl;
     return oss.str();
