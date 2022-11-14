@@ -1,188 +1,143 @@
-// Dear ImGui: standalone example application for GLFW + OpenGL 3, using programmable pipeline
-// (GLFW is a cross-platform general purpose library for handling windows, inputs, OpenGL/Vulkan/Metal graphics context creation, etc.)
-// If you are new to Dear ImGui, read documentation from the docs/ folder + read the top of imgui.cpp.
-// Read online: https://github.com/ocornut/imgui/tree/master/docs
+#include <filesystem>
+namespace fs = std::filesystem;
+#include <iostream>
+#include <glad/glad.h>
+#include <GLFW/glfw3.h>
+#include <stb/stb_image.h>
 
-#include "engine/Particule.h"
-#include "engine/Vector3.h"
-#include "imgui.h"
-#include "imgui_impl_glfw.h"
-#include "imgui_impl_opengl3.h"
-#include <stdio.h>
-#include <vector>
-#if defined(IMGUI_IMPL_OPENGL_ES2)
-#include <GLES2/gl2.h>
-#endif
-#include <GLFW/glfw3.h> // Will drag system OpenGL headers
+#include "graphics/shader.h"
+#include "graphics/vao.h"
+#include "graphics/vbo.h"
+#include "graphics/ebo.h"
+#include "graphics/texture.h"
 
-// [Win32] Our example includes a copy of glfw3.lib pre-compiled with VS2010 to maximize ease of testing and compatibility with old VS compilers.
-// To link with VS2010-era libraries, VS2015+ requires linking with legacy_stdio_definitions.lib, which we do using this pragma.
-// Your own project should not be affected, as you are likely to link with a newer binary of GLFW that is adequate for your version of Visual Studio.
-#if defined(_MSC_VER) && (_MSC_VER >= 1900) && !defined(IMGUI_DISABLE_WIN32_FUNCTIONS)
-#pragma comment(lib, "legacy_stdio_definitions")
-#endif
-
-struct ColoredParticule {
-    Particule particule;
-    int red = 200;
-    int green = 250;
-    int blue = 253;
+// Vertices coordinates
+GLfloat vertices[] =
+{ //     COORDINATES     /        COLORS      /   TexCoord  //
+	-0.5f, -0.5f, 0.0f,     1.0f, 0.0f, 0.0f,	0.0f, 0.0f, // Lower left corner
+	-0.5f,  0.5f, 0.0f,     0.0f, 1.0f, 0.0f,	0.0f, 1.0f, // Upper left corner
+	 0.5f,  0.5f, 0.0f,     0.0f, 0.0f, 1.0f,	1.0f, 1.0f, // Upper right corner
+	 0.5f, -0.5f, 0.0f,     1.0f, 1.0f, 1.0f,	1.0f, 0.0f  // Lower right corner
 };
 
-void drawParticle(ColoredParticule cp)
-{   
-    glEnable(GL_POINT_SMOOTH);
-    glPointSize(10.0f);
-    glBegin(GL_POINTS);
-    glVertex3f(cp.particule.position.x, cp.particule.position.y, cp.particule.position.z);
-    glColor3f(cp.red, cp.green, cp.blue); 
-    glEnd();
-
-    glFlush();
-}
-
-static void glfw_error_callback(int error, const char* description)
+// Indices for vertices order
+GLuint indices[] =
 {
-    fprintf(stderr, "Glfw Error %d: %s\n", error, description);
-}
+	0, 2, 1, // Upper triangle
+	0, 3, 2 // Lower triangle
+};
 
-int main(int, char**)
+int main()
 {
-    float g = 10;
-    float dt = 0.001f;
+	// Initialize GLFW
+	glfwInit();
 
-    std::vector<ColoredParticule> particules = {};
+	// Tell GLFW we are using OpenGL 3.3
+	glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
+	glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
 
-    // Setup window
-    glfwSetErrorCallback(glfw_error_callback);
-    if (!glfwInit())
-        return 1;
+	// Tell GLFW we are using the CORE profile
+	// So that means we only have the modern functions
+	glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 
-    // Decide GL+GLSL versions
-#if defined(IMGUI_IMPL_OPENGL_ES2)
-    // GL ES 2.0 + GLSL 100
-    const char* glsl_version = "#version 100";
-    glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 2);
-    glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 0);
-    glfwWindowHint(GLFW_CLIENT_API, GLFW_OPENGL_ES_API);
-#elif defined(__APPLE__)
-    // GL 3.2 + GLSL 150
-    const char* glsl_version = "#version 150";
-    glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
-    glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 2);
-    glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);  // 3.2+ only
-    glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);            // Required on Mac
-#else
-    // GL 3.0 + GLSL 130
-    const char* glsl_version = "#version 130";
-    glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
-    glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 0);
-    //glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);  // 3.2+ only
-    //glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);            // 3.0+ only
-#endif
+	// Create a GLFWwindow object of 800 by 800 pixels, naming it "YoutubeOpenGL"
+	GLFWwindow* window = glfwCreateWindow(800, 800, "YoutubeOpenGL", NULL, NULL);
 
-    // Create window with graphics context
-    GLFWmonitor* monitor = glfwGetPrimaryMonitor();
-    GLFWwindow* window = glfwCreateWindow(1280, 720, "Physic Engine Demo", NULL, NULL);
+	// Error check if the window fails to create
+	if (window == NULL)
+	{
+		std::cout << "Failed to create GLFW window" << std::endl;
+		glfwTerminate();
+		return -1;
+	}
 
-    if (window == NULL)
-        return 1;
-    glfwMakeContextCurrent(window);
-    glfwSwapInterval(1); // Enable vsync
+	// Introduce the window into the current context
+	glfwMakeContextCurrent(window);
 
-    // Setup Dear ImGui context
-    IMGUI_CHECKVERSION();
-    ImGui::CreateContext();
-    ImGuiIO& io = ImGui::GetIO(); (void)io;
-    //io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;     // Enable Keyboard Controls
-    //io.ConfigFlags |= ImGuiConfigFlags_NavEnableGamepad;      // Enable Gamepad Controls
+	//Load GLAD so it configures OpenGL
+	gladLoadGL();
 
-    // Setup Dear ImGui style
-    ImGui::StyleColorsDark();
-    //ImGui::StyleColorsLight();
+	// Specify the viewport of OpenGL in the Window
+	// In this case the viewport goes from x = 0, y = 0, to x = 800, y = 800
+	glViewport(0, 0, 800, 800);
 
-    // Setup Platform/Renderer backends
-    ImGui_ImplGlfw_InitForOpenGL(window, true);
-    ImGui_ImplOpenGL3_Init(glsl_version);
+	// Generates Shader object using shaders defualt.vert and default.frag
+	Graphics::Shader shaderProgram("resources/shaders/default.vert", "resources/shaders/default.frag");
 
-    // Our state
-    ImVec4 clear_color = ImVec4(0.0f, 0.0f, 0.0f, 0.0f);
-    float base_force = 10000;
+	// Generates Vertex Array Object and binds it
+	Graphics::VAO VAO;
+	VAO.Bind();
 
-    // Main loop
-    while (!glfwWindowShouldClose(window))
-    {
-        glfwPollEvents();
+	// Generates Vertex Buffer Object and links it to vertices
+	Graphics::VBO VBO(vertices, sizeof(vertices));
+	// Generates Element Buffer Object and links it to indices
+	Graphics::EBO EBO(indices, sizeof(indices));
 
-        ImGui_ImplOpenGL3_NewFrame();
-        ImGui_ImplGlfw_NewFrame();
-        ImGui::NewFrame();
+	// Links VBO to VAO
+	VAO.LinkAttrib(VBO, 0, 3, GL_FLOAT, 8 * sizeof(float), (void*)0);
+	VAO.LinkAttrib(VBO, 1, 3, GL_FLOAT, 8 * sizeof(float), (void*)(3 * sizeof(float)));
+	VAO.LinkAttrib(VBO, 2, 2, GL_FLOAT, 8 * sizeof(float), (void*)(6 * sizeof(float)));
 
-        {
-            ImGui::Begin("Shooter !");
+	// Unbind all to prevent accidentally modifying them
+	VAO.Unbind();
+	VBO.Unbind();
+	EBO.Unbind();
 
-            ImGui::Text("Choose the projectile.");
+	// Gets ID of uniform called "scale"
+	GLuint uniID = glGetUniformLocation(shaderProgram.ID, "scale");
 
-            if (ImGui::Button("Dirt")) {
-                ColoredParticule cp;
-                cp.particule = Particule(Vector3(-1, -0.9f, 0), 5);
-                particules.push_back(cp);
-                Vector3 forces = Vector3(base_force, -g * cp.particule.masse() + base_force, 0);
-                cp.particule.integrate(forces, dt);
-            }
+	
 
-            if (ImGui::Button("Paper")) {
-                ColoredParticule cp;
-                cp.particule = Particule(Vector3(-1, -0.9f, 0), 3.5),
-                particules.push_back(cp);
-                Vector3 forces = Vector3(base_force, -g * cp.particule.masse() + base_force, 0);
-                cp.particule.integrate(forces, dt);
-            }
+	std::string parentDir = (fs::current_path().fs::path::parent_path()).string();
+	std::string texPath = "/resources/textures/";
 
-            if (ImGui::Button("Steel")) {
-                ColoredParticule cp;
-                cp.particule = Particule(Vector3(-1, -0.9f, 0), 10);
-                particules.push_back(cp);
-                Vector3 forces = Vector3(base_force, -g * cp.particule.masse() + base_force, 0);
-                cp.particule.integrate(forces, dt);
-            }
+	// Texture
+	Graphics::Texture popCat("resources/textures/pop_cat.png", GL_TEXTURE_2D, GL_TEXTURE0, GL_RGBA, GL_UNSIGNED_BYTE);
+	popCat.texUnit(shaderProgram, "tex0", 0);
 
-            ImGui::End();
-        }
+	// Main while loop
+	while (!glfwWindowShouldClose(window))
+	{
+		// Specify the color of the background
+		glClearColor(0.07f, 0.13f, 0.17f, 1.0f);
 
-        // Rendering
-        ImGui::Render();
-        int display_w, display_h;
-        glfwGetFramebufferSize(window, &display_w, &display_h);
-        glViewport(0, 0, display_w, display_h);
-        glClearColor(clear_color.x * clear_color.w, clear_color.y * clear_color.w, clear_color.z * clear_color.w, clear_color.w);
-        glClear(GL_COLOR_BUFFER_BIT);
-        ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
+		// Clean the back buffer and assign the new color to it
+		glClear(GL_COLOR_BUFFER_BIT);
 
-        for (int i = 0; i < particules.size(); i++)
-        {
-            ColoredParticule cp = particules[i];
+		// Tell OpenGL which Shader Program we want to use
+		shaderProgram.Activate();
 
-            if (cp.particule.position.y < -1.2) {
-                particules.erase(particules.begin() + i);
-            }
+		// Assigns a value to the uniform; NOTE: Must always be done after activating the Shader Program
+		glUniform1f(uniID, 0.5f);
 
-            Vector3 gravity = Vector3(0, -g * cp.particule.masse(), 0);
-            cp.particule.integrate(gravity, dt);
+		// Binds texture so that is appears in rendering
+		popCat.Bind();
 
-            drawParticle(cp);
-        }
+		// Bind the VAO so OpenGL knows to use it
+		VAO.Bind();
 
-        glfwSwapBuffers(window);
-    }
+		// Draw primitives, number of indices, datatype of indices, index of indices
+		glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
 
-    // Cleanup
-    ImGui_ImplOpenGL3_Shutdown();
-    ImGui_ImplGlfw_Shutdown();
-    ImGui::DestroyContext();
+		// Swap the back buffer with the front buffer
+		glfwSwapBuffers(window);
 
-    glfwDestroyWindow(window);
-    glfwTerminate();
+		// Take care of all GLFW events
+		glfwPollEvents();
+	}
 
-    return 0;
+	// Delete all the objects we've created
+	VAO.Delete();
+	VBO.Delete();
+	EBO.Delete();
+	popCat.Delete();
+	shaderProgram.Delete();
+
+	// Delete window before ending the program
+	glfwDestroyWindow(window);
+
+	// Terminate GLFW before ending the program
+	glfwTerminate();
+
+	return 0;
 }

@@ -1,6 +1,6 @@
 #pragma once
 #include "ParticleContact.h"
-#include "Registry.h"
+#include "physics/Registry.h"
 
 class ParticleContactResolver
 {

@@ -2,9 +2,9 @@
 
 #include <vector>
 #include <map>
-#include <math.h>
+#include <cmath>
 
-#include "Vector3.h"
+#include "core/math.h"
 
 class Particule
 {

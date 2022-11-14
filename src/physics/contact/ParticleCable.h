@@ -2,7 +2,7 @@
 
 #include "ParticleLink.h"
 #include "ParticleContact.h"
-#include "Particule.h"
+#include "physics/Particule.h"
 
 
 class ParticleCable : public ParticleLink {
