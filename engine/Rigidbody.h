@@ -6,7 +6,7 @@
 #include "Matrix4.h"
 #include "Matrix3.h"
 
-class RigidBody: IForceAppliable {
+class RigidBody: public IForceAppliable {
 
 private : 
 	float inverseMasse;

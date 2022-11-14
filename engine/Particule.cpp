@@ -7,21 +7,21 @@ Particule::Particule()
 
 Particule::Particule(Vector3 _position, float _masse)
 {
-	inverseMasse_ = 1 / _masse;
+	inverseMasse = 1 / _masse;
 	position = _position;
 }
 
 Particule::Particule(Vector3 _position, float _masse, float _damping)
 {
-	inverseMasse_ = 1 / _masse;
-	damping_ = _damping;
+	inverseMasse = 1 / _masse;
+	damping = _damping;
 	position = _position;
 }
 
 Particule Particule::operator=(const Particule& other)
 {
-	this->inverseMasse_ = other.inverseMasse;
-	this->damping_ = other.damping;
+	this->inverseMasse = other.inverseMasse;
+	this->damping = other.damping;
 	this->position = other.position;
 	this->velocity = other.velocity;
 	this->acceleration = other.acceleration;
@@ -46,12 +46,12 @@ bool Particule::operator!=(const Particule& other)
 
 void Particule::setMasse(float _masse)
 {
-	inverseMasse_ = 1 / _masse;
+	inverseMasse = 1 / _masse;
 }
 
 void Particule::setInverseMasse(float _inverseMasse)
 {
-	inverseMasse_ = _inverseMasse;
+	inverseMasse = _inverseMasse;
 }
 
 float Particule::masse()

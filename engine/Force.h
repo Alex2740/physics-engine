@@ -6,6 +6,8 @@
 
 #include "Vector3.h"
 #include "Particule.h"
+#include "Rigidbody.h"
+
 // ############ FORCE ###########
 namespace Force
 {
@@ -15,14 +17,17 @@ namespace Force
     {
         // the general force class
     protected:
-        Particule* particule;
+        IForceAppliable* object;
+        // Particule* particule;
         virtual bool isEqual(const Force& obj) const;
     public:
         Force();
-        Force(Particule *p); // the call with particle is expected
+        Force(IForceAppliable* obj);
+        // Force(Particule *p); // the call with particle is expected
+        // Force(RigidBody* rb);
         ~Force();
         virtual Vector3 getForce() = 0;
-        bool operator==(const Force& other);
+        bool operator==(const Force& other) const;
     };
 
     class Gravity: public Force
@@ -33,7 +38,7 @@ namespace Force
     protected:
         bool isEqual(const Force& obj) const override;
     public:
-        Gravity(Particule *p);
+        Gravity(IForceAppliable *p);
         Vector3 getForce() override;
     };
 
@@ -42,19 +47,37 @@ namespace Force
         float k1=3;
         float k2=4;
     public:
-        ParticuleDrag(Particule* p, float k1, float k2);
+        ParticuleDrag(IForceAppliable* p, float k1, float k2);
         Vector3 getForce() override;
     };
 
     class Spring: public Force {
-    // build a 'static' string between the two particle,
+    // build a 'static' string between the two particles/rigidbodies,
     // the force will be the one p1 taken from p2;
     private:
         float k;
         Vector3 dist;
-        Particule* particule2;
+        // the following are used in case the second member is a particle
+        IForceAppliable* object2;
+
+        // the following var are used for RigidBody
+        Vector3 localPoint = Vector3::Zero();
+        Vector3 localPoint2 = Vector3::Zero();
+
+        int connectType = 0;
+        // 0 for particle-particle
+        // 1 for particle-rigidbody
+        // 2 for rigidbody-particle
+        // 3 for rigidbody-rigidbody
     public:
+        // considering all the possibilities:
+        // Particle-Particle
+        // Particle-RigidBody
+        // etc.
         Spring(Particule* p1, Particule* p2, float k);
+        Spring(Particule* p1, RigidBody* rb, Vector3 localPoint, float k);
+        Spring(RigidBody* rb, Vector3 localPoint, Particule* p2, float k);
+        Spring(RigidBody* rb1, RigidBody* rb2, Vector3 localPoint1, Vector3 localPoint2);
         Vector3 getForce() override;
     };
 }
