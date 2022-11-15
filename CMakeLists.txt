@@ -4,78 +4,118 @@ project(physic-engine VERSION 0.1.0)
 include(CTest)
 enable_testing()
 
-link_directories(${CMAKE_SOURCE_DIR}/imgui/libs/glfw/lib-vs2010-32)
-link_directories(${CMAKE_SOURCE_DIR}/imgui/libs/glfw/lib-vs2010-64)
+link_directories(${CMAKE_SOURCE_DIR}/src/imgui/libs/glfw/lib-vs2010-32)
+link_directories(${CMAKE_SOURCE_DIR}/src/imgui/libs/glfw/lib-vs2010-64)
 
 set(ENGINES
-    ./engine/contact/ParticleContact.cpp
-    ./engine/contact/ParticleContact.h
-    ./engine/contact/ParticleContactResolver.cpp
-    ./engine/contact/ParticleContactResolver.h
-    ./engine/contact/ParticleLink.cpp
-    ./engine/contact/ParticleLink.h
-    ./engine/contact/ParticleCable.cpp
-    ./engine/contact/ParticleCable.h
-    ./engine/contact/ParticleRod.cpp
-    ./engine/contact/ParticleRod.h
-    ./engine/contact/NaiveParticleContactGenerator.cpp
-    ./engine/contact/NaiveParticleContactGenerator.h
-    ./engine/contact/WallContactGenerator.cpp
-    ./engine/contact/WallContactGenerator.h
+    ./src/physics/contact/ParticleContact.cpp
+    ./src/physics/contact/ParticleContact.h
+    ./src/physics/contact/ParticleContactResolver.cpp
+    ./src/physics/contact/ParticleContactResolver.h
+    ./src/physics/contact/ParticleLink.cpp
+    ./src/physics/contact/ParticleLink.h
+    ./src/physics/contact/ParticleCable.cpp
+    ./src/physics/contact/ParticleCable.h
+    ./src/physics/contact/ParticleRod.cpp
+    ./src/physics/contact/ParticleRod.h
+    ./src/physics/contact/NaiveParticleContactGenerator.cpp
+    ./src/physics/contact/NaiveParticleContactGenerator.h
+    ./src/physics/contact/WallContactGenerator.cpp
+    ./src/physics/contact/WallContactGenerator.h
 
-    ./engine/Quaternion.cpp
-    ./engine/Quaternion.h
-    ./engine/Registry.cpp
-    ./engine/Registry.h
-    ./engine/Force.cpp
-    ./engine/Force.h
-    ./engine/Particule.cpp
-    ./engine/Particule.h
-    ./engine/Vector3.cpp
-    ./engine/Vector3.h
-    ./engine/PhysicWorld.cpp
-    ./engine/PhysicWorld.h
-    ./engine/Matrix3.cpp
-    ./engine/Matrix3.h
-    ./engine/Matrix4.cpp
-    ./engine/Matrix4.h
-    ./engine/Transform.h
-    ./engine/Transform.cpp
-    ./engine/Rigidbody.cpp
-    ./engine/Rigidbody.h
+    ./src/physics/Rigidbody.cpp
+    ./src/physics/Rigidbody.h
+
+    ./src/physics/Registry.cpp
+    ./src/physics/Registry.h
+    ./src/physics/Force.cpp
+    ./src/physics/Force.h
+    ./src/physics/Particule.cpp
+    ./src/physics/Particule.h
+    ./src/physics/PhysicWorld.cpp
+    ./src/physics/PhysicWorld.h
+    ./src/physics/Transform.h
+    ./src/physics/Transform.cpp
 )
 
-set(IMGUI ./imgui/imgui.cpp ./imgui/imgui_demo.cpp ./imgui/imgui_draw.cpp ./imgui/imgui_tables.cpp ./imgui/imgui_widgets.cpp ./imgui/imgui_impl_glfw.cpp ./imgui/imgui_impl_opengl3.cpp)
+set(CORE
+    ./src/core/math.h
+    ./src/core/Vector3.cpp
+    ./src/core/Vector3.h
+    ./src/core/Matrix3.cpp
+    ./src/core/Matrix3.h
+    ./src/core/Matrix4.cpp
+    ./src/core/Matrix4.h
+    ./src/core/Quaternion.cpp
+    ./src/core/Quaternion.h
+)
 
-add_executable(test1 ./test/test1.cpp ${ENGINES} ${IMGUI})
-target_include_directories(test1 PUBLIC ${CMAKE_SOURCE_DIR}/engine ${CMAKE_SOURCE_DIR}/imgui imgui/libs/glfw/include)
-target_link_directories(test1 PUBLIC imgui/libs/glfw/lib-vc2010-64 imgui/libs/glfw/lib-vc2010-32)
+set(IMGUI
+    ./src/imgui/imgui.cpp
+    ./src/imgui/imgui_demo.cpp
+    ./src/imgui/imgui_draw.cpp
+    ./src/imgui/imgui_tables.cpp
+    ./src/imgui/imgui_widgets.cpp
+    ./src/imgui/imgui_impl_glfw.cpp
+    ./src/imgui/imgui_impl_opengl3.cpp
+)
+
+set(GRAPHICS
+    ./src/graphics/glad.c
+    ./src/graphics/stb.cpp
+
+    ./src/graphics/shader.cpp ./src/graphics/shader.h
+
+    ./src/graphics/vao.cpp ./src/graphics/vao.h
+    ./src/graphics/vbo.cpp ./src/graphics/vbo.h
+    ./src/graphics/ebo.cpp ./src/graphics/ebo.h
+
+    ./src/graphics/texture.cpp ./src/graphics/texture.h
+)
+
+add_executable(test1 ./src/test/test1.cpp ${ENGINES} ${IMGUI} ${CORE})
+target_include_directories(test1 PUBLIC ${CMAKE_SOURCE_DIR}/src src/imgui/libs/glfw/include)
+target_link_directories(test1 PUBLIC src/imgui/libs/glfw/lib-vc2010-64 src/imgui/libs/glfw/lib-vc2010-32)
 target_link_libraries(test1 PRIVATE opengl32.lib glfw3.lib)
 
-add_executable(test2 ./test/test2.cpp ${ENGINES} ${IMGUI})
-target_include_directories(test2 PUBLIC ${CMAKE_SOURCE_DIR}/engine ${CMAKE_SOURCE_DIR}/imgui imgui/libs/glfw/include)
-target_link_directories(test2 PUBLIC imgui/libs/glfw/lib-vc2010-64 imgui/libs/glfw/lib-vc2010-32)
+add_executable(test2 ./src/test/test2.cpp ${ENGINES} ${IMGUI} ${CORE})
+target_include_directories(test2 PUBLIC ${CMAKE_SOURCE_DIR}/src src/imgui/libs/glfw/include)
+target_link_directories(test2 PUBLIC src/imgui/libs/glfw/lib-vc2010-64 src/imgui/libs/glfw/lib-vc2010-32)
 target_link_libraries(test2 PRIVATE opengl32.lib glfw3.lib)
 
-add_executable(test3 ./test/test3.cpp ${ENGINES} ${IMGUI})
-target_include_directories(test3 PUBLIC ${CMAKE_SOURCE_DIR}/engine ${CMAKE_SOURCE_DIR}/imgui imgui/libs/glfw/include)
-target_link_directories(test3 PUBLIC imgui/libs/glfw/lib-vc2010-64 imgui/libs/glfw/lib-vc2010-32)
+add_executable(test3 ./src/test/test3.cpp ${ENGINES} ${IMGUI} ${CORE})
+target_include_directories(test3 PUBLIC ${CMAKE_SOURCE_DIR}/src src/imgui/libs/glfw/include)
+target_link_directories(test3 PUBLIC src/imgui/libs/glfw/lib-vc2010-64 src/imgui/libs/glfw/lib-vc2010-32)
 target_link_libraries(test3 PRIVATE opengl32.lib glfw3.lib)
 
-add_executable(test_quat ./test/test_quat.cpp ${ENGINES} ${IMGUI})
-target_include_directories(test_quat PUBLIC ${CMAKE_SOURCE_DIR}/engine ${CMAKE_SOURCE_DIR}/imgui imgui/libs/glfw/include)
-target_link_directories(test_quat PUBLIC imgui/libs/glfw/lib-vc2010-64 imgui/libs/glfw/lib-vc2010-32)
+add_executable(test_quat ./src/test/test_quat.cpp ${ENGINES} ${IMGUI} ${CORE})
+target_include_directories(test_quat PUBLIC ${CMAKE_SOURCE_DIR}/src src/imgui/libs/glfw/include)
+target_link_directories(test_quat PUBLIC src/imgui/libs/glfw/lib-vc2010-64 src/imgui/libs/glfw/lib-vc2010-32)
 target_link_libraries(test_quat PRIVATE opengl32.lib glfw3.lib)
 
-add_executable(pool ./demo/pool.cpp ${ENGINES} ${IMGUI})
-target_include_directories(pool PUBLIC ${CMAKE_SOURCE_DIR}/engine ${CMAKE_SOURCE_DIR}/imgui imgui/libs/glfw/include)
-target_link_directories(pool PUBLIC imgui/libs/glfw/lib-vc2010-64 imgui/libs/glfw/lib-vc2010-32)
+add_executable(pool ./demo/pool.cpp ${ENGINES} ${IMGUI} ${CORE})
+target_include_directories(pool PUBLIC ${CMAKE_SOURCE_DIR}/src src/imgui/libs/glfw/include)
+target_link_directories(pool PUBLIC src/imgui/libs/glfw/lib-vc2010-64 src/imgui/libs/glfw/lib-vc2010-32)
 target_link_libraries(pool PRIVATE opengl32.lib glfw3.lib)
 
-add_executable(amas ./demo/amas.cpp ${ENGINES} ${IMGUI})
-target_include_directories(amas PUBLIC ${CMAKE_SOURCE_DIR}/engine ${CMAKE_SOURCE_DIR}/imgui imgui/libs/glfw/include)
-target_link_directories(amas PUBLIC imgui/libs/glfw/lib-vc2010-64 imgui/libs/glfw/lib-vc2010-32)
+add_executable(amas ./demo/amas.cpp ${ENGINES} ${IMGUI} ${CORE})
+target_include_directories(amas PUBLIC ${CMAKE_SOURCE_DIR}/src src/imgui/libs/glfw/include)
+target_link_directories(amas PUBLIC src/imgui/libs/glfw/lib-vc2010-64 src/imgui/libs/glfw/lib-vc2010-32)
 target_link_libraries(amas PRIVATE opengl32.lib glfw3.lib)
+
+add_executable(main ./main.cpp ${ENGINES} ${IMGUI} ${GRAPHICS} ${CORE})
+target_include_directories(main PUBLIC ${CMAKE_SOURCE_DIR}/src src/imgui/libs/glfw/include src/include)
+target_link_directories(main PUBLIC src/imgui/libs/glfw/lib-vc2010-64 src/imgui/libs/glfw/lib-vc2010-32)
+target_link_libraries(main PRIVATE opengl32.lib glfw3.lib)
+target_compile_features(main PRIVATE cxx_std_17)
+
+add_custom_target(copy_resources ALL
+        COMMAND ${CMAKE_COMMAND} -E copy_directory
+        ${PROJECT_SOURCE_DIR}/resources
+        ${PROJECT_BINARY_DIR}/resources
+        COMMENT "Copying resources into binary directory")
+
+add_dependencies(main copy_resources)
 
 SET(CMAKE_EXE_LINKER_FLAGS /NODEFAULTLIB:\"msvcrt.lib\")
 

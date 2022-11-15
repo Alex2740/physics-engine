@@ -3,14 +3,14 @@
 // If you are new to Dear ImGui, read documentation from the docs/ folder + read the top of imgui.cpp.
 // Read online: https://github.com/ocornut/imgui/tree/master/docs
 
-#include "Particule.h"
-#include "Vector3.h"
-#include "Force.h"
-#include "PhysicWorld.h"
+#include "physics/Particule.h"
+#include "core/math.h"
+#include "physics/Force.h"
+#include "physics/PhysicWorld.h"
 
-#include "imgui.h"
-#include "imgui_impl_glfw.h"
-#include "imgui_impl_opengl3.h"
+#include "imgui/imgui.h"
+#include "imgui/imgui_impl_glfw.h"
+#include "imgui/imgui_impl_opengl3.h"
 
 #include <stdio.h>
 #include <vector>

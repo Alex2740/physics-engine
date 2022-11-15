@@ -1,7 +1,7 @@
 #pragma once
 
-#include "Particule.h"
-#include "Vector3.h"
+#include "physics/Particule.h"
+#include "core/math.h"
 
 class ParticleContact
 {
