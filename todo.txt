@@ -1,0 +1,12 @@
+Matrix4 -> Matrix3
+Matrix3 * Matrix4
+
+transformation between local & world
+
+correct bugs in CalculateDerivedData (indice)
+
+an example
+
+normaliser?
+
+matrice d'inertie (init in constructor)
