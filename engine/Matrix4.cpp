@@ -1,5 +1,23 @@
 #include "Matrix4.h"
 
+Matrix4::Matrix4(Matrix3 matrix3, Vector3 vector) {
+	data[0] = matrix3.data[0];
+	data[1] = matrix3.data[1];
+	data[2] = matrix3.data[2];
+
+	data[4] = matrix3.data[3];
+	data[5] = matrix3.data[4];
+	data[6] = matrix3.data[5];
+
+	data[8] = matrix3.data[6];
+	data[9] = matrix3.data[7];
+	data[10] = matrix3.data[8];
+
+	data[3] = vector.x;
+	data[7] = vector.y;
+	data[11] = vector.z;
+}
+
 Vector3 Matrix4::operator*(const Vector3& vector)
 {
 	return Vector3(
@@ -34,12 +52,30 @@ Matrix4 Matrix4::operator*(const Matrix4& other)
 
 float Matrix4::getDeterminant()
 {
-	return data[8] * data[5] * data[2]
+	return - data[8] * data[5] * data[2]
 		+ data[4] * data[9] * data[2]
 		+ data[8] * data[1] * data[6]
 		- data[0] * data[9] * data[6]
 		- data[4] * data[1] * data[10]
 		+ data[0] * data[5] * data[10];
+}
+
+Matrix3 Matrix4::getMatrix3()
+{
+	Matrix3 ret = Matrix3();
+	ret.data[0] = data[0];
+	ret.data[1] = data[1];
+	ret.data[2] = data[2];
+
+	ret.data[3] = data[4];
+	ret.data[4] = data[5];
+	ret.data[5] = data[6];
+
+	ret.data[6] = data[8];
+	ret.data[7] = data[9];
+	ret.data[8] = data[10];
+
+	return ret;
 }
 
 Vector3 Matrix4::transform(Vector3& vector)
