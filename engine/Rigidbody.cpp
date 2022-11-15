@@ -23,7 +23,7 @@ void RigidBody::integrate(float dt)
 	Vector3 angularAcceleration = inverseInertiaTensorWorld.transform(torqueAccum);
 
 	// Calcul vélocité linéaire
-	velocity = velocity * powf(linearDamping, dt) + linearAcceleration * dt;
+	velocity = velocity * powf(damping, dt) + linearAcceleration * dt;
 
 	// Calcul vélocité angulaire
 	rotation = rotation * powf(angularDamping, dt) + angularAcceleration * dt;

@@ -8,10 +8,7 @@
 
 class RigidBody: public IForceAppliable {
 
-private : 
-	float inverseMasse;
-	float linearDamping;
-
+private:
 	Quaternion orientation;
 	Vector3 rotation;
 	Matrix4 transformMatrix;
@@ -25,11 +22,11 @@ private :
 
 	Vector3 getPointInWorldSpace(Vector3 point);
 
-public : 
-	Vector3 position;
-	Vector3 velocity;
-	Vector3 acceleration;
-	
+public:
+	// Vector3 position;
+	// Vector3 velocity;
+	// Vector3 acceleration;
+
 	void integrate(float dt);
 
 	void addForce(const Vector3& force);

@@ -100,7 +100,7 @@ void Registry::RigidRegistry::update(float dt) {
         }
     }
     this->rigidbody->integrate(dt);
-    this->rigidbody->ClearAccumulator(); // not necessary. but in case
+    // this->rigidbody->ClearAccumulator(); // not necessary. but in case
 }
 
 void free() {
