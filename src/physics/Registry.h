@@ -5,7 +5,6 @@
 #include "Rigidbody.h"
 #include "Particule.h"
 #include "Force.h"
-#include "core/math.h"
 
 namespace Registry
 {

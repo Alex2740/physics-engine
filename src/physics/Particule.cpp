@@ -59,6 +59,10 @@ float Particule::masse()
 	return 1 / inverseMasse;
 }
 
+void Particule::integrate(float dt)
+{
+
+}
 
 void Particule::integrate(Vector3 forces, float dt)
 {

@@ -5,7 +5,6 @@
 #include <cmath>
 
 #include "IForceAppliable.h"
-#include "core/math.h"
 
 class Particule : public IForceAppliable
 {
@@ -28,5 +27,6 @@ public:
 
 	float masse();
 
+	void Particule::integrate(float dt) override;
 	void integrate(Vector3 forces, float dt);
 };

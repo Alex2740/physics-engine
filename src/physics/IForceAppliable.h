@@ -12,5 +12,5 @@ public:
     float inverseMasse;
 	float damping;
 
-    virtual void integrate(Vector3 force, float dt);
+    virtual void integrate(float dt) = 0;
 };

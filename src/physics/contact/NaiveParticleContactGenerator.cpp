@@ -2,7 +2,6 @@
 // the couples to see if any two particles are closer than the distance 2 * radius
 
 #include "NaiveParticleContactGenerator.h"
-#include "core/math.h"
 
 
 NaiveParticleContactGenerator::NaiveParticleContactGenerator(std::vector<Particule*> particles, float particleRadius)

@@ -1,5 +1,10 @@
 #include "Matrix4.h"
 
+Matrix4::Matrix4()
+{
+
+}
+
 Matrix4::Matrix4(Matrix3 matrix3, Vector3 vector) {
 	data[0] = matrix3.data[0];
 	data[1] = matrix3.data[1];

@@ -1,6 +1,6 @@
 #include "WallContactGenerator.h"
 
-#include <math.h>
+#include <cmath>
 
 WallContactGenerator::WallContactGenerator(std::vector<Particule*> particules, Vector3 normal, Vector3 origine, float wallRadius)
 {

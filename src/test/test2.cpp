@@ -4,7 +4,6 @@
 // Read online: https://github.com/ocornut/imgui/tree/master/docs
 
 #include "physics/Particule.h"
-#include "core/math.h"
 #include "physics/Force.h"
 #include "physics/PhysicWorld.h"
 

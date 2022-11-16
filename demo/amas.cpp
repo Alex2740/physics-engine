@@ -3,14 +3,13 @@
 // If you are new to Dear ImGui, read documentation from the docs/ folder + read the top of imgui.cpp.
 // Read online: https://github.com/ocornut/imgui/tree/master/docs
 
-#include "physics/Particule.h"
-#include "core/math.h"
-#include "physics/Force.h"
-#include "physics/PhysicWorld.h"
-#include "physics/contact/ParticleCable.h"
-#include "physics/contact/ParticleRod.h"
-#include "physics/contact/NaiveParticleContactGenerator.h"
-#include "physics/contact/WallContactGenerator.h"
+#include "Particule.h"
+#include "Force.h"
+#include "PhysicWorld.h"
+#include "contact/ParticleCable.h"
+#include "contact/ParticleRod.h"
+#include "contact/NaiveParticleContactGenerator.h"
+#include "contact/WallContactGenerator.h"
 
 #include "imgui/imgui.h"
 #include "imgui/imgui_impl_glfw.h"

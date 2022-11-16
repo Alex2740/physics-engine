@@ -111,73 +111,82 @@ void RigidBody::CalculateDerivedData()
 	// Mb matrice 3x3 (rotation, on ne s'intéresse pas à la translation)
 
 	// Calcul MbI(-1)
-	float i0 = transformMatrix.data[0] * inverseInertiaTensorLocal.data[0]
-		+ transformMatrix.data[1] * inverseInertiaTensorLocal.data[3]
-		+ transformMatrix.data[2] * inverseInertiaTensorLocal.data[6];
+	{
+	// old version
+	// float i0 = transformMatrix.data[0] * inverseInertiaTensorLocal.data[0]
+	// 	+ transformMatrix.data[1] * inverseInertiaTensorLocal.data[3]
+	// 	+ transformMatrix.data[2] * inverseInertiaTensorLocal.data[6];
 
-	float i1= transformMatrix.data[0] * inverseInertiaTensorLocal.data[1]
-		+ transformMatrix.data[1] * inverseInertiaTensorLocal.data[4]
-		+ transformMatrix.data[2] * inverseInertiaTensorLocal.data[7];
+	// float i1= transformMatrix.data[0] * inverseInertiaTensorLocal.data[1]
+	// 	+ transformMatrix.data[1] * inverseInertiaTensorLocal.data[4]
+	// 	+ transformMatrix.data[2] * inverseInertiaTensorLocal.data[7];
 
-	float i2= transformMatrix.data[0] * inverseInertiaTensorLocal.data[2]
-		+ transformMatrix.data[1] * inverseInertiaTensorLocal.data[5]
-		+ transformMatrix.data[2] * inverseInertiaTensorLocal.data[8];
+	// float i2= transformMatrix.data[0] * inverseInertiaTensorLocal.data[2]
+	// 	+ transformMatrix.data[1] * inverseInertiaTensorLocal.data[5]
+	// 	+ transformMatrix.data[2] * inverseInertiaTensorLocal.data[8];
 
-	float i3 = transformMatrix.data[3] * inverseInertiaTensorLocal.data[0]
-		+ transformMatrix.data[4] * inverseInertiaTensorLocal.data[3]
-		+ transformMatrix.data[5] * inverseInertiaTensorLocal.data[6];
+	// float i3 = transformMatrix.data[3] * inverseInertiaTensorLocal.data[0]
+	// 	+ transformMatrix.data[4] * inverseInertiaTensorLocal.data[3]
+	// 	+ transformMatrix.data[5] * inverseInertiaTensorLocal.data[6];
 
-	float i4 = transformMatrix.data[3] * inverseInertiaTensorLocal.data[1]
-		+ transformMatrix.data[4] * inverseInertiaTensorLocal.data[4]
-		+ transformMatrix.data[5] * inverseInertiaTensorLocal.data[7];
+	// float i4 = transformMatrix.data[3] * inverseInertiaTensorLocal.data[1]
+	// 	+ transformMatrix.data[4] * inverseInertiaTensorLocal.data[4]
+	// 	+ transformMatrix.data[5] * inverseInertiaTensorLocal.data[7];
 
-	float i5 = transformMatrix.data[3] * inverseInertiaTensorLocal.data[2]
-		+ transformMatrix.data[4] * inverseInertiaTensorLocal.data[5]
-		+ transformMatrix.data[5] * inverseInertiaTensorLocal.data[8];
+	// float i5 = transformMatrix.data[3] * inverseInertiaTensorLocal.data[2]
+	// 	+ transformMatrix.data[4] * inverseInertiaTensorLocal.data[5]
+	// 	+ transformMatrix.data[5] * inverseInertiaTensorLocal.data[8];
 
-	float i6 = transformMatrix.data[6] * inverseInertiaTensorLocal.data[0]
-		+ transformMatrix.data[7] * inverseInertiaTensorLocal.data[3]
-		+ transformMatrix.data[8] * inverseInertiaTensorLocal.data[6];
+	// float i6 = transformMatrix.data[6] * inverseInertiaTensorLocal.data[0]
+	// 	+ transformMatrix.data[7] * inverseInertiaTensorLocal.data[3]
+	// 	+ transformMatrix.data[8] * inverseInertiaTensorLocal.data[6];
 
-	float i7 = transformMatrix.data[6] * inverseInertiaTensorLocal.data[1]
-		+ transformMatrix.data[7] * inverseInertiaTensorLocal.data[4]
-		+ transformMatrix.data[8] * inverseInertiaTensorLocal.data[7];
+	// float i7 = transformMatrix.data[6] * inverseInertiaTensorLocal.data[1]
+	// 	+ transformMatrix.data[7] * inverseInertiaTensorLocal.data[4]
+	// 	+ transformMatrix.data[8] * inverseInertiaTensorLocal.data[7];
 
-	float i8 = transformMatrix.data[6] * inverseInertiaTensorLocal.data[2]
-		+ transformMatrix.data[7] * inverseInertiaTensorLocal.data[5]
-		+ transformMatrix.data[8] * inverseInertiaTensorLocal.data[8];
-
+	// float i8 = transformMatrix.data[6] * inverseInertiaTensorLocal.data[2]
+	// 	+ transformMatrix.data[7] * inverseInertiaTensorLocal.data[5]
+	// 	+ transformMatrix.data[8] * inverseInertiaTensorLocal.data[8];
+	}
+	Matrix3 transformeMatrix3, tmp;
+	transformeMatrix3 = transformMatrix.getMatrix3();
+	tmp = transformeMatrix3 * inverseInertiaTensorLocal;
 
 	//Calcul MbI(-1)Mb(-1) = I(-1)'
 	// Les deux bases sont orthonormées, donc la matrice Mb est orthogonale
 	// On a alors Mb(-1) = (t)Mb, ce qui simplifie le calcul
 
-	inverseInertiaTensorWorld.data[0] = i0 * transformMatrix.data[0]
-		+ i1 * transformMatrix.data[1] + i2 * transformMatrix.data[2];
+	{
+	// old version	
+	// inverseInertiaTensorWorld.data[0] = i0 * transformMatrix.data[0]
+	// 	+ i1 * transformMatrix.data[1] + i2 * transformMatrix.data[2];
 	
-	inverseInertiaTensorWorld.data[1] = i0 * transformMatrix.data[4]
-		+ i1 * transformMatrix.data[5] + i2 * transformMatrix.data[6];
+	// inverseInertiaTensorWorld.data[1] = i0 * transformMatrix.data[4]
+	// 	+ i1 * transformMatrix.data[5] + i2 * transformMatrix.data[6];
 
-	inverseInertiaTensorWorld.data[2] = i0 * transformMatrix.data[8]
-		+ i1 * transformMatrix.data[9] + i2 * transformMatrix.data[10];
+	// inverseInertiaTensorWorld.data[2] = i0 * transformMatrix.data[8]
+	// 	+ i1 * transformMatrix.data[9] + i2 * transformMatrix.data[10];
 
-	inverseInertiaTensorWorld.data[3] = i3 * transformMatrix.data[0]
-		+ i4 * transformMatrix.data[1] + i5 * transformMatrix.data[2];
+	// inverseInertiaTensorWorld.data[3] = i3 * transformMatrix.data[0]
+	// 	+ i4 * transformMatrix.data[1] + i5 * transformMatrix.data[2];
 
-	inverseInertiaTensorWorld.data[4] = i3 * transformMatrix.data[4]
-		+ i4 * transformMatrix.data[5] + i5 * transformMatrix.data[6];
+	// inverseInertiaTensorWorld.data[4] = i3 * transformMatrix.data[4]
+	// 	+ i4 * transformMatrix.data[5] + i5 * transformMatrix.data[6];
 
-	inverseInertiaTensorWorld.data[5] = i3 * transformMatrix.data[8]
-		+ i4 * transformMatrix.data[9] + i5 * transformMatrix.data[10];
+	// inverseInertiaTensorWorld.data[5] = i3 * transformMatrix.data[8]
+	// 	+ i4 * transformMatrix.data[9] + i5 * transformMatrix.data[10];
 
-	inverseInertiaTensorWorld.data[6] = i6 * transformMatrix.data[0]
-		+ i7 * transformMatrix.data[1] + i8 * transformMatrix.data[2];
+	// inverseInertiaTensorWorld.data[6] = i6 * transformMatrix.data[0]
+	// 	+ i7 * transformMatrix.data[1] + i8 * transformMatrix.data[2];
 
-	inverseInertiaTensorWorld.data[7] = i6 * transformMatrix.data[4]
-		+ i7 * transformMatrix.data[5] + i8 * transformMatrix.data[6];
+	// inverseInertiaTensorWorld.data[7] = i6 * transformMatrix.data[4]
+	// 	+ i7 * transformMatrix.data[5] + i8 * transformMatrix.data[6];
 
-	inverseInertiaTensorWorld.data[8] = i6 * transformMatrix.data[8]
-		+ i7 * transformMatrix.data[9] + i8 * transformMatrix.data[10];
+	// inverseInertiaTensorWorld.data[8] = i6 * transformMatrix.data[8]
+	// 	+ i7 * transformMatrix.data[9] + i8 * transformMatrix.data[10];
+	}
 
+	inverseInertiaTensorWorld = tmp * transformeMatrix3.inverse();
 
 }

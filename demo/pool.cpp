@@ -3,9 +3,8 @@
 // If you are new to Dear ImGui, read documentation from the docs/ folder + read the top of imgui.cpp.
 // Read online: https://github.com/ocornut/imgui/tree/master/docs
 
-#include "physics/Particule.h"
-#include "core/math.h"
-#include "physics/Force.h"
+#include "Particule.h"
+#include "Force.h"
 #include "physics/PhysicWorld.h"
 #include "physics/contact/ParticleCable.h"
 #include "physics/contact/ParticleRod.h"
