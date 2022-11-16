@@ -27,6 +27,9 @@ public:
 	// Vector3 velocity;
 	// Vector3 acceleration;
 
+
+	RigidBody(Vector3 position , float a, float b, float c ,float masse, float linearDamping, float angularDamping);
+
 	void integrate(float dt);
 
 	void addForce(const Vector3& force);
