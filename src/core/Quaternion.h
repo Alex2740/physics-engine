@@ -23,6 +23,7 @@ public:
     Quaternion(float _w, float _x, float _y, float _z);
     Quaternion(float _w, Vector3 v);
     Quaternion(Vector3 euler);
+    Quaternion();
     ~Quaternion();
 
     float getMagnitude();

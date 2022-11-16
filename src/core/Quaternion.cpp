@@ -1,6 +1,9 @@
 #include "Quaternion.h"
 
-
+Quaternion::Quaternion()
+{
+    // nothing here because it's used as a declaration without initialisation
+}
 
 Quaternion::Quaternion(float _w, float _x, float _y, float _z)
 {
