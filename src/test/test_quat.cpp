@@ -1,4 +1,4 @@
-#include "Quaternion.h"
+#include "core/math.h"
 #include <iostream>
 
 int main() {

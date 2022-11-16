@@ -1,5 +1,5 @@
 #include "ParticleLink.h"
-#include "Vector3.h"
+#include "core/math.h"
 
 ParticleLink::ParticleLink(Particule* p1, Particule* p2) {
 	this->particle[0] = p1;

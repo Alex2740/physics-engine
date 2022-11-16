@@ -2,10 +2,10 @@
 
 #include <vector>
 #include <map>
-#include <math.h>
+#include <cmath>
 
 #include "IForceAppliable.h"
-#include "Vector3.h"
+#include "core/math.h"
 
 class Particule : public IForceAppliable
 {
