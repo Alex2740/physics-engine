@@ -51,7 +51,7 @@ Force::Spring::Spring(Particule* p1, RigidBody* rb, Vector3 localPoint2, float k
     this->object2 = rb;
     this->k = k;
     this->localPoint2 = localPoint2;
-    this->dist = this->object2->position + this->localPoint2 - this->object->position;
+    this->dist = rb->getPointInWorldSpace(localPoint2) - this->object->position;
 }
 
 Force::Spring::Spring(RigidBody* rb, Vector3 localPoint, Particule* p2, float k) {
@@ -60,7 +60,7 @@ Force::Spring::Spring(RigidBody* rb, Vector3 localPoint, Particule* p2, float k)
     this->object2 = p2;
     this->k = k;
     this->localPoint = localPoint;
-    this->dist = this->object2->position - this->object->position - this->localPoint; 
+    this->dist = this->object2->position - rb->getPointInWorldSpace(localPoint);
 }
 
 Force::Spring::Spring(RigidBody* rb1, RigidBody* rb2, Vector3 localPoint1, Vector3 localPoint2) {
@@ -70,7 +70,7 @@ Force::Spring::Spring(RigidBody* rb1, RigidBody* rb2, Vector3 localPoint1, Vecto
     this->k = k;
     this->localPoint = localPoint;
     this->localPoint2 = localPoint2;
-    this->dist = this->object2->position + this->localPoint2 - this->object->position - this->localPoint; 
+    this->dist = rb2->getPointInWorldSpace(localPoint2) - rb1->getPointInWorldSpace(localPoint1); 
 }
 
 Vector3 Force::ParticuleDrag::getForce() {
@@ -90,11 +90,29 @@ Vector3 Force::Gravity::getForce() {
 }
 
 Vector3 Force::Spring::getForce() {
-    // TODO: not finish
     Vector3 newDist;
-    float diff;
-    newDist = object2->position + localPoint2 - object->position - localPoint;
-    diff = newDist.getMagnitude() - dist.getMagnitude();
+    switch (this->connectType)
+    {
+    case 0:
+        // particle-particle
+        newDist = object2->position - object->position;
+        break;
+    case 1:
+        // particle-rigidbody
+        newDist = dynamic_cast<RigidBody*>(object2)->getPointInWorldSpace(localPoint2) - object->position;
+        break;
+    case 2:
+        // rigidbody-particle
+        newDist = object2->position - dynamic_cast<RigidBody*>(object)->getPointInWorldSpace(localPoint);
+        break;
+    case 3:
+        // body-body
+        newDist = dynamic_cast<RigidBody*>(object2)->getPointInWorldSpace(localPoint2) - dynamic_cast<RigidBody*>(object)->getPointInWorldSpace(localPoint);
+        break;
+    default:
+        break;
+    }
+    float diff = newDist.getMagnitude() - dist.getMagnitude();
     if (diff == 0) return Vector3::Zero();
     // std::cout << particule->position.x << " " << particule->position.y << std::endl;
     // std::cout << particule2->position.x << " " << particule2->position.y << std::endl;
