@@ -5,7 +5,7 @@ Vector3 RigidBody::getPointInWorldSpace(Vector3 point)
 	return Matrix4::localToWorld(point, transformMatrix);
 }
 
-RigidBody::RigidBody(Vector3 position,float a, float b, float c ,float masse, float linearDamping, float angularDamping)
+RigidBody::RigidBody(Vector3 position, float a, float b, float c ,float masse, float linearDamping, float angularDamping)
 {
 	// Rigidbody : parallélépipède rectangle 
 	// a : longueur

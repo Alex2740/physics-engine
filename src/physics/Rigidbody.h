@@ -10,7 +10,7 @@ class RigidBody: public IForceAppliable {
 
 private:
 	Quaternion orientation;
-	Vector3 rotation;
+	Vector3 rotation; // vitesse angulaire
 	Matrix4 transformMatrix;
 
 	float angularDamping;
@@ -20,7 +20,7 @@ private:
 	Matrix3 inverseInertiaTensorLocal;
 	Matrix3 inverseInertiaTensorWorld;
 
-	Vector3 getPointInWorldSpace(Vector3 point);
+	void CalculateDerivedData();
 
 public:
 	// Vector3 position;
@@ -39,9 +39,7 @@ public:
 	void AddForceAtBodyPoint(const Vector3& force, const Vector3& localPoint);
 
 	void ClearAccumulator();
+	Vector3 getPointInWorldSpace(Vector3 point);
 
-private :
-
-	void CalculateDerivedData();
 
 };
