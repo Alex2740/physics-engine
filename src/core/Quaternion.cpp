@@ -171,7 +171,6 @@ Quaternion Quaternion::Zero() {
 
 std::string Quaternion::getString() {
     std::ostringstream oss;
-    // TODO: precision doesn't work for some reason
     oss << std::fixed << std::setprecision(2);
     oss << "[ " << w;
     oss << " (" << x;
