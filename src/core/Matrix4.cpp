@@ -1,8 +1,9 @@
 #include "Matrix4.h"
 
-Matrix4::Matrix4()
+Matrix4::Matrix4():
+	// this will initialize the value of the matrix, which is used to init rigidbidy angles
+	data{1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0}
 {
-
 }
 
 Matrix4::Matrix4(Matrix3 matrix3, Vector3 vector) {

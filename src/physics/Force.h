@@ -80,4 +80,19 @@ namespace Force
         Spring(RigidBody* rb1, RigidBody* rb2, Vector3 localPoint1, Vector3 localPoint2);
         Vector3 getForce() override;
     };
+
+    class FixAngleForce : public Force
+    // this is a new force that ONLY applies to a rigidbody;
+    // it will always act on the same body with the same relative angle
+    // as if the force is stick on the object
+    // e.g. the rocket engine
+    {
+    private:
+        Vector3 originalForce;
+        Vector3 localPoint;
+    public:
+        FixAngleForce(RigidBody* body, Vector3 localPoint, Vector3 originalForce);
+        ~FixAngleForce();
+        Vector3 getForce() override;
+    };    
 }

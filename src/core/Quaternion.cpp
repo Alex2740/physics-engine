@@ -2,7 +2,10 @@
 
 Quaternion::Quaternion()
 {
-    // nothing here because it's used as a declaration without initialisation
+    w = 1;
+    x = 0;
+    y = 0;
+    z = 0;
 }
 
 Quaternion::Quaternion(float _w, float _x, float _y, float _z)
@@ -112,6 +115,11 @@ bool Quaternion::isUniform(Quaternion q) {
     return (std::abs(q.getMagnitude() - 1) < 4 * std::numeric_limits<float>::epsilon());
 }
 
+Quaternion Quaternion::normalize(Quaternion q) {
+    float m = q.getMagnitude();
+    return Quaternion(q.w/m, q.x/m, q.y/m, q.z/m);
+}
+
 Quaternion Quaternion::conjugation(Quaternion q) {
     return Quaternion(q.w, -q.x, -q.y, -q.z);
 }
@@ -138,6 +146,7 @@ Quaternion Quaternion::rotateByQuaternion(Quaternion q) {
     Quaternion qInv = Quaternion::inverse(q);
 
     *this = q * (*this) * qInv;
+    // auto v = this->getMagnitude();
     return *this;
 }
 

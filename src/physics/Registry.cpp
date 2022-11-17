@@ -78,7 +78,8 @@ void Registry::RigidRegistry::addForceWorldPoint(Force::Force* f, Vector3 coord)
 
 void Registry::RigidRegistry::update(float dt) {
     this->rigidbody->ClearAccumulator();
-    for (auto f: forceRegistry) {
+    for (Force::Force* f: forceRegistry) {
+        // dynamic_cast<Force::FixAngleForce*>(f)->getForce();
         Vector3 tmpForce = f->getForce();
         Vector3 tmpCoord;
         switch (this->forceApplyType[f])

@@ -23,6 +23,7 @@ RigidBody::RigidBody(Vector3 position, float a, float b, float c ,float masse, f
 	
 
 	this->position = position;
+	this->orientation = orientation;
 	this->inverseMasse = 1 / masse;
 	this->damping = linearDamping;
 	this->angularDamping = angularDamping;
@@ -36,6 +37,8 @@ void RigidBody::integrate(float dt)
 	// MaJ de l'orientation
 
 	orientation += Quaternion(0, rotation) * orientation * dt/2;
+
+	orientation = Quaternion::normalize(orientation);
 
 	CalculateDerivedData();
 
@@ -189,4 +192,8 @@ void RigidBody::CalculateDerivedData()
 
 	inverseInertiaTensorWorld = tmp * transformeMatrix3.inverse();
 
+}
+
+Quaternion RigidBody::getOrientation() {
+	return this->orientation;
 }

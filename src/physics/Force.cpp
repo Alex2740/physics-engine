@@ -73,6 +73,17 @@ Force::Spring::Spring(RigidBody* rb1, RigidBody* rb2, Vector3 localPoint1, Vecto
     this->dist = rb2->getPointInWorldSpace(localPoint2) - rb1->getPointInWorldSpace(localPoint1); 
 }
 
+Force::FixAngleForce::FixAngleForce(RigidBody* body, Vector3 localPoint, Vector3 originalForce)
+{
+    this->object = body;
+    this->localPoint = localPoint;
+    this->originalForce = originalForce;
+}
+
+Force::FixAngleForce::~FixAngleForce()
+{
+}
+
 Vector3 Force::ParticuleDrag::getForce() {
     Vector3 v = this->object->velocity;
     float magnitude = sqrtf(v.x * v.x + v.y * v.y + v.z * v.z);
@@ -120,4 +131,13 @@ Vector3 Force::Spring::getForce() {
     Vector3 dir = Vector3::Normalized(newDist);
     float magnitude = this->k * diff;
     return dir * magnitude;
+}
+
+Vector3 Force::FixAngleForce::getForce() {
+    // TODO: need debug: the magnitude is not correct
+    RigidBody* body = dynamic_cast<RigidBody*>(object);
+    Quaternion force = Quaternion(0, originalForce);
+    force.rotateByQuaternion(body->getOrientation());
+
+    return Vector3(force.x, force.y, force.z);
 }

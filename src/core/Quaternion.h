@@ -42,6 +42,7 @@ public:
     // of them, we only implement what we need.
 
     static bool isUniform(Quaternion q);
+    static Quaternion normalize(Quaternion q);
     static Quaternion conjugation(Quaternion q);
     static float dot(Quaternion p, Quaternion q);
     static Quaternion inverse(Quaternion q);
