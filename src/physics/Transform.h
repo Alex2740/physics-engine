@@ -1,7 +1,7 @@
 #pragma once
 
-#include "Vector3.h"
-#include "Matrix4.h"
+#include "core/Vector3.h"
+#include "core/Matrix4.h"
 
 class Transform
 {

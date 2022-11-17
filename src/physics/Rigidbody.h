@@ -1,10 +1,10 @@
 #pragma once
 
-#include "IForceAppliable.h"
-#include "Vector3.h"
-#include "Quaternion.h"
-#include "Matrix4.h"
-#include "Matrix3.h"
+#include "physics/IForceAppliable.h"
+#include "core/Vector3.h"
+#include "core/Quaternion.h"
+#include "core/Matrix4.h"
+#include "core/Matrix3.h"
 
 class RigidBody: public IForceAppliable {
 

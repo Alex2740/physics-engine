@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Vector3.h"
+#include "core/Vector3.h"
 
 class IForceAppliable {
 public:

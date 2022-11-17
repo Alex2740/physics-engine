@@ -4,9 +4,9 @@
 
 #include <map>
 
-#include "Particule.h"
-#include "Rigidbody.h"
-#include "Vector3.h"
+#include "physics/Particule.h"
+#include "physics/Rigidbody.h"
+#include "core/Vector3.h"
 
 // ############ FORCE ###########
 namespace Force

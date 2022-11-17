@@ -132,6 +132,13 @@ target_link_directories(main PUBLIC src/imgui/libs/glfw/lib-vc2010-64 src/imgui/
 target_link_libraries(main PRIVATE opengl32.lib glfw3.lib)
 target_compile_features(main PRIVATE cxx_std_17)
 
+add_executable(test_rigidbody ./src/test/test_rigidbody.cpp ${ENGINES} ${IMGUI} ${GRAPHICS} ${CORE})
+target_include_directories(test_rigidbody PUBLIC ${CMAKE_SOURCE_DIR}/src
+src/imgui/libs/glfw/include src/include)
+target_link_directories(test_rigidbody PUBLIC src/imgui/libs/glfw/lib-vc2010-64 src/imgui/libs/glfw/lib-vc2010-32)
+target_link_libraries(test_rigidbody PRIVATE opengl32.lib glfw3.lib)
+target_compile_features(test_rigidbody PRIVATE cxx_std_17)
+
 add_custom_target(copy_resources ALL
         COMMAND ${CMAKE_COMMAND} -E copy_directory
         ${PROJECT_SOURCE_DIR}/resources

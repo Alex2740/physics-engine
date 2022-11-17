@@ -2,9 +2,9 @@
 #pragma once
 #include <iostream>
 
-#include "Rigidbody.h"
-#include "Particule.h"
-#include "Force.h"
+#include "physics/Rigidbody.h"
+#include "physics/Particule.h"
+#include "physics/Force.h"
 
 namespace Registry
 {
