@@ -24,8 +24,6 @@ void Camera::Matrix(float FOVdeg, float nearPlane, float farPlane, Shader& shade
 	glUniformMatrix4fv(glGetUniformLocation(shader.ID, uniform), 1, GL_FALSE, glm::value_ptr(projection * view));
 }
 
-
-
 void Camera::Inputs(GLFWwindow* window)
 {
 	// Handles key inputs
