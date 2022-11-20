@@ -60,8 +60,16 @@ Registry::RigidRegistry::RigidRegistry(RigidBody* r) {
     this->rigidbody = r;
 }
 
+Registry::RigidRegistry::~RigidRegistry()
+{
+}
+
 void Registry::RigidRegistry::addForce(Force::Force* f) {
     this->forceRegistry.push_back(f);
+}
+
+void Registry::RigidRegistry::delForce(Force::Force* f)
+{
 }
 
 void Registry::RigidRegistry::addForceLocalPoint(Force::Force* f, Vector3 coord) {
@@ -104,6 +112,9 @@ void Registry::RigidRegistry::update(float dt) {
     // this->rigidbody->ClearAccumulator(); // not necessary. but in case
 }
 
-void free() {
-    // TODO
+void Registry::RigidRegistry::free()
+{
+    for (auto p : this->forceRegistry) {
+        delete p;
+    }
 }

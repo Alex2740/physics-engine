@@ -10,6 +10,11 @@ PhysicWorld::~PhysicWorld()
 	for (auto p: this->particuleRegistries) {
 		p.second.free();
 	}
+
+	for (auto p : this->rigidBodyRegistries) {
+		p.second.free();
+	}
+
 	for (auto p: this->contactGenerators) {
 		delete p;
 	}
@@ -24,6 +29,17 @@ void PhysicWorld::AddParticule(Particule* particle)
 void PhysicWorld::DeleteParticule(Particule* particle)
 {
 	particuleRegistries.erase(particle);
+}
+
+void PhysicWorld::AddRigidBody(RigidBody* rb)
+{
+	rigidBodies.push_back(rb);
+	rigidBodyRegistries[rb] = Registry::RigidRegistry(rb);
+}
+
+void PhysicWorld::DeleteRigidBody(RigidBody* rb)
+{
+	rigidBodyRegistries.erase(rb);
 }
 
 void PhysicWorld::AddForce(Particule* particle, Force::Force* force)
@@ -43,8 +59,14 @@ void PhysicWorld::AddContactGenerator(ParticleContactGenerator* generator)
 
 void PhysicWorld::RunPhysics(float duration)
 {
-	// Intégration des forces
+	// Intégration des forces particules
 	for (auto registry : particuleRegistries) {
+		registry.second.update(duration);
+	}
+
+
+	// Intégration des forces rigidbodies
+	for (auto registry : rigidBodyRegistries) {
 		registry.second.update(duration);
 	}
 
