@@ -29,4 +29,8 @@ public:
 	static Vector3 localToWorld(Vector3& local, Matrix4& transform);
 
 	void setOrientationPosition(Quaternion& quaternion, Vector3& position);
+
+	static Matrix4 LookAt(Vector3 eye, Vector3 center, Vector3 up);
+
+	static Matrix4 Identity();
 };

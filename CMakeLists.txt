@@ -49,6 +49,7 @@ set(CORE
     ./src/core/Matrix4.h
     ./src/core/Quaternion.cpp
     ./src/core/Quaternion.h
+    ./src/core/Angles.h;
 )
 
 set(IMGUI
@@ -73,6 +74,8 @@ set(GRAPHICS
 
     ./src/graphics/texture.cpp ./src/graphics/texture.h
     ./src/graphics/camera.h ./src/graphics/camera.cpp
+
+    ./src/graphics/api.h ./src/graphics/api.cpp
 )
 
 add_executable(test1 ./src/test/test1.cpp ${ENGINES} ${IMGUI} ${CORE})

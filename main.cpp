@@ -15,6 +15,7 @@ namespace fs = std::filesystem;
 #include "graphics/ebo.h"
 #include "graphics/texture.h"
 #include "graphics/camera.h"
+#include "graphics/api.h"
 
 const unsigned int width = 800;
 const unsigned int height = 800;
@@ -76,17 +77,17 @@ GLuint indices[] =
 	3, 0, 4
 };
 
-glm::vec3 cubePositions[] = {
-		glm::vec3(0.0f,  0.0f,  0.0f),
-		glm::vec3(2.0f,  5.0f, -15.0f),
-		glm::vec3(-1.5f, -2.2f, -2.5f),
-		glm::vec3(-3.8f, -2.0f, -12.3f),
-		glm::vec3(2.4f, -0.4f, -3.5f),
-		glm::vec3(-1.7f,  3.0f, -7.5f),
-		glm::vec3(1.3f, -2.0f, -2.5f),
-		glm::vec3(1.5f,  2.0f, -2.5f),
-		glm::vec3(1.5f,  0.2f, -1.5f),
-		glm::vec3(-1.3f,  1.0f, -1.5f)
+Vector3 cubePositions[] = {
+	Vector3(0.0f,  0.0f,  0.0f),
+	Vector3(2.0f,  5.0f, -15.0f),
+	Vector3(-1.5f, -2.2f, -2.5f),
+	Vector3(-3.8f, -2.0f, -12.3f),
+	Vector3(2.4f, -0.4f, -3.5f),
+	Vector3(-1.7f,  3.0f, -7.5f),
+	Vector3(1.3f, -2.0f, -2.5f),
+	Vector3(1.5f,  2.0f, -2.5f),
+	Vector3(1.5f,  0.2f, -1.5f),
+	Vector3(-1.3f,  1.0f, -1.5f),
 };
 
 int main()
@@ -127,9 +128,8 @@ int main()
 	// Generates Shader object using shaders default.vert and default.frag
 	Shader shaderProgram("resources/shaders/default.vert", "resources/shaders/default.frag");
 
-	glm::mat4 model = glm::mat4(1.0f);
-	int modelLoc = glGetUniformLocation(shaderProgram.ID, "model");
-	glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
+	Matrix4 model = Matrix4::Identity();
+	shaderProgram.setMat4("model", model);
 
 	// Generates Vertex Array Object and binds it
 	VAO VAO1;
@@ -159,7 +159,7 @@ int main()
 	glEnable(GL_DEPTH_TEST);
 
 	// Creates camera object
-	Camera camera(width, height, glm::vec3(0.0f, 0.0f, 2.0f));
+	Camera camera(width, height, Graphics::Api::Vector3ToOpenGL(Vector3(0.0f, 0.0f, 2.0f)));
 
 	// Main while loop
 	while (!glfwWindowShouldClose(window))
@@ -188,7 +188,7 @@ int main()
 		for (unsigned int i = 0; i < 10; i++)
 		{
 			glm::mat4 model = glm::mat4(1.0f);
-			model = glm::translate(model, cubePositions[i]);
+			model = glm::translate(model, Graphics::Api::Vector3ToOpenGL(cubePositions[i]));
 			float angle = 20.0f * i;
 			model = glm::rotate(model, glm::radians(angle), glm::vec3(1.0f, 0.3f, 0.5f));
 			glUniformMatrix4fv(glGetUniformLocation(shaderProgram.ID, "model"), 1, GL_FALSE, &model[0][0]);
