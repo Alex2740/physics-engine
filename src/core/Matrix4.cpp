@@ -164,3 +164,45 @@ void Matrix4::setOrientationPosition(Quaternion& quaternion, Vector3& position)
 	data[10] = 1 - (2 * quaternion.x * quaternion.x + 2 * quaternion.y * quaternion.y);
 	data[11] = position.z;
 }
+
+Matrix4 Matrix4::LookAt(Vector3 eye, Vector3 center, Vector3 up)
+{
+	Matrix4 matrix;
+	Vector3 x, y, z;
+
+	z = eye - center;
+	z = Vector3::Normalized(z);
+	y = up;
+	x = Vector3::Cross(y, z);
+
+	y = Vector3::Cross(z, x);
+
+	x = Vector3::Normalized(x);
+	y = Vector3::Normalized(y);
+
+	matrix.data[0] = x.x;
+	matrix.data[1] = x.y;
+	matrix.data[2] = x.z;
+	matrix.data[3] = -Vector3::Dot(x, eye);
+	matrix.data[4] = y.x;
+	matrix.data[5] = y.y;
+	matrix.data[6] = y.z;
+	matrix.data[7] = -Vector3::Dot(y, eye);
+	matrix.data[8] = z.x;
+	matrix.data[9] = z.y;
+	matrix.data[10] = z.z;
+	matrix.data[11] = -Vector3::Dot(z, eye);
+
+	return matrix;
+}
+
+Matrix4 Matrix4::Identity()
+{
+	Matrix4 identity = Matrix4();
+
+	identity.data[0] = 1;
+	identity.data[5] = 1;
+	identity.data[10] = 1;
+
+	return identity;
+}
