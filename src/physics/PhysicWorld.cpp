@@ -52,6 +52,23 @@ void PhysicWorld::DeleteForce(Particule* particle, Force::Force* force)
 	particuleRegistries[particle].delForce(force);
 }
 
+void PhysicWorld::AddForce(RigidBody* rb, Force::Force* f)
+{
+	rigidBodyRegistries[rb].addForce(f);
+}
+
+void PhysicWorld::AddForceLocalPoint(RigidBody* rb, Force::Force* f, Vector3 coord)
+{
+	rigidBodyRegistries[rb].addForceLocalPoint(f, coord);
+}
+
+void PhysicWorld::AddForceWorldPoint(RigidBody* rb, Force::Force* f, Vector3 coord)
+{
+	rigidBodyRegistries[rb].addForceWorldPoint(f, coord);
+}
+
+
+
 void PhysicWorld::AddContactGenerator(ParticleContactGenerator* generator)
 {
 	contactGenerators.push_back(generator);

@@ -33,6 +33,10 @@ public:
 	void AddForce(Particule* particule, Force::Force* force);
 	void DeleteForce(Particule* particule, Force::Force* force);
 
+	void AddForce(RigidBody* rb, Force::Force* f);
+	void AddForceLocalPoint(RigidBody* rb, Force::Force* f, Vector3 coord);
+	void AddForceWorldPoint(RigidBody* rb, Force::Force* f, Vector3 coord);
+
 	void AddContactGenerator(ParticleContactGenerator* generator);
 	
 
