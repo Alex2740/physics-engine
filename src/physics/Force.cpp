@@ -63,12 +63,12 @@ Force::Spring::Spring(RigidBody* rb, Vector3 localPoint, Particule* p2, float k)
     this->dist = this->object2->position - rb->getPointInWorldSpace(localPoint);
 }
 
-Force::Spring::Spring(RigidBody* rb1, RigidBody* rb2, Vector3 localPoint1, Vector3 localPoint2) {
+Force::Spring::Spring(RigidBody* rb1, RigidBody* rb2, Vector3 localPoint1, Vector3 localPoint2, float k) {
     this->connectType = 3;
     this->object = rb1;
     this->object2 = rb2;
     this->k = k;
-    this->localPoint = localPoint;
+    this->localPoint = localPoint1;
     this->localPoint2 = localPoint2;
     this->dist = rb2->getPointInWorldSpace(localPoint2) - rb1->getPointInWorldSpace(localPoint1); 
 }

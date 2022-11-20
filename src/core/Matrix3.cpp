@@ -1,5 +1,13 @@
 #include "Matrix3.h"
 
+Matrix3::Matrix3()
+{
+	for (size_t i = 0; i < 9; i++)
+	{
+		data[i] = 0;
+	}
+}
+
 Vector3 Matrix3::operator*(const Vector3& vector)
 {
 	return Vector3(
@@ -70,7 +78,7 @@ void Matrix3::setInverse(Matrix3& matrix)
 	t5 = matrix.data[1] * matrix.data[6];
 	t6 = matrix.data[2] * matrix.data[6];
 
-	float determinant = t1 * matrix.data[8] - t2 * matrix.data[7] - t3 * matrix.data[8] + t4 * matrix.data[7] + t5 * matrix.data[5] - t6 * matrix.data[4];
+	float determinant = -matrix.data[2] * matrix.data[4] * matrix.data[6] + matrix.data[1] * matrix.data[5] * matrix.data[6] * +matrix.data[2] * matrix.data[3] * matrix.data[7] -matrix.data[0] * matrix.data[5] * matrix.data[7] -matrix.data[1] * matrix.data[3] * matrix.data[8] + matrix.data[0] * matrix.data[4] * matrix.data[8];
 
 	if (determinant == 0.0f) return;
 

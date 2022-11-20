@@ -138,3 +138,9 @@ void Vector3::print()
 {
 	std::cout << "Vector3(" << x << "f, " << y << "f, " << z << "f)" << std::endl;
 }
+
+std::ostream& operator<<(std::ostream& os, const Vector3& vector)
+{
+	os << "Vector3(" << vector.x << ", " << vector.y << ", " << vector.z << ')';
+	return os;
+}

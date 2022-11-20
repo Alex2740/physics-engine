@@ -8,6 +8,8 @@ class Matrix3
 public:
 	float data[9];
 
+	Matrix3();
+
 	Vector3 operator*(const Vector3 &vector);
 	Matrix3 operator*(const Matrix3 &other);
 	void operator*=(const Matrix3 &other);

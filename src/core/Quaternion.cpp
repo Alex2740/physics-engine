@@ -2,7 +2,7 @@
 
 Quaternion::Quaternion()
 {
-    w = 1;
+    w = 0;
     x = 0;
     y = 0;
     z = 0;
@@ -152,6 +152,7 @@ Quaternion Quaternion::rotateByQuaternion(Quaternion q) {
 
 Vector3 Quaternion::toEuler() {
     // code from https://en.wikipedia.org/wiki/Conversion_between_quaternions_and_Euler_angles
+    // Order of Euler Rotation Z -> Y -> X.
     Vector3 angles;
 
     // roll (x-axis rotation)
@@ -175,7 +176,12 @@ Vector3 Quaternion::toEuler() {
 }
 
 Quaternion Quaternion::Zero() {
-    return Quaternion(0., 0., 0, 0);
+    return Quaternion(0, 0, 0, 0);
+}
+
+Quaternion Quaternion::Identity()
+{
+    return Quaternion(1.0f, 0.0f, 0.0f, 0.0f);
 }
 
 std::string Quaternion::getString() {
@@ -188,4 +194,10 @@ std::string Quaternion::getString() {
     oss << ")]";
     // std::cout << oss.str() << std::endl;
     return oss.str();
+}
+
+std::ostream& operator<<(std::ostream& os, const Quaternion& quaternion)
+{
+    os << "Quaternion(" << quaternion.x << ", " << quaternion.y << ", " << quaternion.z << ", " << quaternion.w << ')';
+    return os;
 }

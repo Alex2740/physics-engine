@@ -77,7 +77,7 @@ namespace Force
         Spring(Particule* p1, Particule* p2, float k);
         Spring(Particule* p1, RigidBody* rb, Vector3 localPoint, float k);
         Spring(RigidBody* rb, Vector3 localPoint, Particule* p2, float k);
-        Spring(RigidBody* rb1, RigidBody* rb2, Vector3 localPoint1, Vector3 localPoint2);
+        Spring(RigidBody* rb1, RigidBody* rb2, Vector3 localPoint1, Vector3 localPoint2, float k);
         Vector3 getForce() override;
     };
 

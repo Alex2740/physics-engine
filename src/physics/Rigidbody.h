@@ -9,14 +9,13 @@
 class RigidBody: public IForceAppliable {
 
 private:
-	// TODO: correct init is needed for class attributs
 	Quaternion orientation;
 	Vector3 rotation; // vitesse angulaire
 	Matrix4 transformMatrix;
 
 	float angularDamping = 1;
 	// Vector3 acceleration;
-	Vector3 torqueAccum = Vector3::Zero();
+	
 
 	Matrix3 inverseInertiaTensorLocal;
 	Matrix3 inverseInertiaTensorWorld;
@@ -27,6 +26,7 @@ public:
 	// Vector3 position;
 	// Vector3 velocity;
 	// Vector3 acceleration;
+	Vector3 torqueAccum = Vector3::Zero();
 
 
 	RigidBody(Vector3 position, float a, float b, float c ,float masse, float linearDamping, float angularDamping);

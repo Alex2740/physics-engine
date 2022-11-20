@@ -36,6 +36,7 @@ public:
     Quaternion operator/(const float divider);
     bool operator==(const Quaternion& other) const;
     bool operator!=(const Quaternion& other) const;
+    friend std::ostream& operator<<(std::ostream& os, const Quaternion& quaternion);
 
     // there are multiples functions which are bound with the
     // different "multiply" operation, since we don't need all
@@ -53,6 +54,7 @@ public:
     Vector3 toEuler();
     
     static Quaternion Zero();
+    static Quaternion Identity();
 
     std::string getString();
 };

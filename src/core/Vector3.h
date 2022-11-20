@@ -24,6 +24,7 @@ public:
     Vector3 operator/(const float& other);
     bool operator==(const Vector3& other) const;
     bool operator!=(const Vector3& other) const;
+    friend std::ostream& operator<<(std::ostream& os, const Vector3& vector);
 
     static float Dot(const Vector3 a, const Vector3 b);
     static Vector3 Cross(const Vector3 a, const Vector3 b);
