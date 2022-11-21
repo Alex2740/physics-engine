@@ -213,13 +213,13 @@ int main()
 		Vector3 rotation = fixCube.getOrientation().toEuler();
 		
 		// Rotation on Z-Axis
-		model = glm::rotate(model, glm::radians(rotation.z), glm::vec3(0.0f, 0.0f, 1.0f));
+		model = glm::rotate(model, rotation.z, glm::vec3(0.0f, 0.0f, 1.0f));
 
 		// Rotation on Y-Axis
-		model = glm::rotate(model, glm::radians(rotation.y), glm::vec3(0.0f, 1.0f, 0.0f));
+		model = glm::rotate(model, rotation.y, glm::vec3(0.0f, 1.0f, 0.0f));
 
 		// Rotation on X-Axis
-		model = glm::rotate(model, glm::radians(rotation.x), glm::vec3(1.0f, 0.0f, 0.0f));
+		model = glm::rotate(model, rotation.x, glm::vec3(1.0f, 0.0f, 0.0f));
 
 		glUniformMatrix4fv(glGetUniformLocation(shaderProgram.ID, "model"), 1, GL_FALSE, &model[0][0]);
 		brickTex.Bind();
@@ -232,13 +232,13 @@ int main()
 		rotation = flyingCube.getOrientation().toEuler();
 
 		// Rotation on Z-Axis
-		model = glm::rotate(model, glm::radians(rotation.z), glm::vec3(0.0f, 0.0f, 1.0f));
+		model = glm::rotate(model, rotation.z, glm::vec3(0.0f, 0.0f, 1.0f));
 
 		// Rotation on Y-Axis
-		model = glm::rotate(model, glm::radians(rotation.y), glm::vec3(0.0f, 1.0f, 0.0f));
+		model = glm::rotate(model, rotation.y, glm::vec3(0.0f, 1.0f, 0.0f));
 
 		// Rotation on X-Axis
-		model = glm::rotate(model, glm::radians(rotation.x), glm::vec3(1.0f, 0.0f, 0.0f));
+		model = glm::rotate(model, rotation.x, glm::vec3(1.0f, 0.0f, 0.0f));
 
 		glUniformMatrix4fv(glGetUniformLocation(shaderProgram.ID, "model"), 1, GL_FALSE, &model[0][0]);
 		popCatTex.Bind();
