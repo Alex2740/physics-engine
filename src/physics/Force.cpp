@@ -1,6 +1,9 @@
 #include "IForceAppliable.h"
 #include "Force.h"
 
+#include <iostream>
+#include <fstream>
+
 Force::Force::Force() {
     // this should give a boom
 }
@@ -102,6 +105,7 @@ Vector3 Force::Gravity::getForce() {
 
 Vector3 Force::Spring::getForce() {
     Vector3 newDist;
+    std::ofstream myfile;
     switch (this->connectType)
     {
     case 0:
@@ -124,6 +128,15 @@ Vector3 Force::Spring::getForce() {
         break;
     }
     float diff = newDist.getMagnitude() - dist.getMagnitude();
+    // myfile.open("./log.txt", std::ios::app);
+
+    // // myfile << position.x << " " << position.y << " " << position.z << "\n";
+    // // myfile << velocity.x << " " << velocity.y << " " << velocity.z << "\n" << std::endl;
+    // // myfile << powf(damping, dt) << " " << powf(angularDamping, dt) << std::endl;
+    // // myfile << linearAcceleration.x << " " << linearAcceleration.y << " " << linearAcceleration.z << "\n" << std::endl;
+    // myfile << diff << std::endl;
+
+    // myfile.close();
     if (diff == 0) return Vector3::Zero();
     // std::cout << particule->position.x << " " << particule->position.y << std::endl;
     // std::cout << particule2->position.x << " " << particule2->position.y << std::endl;

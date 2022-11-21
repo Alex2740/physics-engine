@@ -1,5 +1,6 @@
 #include "Rigidbody.h"
 #include <iostream>
+#include <fstream>
 
 Vector3 RigidBody::getPointInWorldSpace(Vector3 point)
 {
@@ -57,6 +58,17 @@ void RigidBody::integrate(float dt)
 	rotation = rotation * powf(angularDamping, dt) + angularAcceleration * dt;
 
 	ClearAccumulator();
+
+	// std::ofstream myfile;
+	// myfile.open("./log.txt", std::ios::app);
+
+	// // myfile << position.x << " " << position.y << " " << position.z << "\n";
+	// // myfile << velocity.x << " " << velocity.y << " " << velocity.z << "\n" << std::endl;
+	// // myfile << powf(damping, dt) << " " << powf(angularDamping, dt) << std::endl;
+	// // myfile << linearAcceleration.x << " " << linearAcceleration.y << " " << linearAcceleration.z << "\n" << std::endl;
+
+	// myfile.close();
+
 }
 
 void RigidBody::addForce(const Vector3& force)

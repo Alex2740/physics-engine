@@ -102,13 +102,13 @@ int main()
 	RigidBody fixCube = RigidBody(positionCubeFix, 1.0, 1.0, 1.0, 42.69, 1.0f, 1.0f);
 	physicWorld.AddRigidBody(&fixCube);
 
-	Vector3 positionFlyingCube = Vector3(3.0, 0.0, 0.0);
+	Vector3 positionFlyingCube = Vector3(0.5, 0.0, 0.0);
 	RigidBody flyingCube = RigidBody(positionFlyingCube, 1.0, 1.0, 1.0, 100.0f, 0.9f, 0.9f);
 	physicWorld.AddRigidBody(&flyingCube);
 
 	physicWorld.AddForce(&flyingCube, new Force::Gravity(&flyingCube));
 
-	physicWorld.AddForceLocalPoint(&flyingCube, new Force::Spring(&flyingCube, &fixCube, Vector3(-0.5f, 0.5f, 0.5f), Vector3(0.5f, -0.5f, 0.5f), 3000.0f), Vector3(-0.5f, 0.5f, 0.5f));
+	physicWorld.AddForceLocalPoint(&flyingCube, new Force::Spring(&flyingCube, &fixCube, Vector3(-0.5f, 0.5f, 0.5f), Vector3(0.5f, -0.5f, 0.5f), 100.0f), Vector3(-0.5f, 0.5f, 0.5f));
 	//physicWorld.AddForceLocalPoint(&flyingCube, new Force::Spring(&flyingCube, &fixCube, Vector3(-0.5f, 0.5f, -0.5f), Vector3(0.5f, -0.5f, -0.5f), 3000.0f), Vector3(-0.5f, 0.5f, -0.5f));
 
 	// Initialize GLFW
@@ -142,7 +142,7 @@ int main()
 
 	// Specify the viewport of OpenGL in the Window
 	// In this case the viewport goes from x = 0, y = 0, to x = 800, y = 800
-	glViewport(0, 0, width, height);
+	glViewport(-30, 0, width, height);
 
 	// Generates Shader object using shaders default.vert and default.frag
 	Shader shaderProgram("resources/shaders/default.vert", "resources/shaders/default.frag");
@@ -198,8 +198,8 @@ int main()
 		camera.Inputs(window);
 
 		physicWorld.RunPhysics(dt);
-		//std::cout << flyingCube.getOrientation() << "\n";
-
+		// std::cout << flyingCube.getOrientation() << "\n";
+		// std::cout << sqrtf(powf(flyingCube.position.x, 2) + powf(flyingCube.position.y, 2)) << std::endl;
 
 		// Updates and exports the camera matrix to the Vertex Shader
 		camera.Matrix(45.0f, 0.1f, 100.0f, shaderProgram, "camMatrix");
@@ -208,7 +208,8 @@ int main()
 		VAO1.Bind();
 
 		glm::mat4 model = glm::mat4(1.0f);
-		model = glm::translate(model, Graphics::Api::Vector3ToOpenGL(fixCube.position));
+		Vector3 tmp = Vector3(fixCube.position.x, fixCube.position.y, fixCube.position.z - 10);
+		model = glm::translate(model, Graphics::Api::Vector3ToOpenGL(tmp));
 		Vector3 rotation = fixCube.getOrientation().toEuler();
 		
 		// Rotation on Z-Axis
@@ -225,7 +226,8 @@ int main()
 		glDrawArrays(GL_TRIANGLES, 0, 36);
 
 		model = glm::mat4(1.0f);
-		model = glm::translate(model, Graphics::Api::Vector3ToOpenGL(flyingCube.position));
+		tmp = Vector3(flyingCube.position.x, flyingCube.position.y, flyingCube.position.z - 10);
+		model = glm::translate(model, Graphics::Api::Vector3ToOpenGL(tmp));
 
 		rotation = flyingCube.getOrientation().toEuler();
 
