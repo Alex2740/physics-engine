@@ -49,7 +49,12 @@ The demo that we have shown in the first part is no longer available due to our 
 - three_bodies.exe
 + amas.exe
 + pool.exe
++ solar.exe
 ```
+
+### solar.exe
+
+This program show our implementation for the rigidBodies. In the demo, we can see two cubes : one which is fixed and another linked with the first one by a spring and that is subject to gravity. 
 
 ### amas.exe
 
