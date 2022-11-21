@@ -100,16 +100,17 @@ int main()
 
 	Vector3 positionCubeFix = Vector3(0.0, 0.0, 0.0);
 	RigidBody fixCube = RigidBody(positionCubeFix, 1.0, 1.0, 1.0, 42.69, 1.0f, 1.0f);
+	fixCube.inverseMasse = 0;
 	physicWorld.AddRigidBody(&fixCube);
 
-	Vector3 positionFlyingCube = Vector3(0.5, 0.0, 0.0);
+	Vector3 positionFlyingCube = Vector3(1.0f, 0.0, 0.0);
 	RigidBody flyingCube = RigidBody(positionFlyingCube, 1.0, 1.0, 1.0, 100.0f, 0.9f, 0.9f);
 	physicWorld.AddRigidBody(&flyingCube);
 
 	physicWorld.AddForce(&flyingCube, new Force::Gravity(&flyingCube));
 
 	physicWorld.AddForceLocalPoint(&flyingCube, new Force::Spring(&flyingCube, &fixCube, Vector3(-0.5f, 0.5f, 0.5f), Vector3(0.5f, -0.5f, 0.5f), 100.0f), Vector3(-0.5f, 0.5f, 0.5f));
-	//physicWorld.AddForceLocalPoint(&flyingCube, new Force::Spring(&flyingCube, &fixCube, Vector3(-0.5f, 0.5f, -0.5f), Vector3(0.5f, -0.5f, -0.5f), 3000.0f), Vector3(-0.5f, 0.5f, -0.5f));
+	//physicWorld.AddForceLocalPoint(&flyingCube, new Force::Spring(&flyingCube, &fixCube, Vector3(-0.5f, 0.5f, -0.5f), Vector3(0.5f, -0.5f, -0.5f), 100.0f), Vector3(-0.5f, 0.5f, -0.5f));
 
 	// Initialize GLFW
 	glfwInit();
