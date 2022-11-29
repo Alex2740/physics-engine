@@ -60,7 +60,7 @@ Vector3 Vector3::operator-(const Vector3& other)
 	return result;
 }
 
-Vector3 Vector3::operator*(const float& other)
+Vector3 Vector3::operator*(const float other) const
 {
 	float newX = x * other;
 	float newY = y * other;
@@ -68,7 +68,7 @@ Vector3 Vector3::operator*(const float& other)
 	return Vector3(newX, newY, newZ);
 }
 
-Vector3 Vector3::operator/(const float& other)
+Vector3 Vector3::operator/(const float other) const
 {
 	float newX = x / other;
 	float newY = y / other;
