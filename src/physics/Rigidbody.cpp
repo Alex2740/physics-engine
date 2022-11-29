@@ -16,7 +16,7 @@ RigidBody::RigidBody(Vector3 position, float a, float b, float c ,float masse, f
 
 	Matrix3 inertie = Matrix3();
 	inertie.data[0] = (masse / 12)  * (powf(c, 2) + powf(b, 2));
-	inertie.data[4] = (masse / 12)  * (powf(a, 2) + powf(c,2));
+	inertie.data[4] = (masse / 12)  * (powf(a, 2) + powf(c, 2));
 	inertie.data[8] = (masse / 12) * (powf(a, 2) + powf(b, 2));
 	
 	// Calcul du tenseur d'inertie inverse
@@ -39,8 +39,9 @@ void RigidBody::integrate(float dt)
 	position += velocity * dt;
 
 	// MaJ de l'orientation
+	// Quaternion tmp = (Quaternion(0, rotation) * orientation);
 	orientation += Quaternion(0, rotation) * orientation * dt/2;
-
+	// Quaternion tmp2 = orientation;
 	orientation = Quaternion::normalize(orientation);
 
 	CalculateDerivedData();
@@ -57,17 +58,9 @@ void RigidBody::integrate(float dt)
 	// Calcul vélocité angulaire
 	rotation = rotation * powf(angularDamping, dt) + angularAcceleration * dt;
 
+
+
 	ClearAccumulator();
-
-	// std::ofstream myfile;
-	// myfile.open("./log.txt", std::ios::app);
-
-	// // myfile << position.x << " " << position.y << " " << position.z << "\n";
-	// // myfile << velocity.x << " " << velocity.y << " " << velocity.z << "\n" << std::endl;
-	// // myfile << powf(damping, dt) << " " << powf(angularDamping, dt) << std::endl;
-	// // myfile << linearAcceleration.x << " " << linearAcceleration.y << " " << linearAcceleration.z << "\n" << std::endl;
-
-	// myfile.close();
 
 }
 
@@ -107,23 +100,34 @@ void RigidBody::CalculateDerivedData()
 	// Calcul matrice de transformation
 
 	transformMatrix.data[0] = 1 - 2 * (orientation.y * orientation.y + orientation.z * orientation.z);
-	transformMatrix.data[1] = 2 * (orientation.x * orientation.y + orientation.z * orientation.w);
-	transformMatrix.data[2] = 2 * (orientation.x * orientation.z - orientation.y * orientation.w);
+	transformMatrix.data[1] = 2 * (orientation.x * orientation.y - orientation.z * orientation.w);
+	transformMatrix.data[2] = 2 * (orientation.x * orientation.z + orientation.y * orientation.w);
 	transformMatrix.data[3] = position.x;
 
-	transformMatrix.data[4] = 2 * (orientation.x * orientation.y - orientation.z * orientation.w);
+	transformMatrix.data[4] = 2 * (orientation.x * orientation.y + orientation.z * orientation.w);
 	transformMatrix.data[5] = 1 - 2 * (orientation.x * orientation.x + orientation.z * orientation.z);
-	transformMatrix.data[6] = 2 * (orientation.y * orientation.z + orientation.x * orientation.w);
+	transformMatrix.data[6] = 2 * (orientation.y * orientation.z - orientation.x * orientation.w);
 	transformMatrix.data[7] = position.y;
 
-	transformMatrix.data[8] = 2 * (orientation.x * orientation.y + orientation.y * orientation.w);
-	transformMatrix.data[9] = 2 * (orientation.y * orientation.z - orientation.x * orientation.w);
+	transformMatrix.data[8] = 2 * (orientation.x * orientation.y - orientation.y * orientation.w);
+	transformMatrix.data[9] = 2 * (orientation.y * orientation.z + orientation.x * orientation.w);
 	transformMatrix.data[10] = 1 - 2 * (orientation.x * orientation.x + orientation.y * orientation.y);
 	transformMatrix.data[11] = position.z;
 	// I(-1)' = Mb * I(-1) * Mb(-1)
 
 	Matrix3 mb = transformMatrix.getMatrix3();
 	inverseInertiaTensorWorld = mb * inverseInertiaTensorLocal * mb.inverse();
+
+	std::ofstream myfile;
+	myfile.open("./log2.txt", std::ios::app);
+	
+	Matrix3 tmp = mb * mb.inverse();
+
+	myfile << tmp.data[0] << " " << tmp.data[1] << " " << tmp.data[2] << "\n";
+	myfile << tmp.data[3] << " " << tmp.data[4] << " " << tmp.data[5] << "\n";
+	myfile << tmp.data[6] << " " << tmp.data[7] << " " << tmp.data[8] << "\n";
+
+	myfile.close();
 }
 
 Quaternion RigidBody::getOrientation() {
