@@ -25,7 +25,7 @@ Quaternion::Quaternion(float _w, Vector3 v)
 }
 
 Quaternion::Quaternion(Vector3 euler)
-// (roll, putch, yaw)
+// (roll, pitch, yaw)
 // code from https://en.wikipedia.org/wiki/Conversion_between_quaternions_and_Euler_angles
 {
     float cr = cosf(euler.x * 0.5f);
@@ -72,9 +72,9 @@ Quaternion& Quaternion::operator*=(const Quaternion& other) {
     tmpZ = z;
 
     this->w = tmpW * other.w - tmpX * other.x - tmpY * other.y - tmpZ * other.z;
-    this->x = tmpX * other.w + tmpW * other.x + tmpZ * other.y - tmpY * other.z;
-    this->y = tmpY * other.w - tmpZ * other.x + tmpW * other.y + tmpX * other.z;
-    this->z = tmpW * other.z + tmpY * other.x - tmpX * other.y + tmpW * other.z;
+    this->x = tmpX * other.w + tmpW * other.x - tmpZ * other.y + tmpY * other.z;
+    this->y = tmpY * other.w + tmpZ * other.x + tmpW * other.y - tmpX * other.z;
+    this->z = tmpW * other.z - tmpY * other.x + tmpX * other.y + tmpZ * other.w;
 
     return *this;
 }
@@ -83,9 +83,9 @@ Quaternion Quaternion::operator*(const Quaternion& other) {
     float tmpW, tmpX, tmpY, tmpZ;
 
     tmpW = w * other.w - x * other.x - y * other.y - z * other.z;
-    tmpX = x * other.w + w * other.x + z * other.y - y * other.z;
-    tmpY = y * other.w - z * other.x + w * other.y + x * other.z;
-    tmpZ = w * other.z + y * other.x - x * other.y + w * other.z;
+    tmpX = x * other.w + w * other.x - z * other.y + y * other.z;
+    tmpY = y * other.w + z * other.x + w * other.y - x * other.z;
+    tmpZ = w * other.z - y * other.x + x * other.y + z * other.w;
 
     return Quaternion(tmpW, tmpX, tmpY, tmpZ);
 }
