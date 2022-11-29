@@ -117,17 +117,6 @@ void RigidBody::CalculateDerivedData()
 
 	Matrix3 mb = transformMatrix.getMatrix3();
 	inverseInertiaTensorWorld = mb * inverseInertiaTensorLocal * mb.inverse();
-
-	std::ofstream myfile;
-	myfile.open("./log2.txt", std::ios::app);
-	
-	Matrix3 tmp = mb * mb.inverse();
-
-	myfile << tmp.data[0] << " " << tmp.data[1] << " " << tmp.data[2] << "\n";
-	myfile << tmp.data[3] << " " << tmp.data[4] << " " << tmp.data[5] << "\n";
-	myfile << tmp.data[6] << " " << tmp.data[7] << " " << tmp.data[8] << "\n";
-
-	myfile.close();
 }
 
 Quaternion RigidBody::getOrientation() {
