@@ -69,16 +69,8 @@ Vector3 Matrix3::transform(Vector3& vector)
 
 void Matrix3::setInverse(Matrix3& matrix)
 {
-	float t1, t2, t3, t4, t5, t6;
 
-	t1 = matrix.data[0] * matrix.data[4];
-	t2 = matrix.data[0] * matrix.data[5];
-	t3 = matrix.data[1] * matrix.data[3];
-	t4 = matrix.data[2] * matrix.data[3];
-	t5 = matrix.data[1] * matrix.data[6];
-	t6 = matrix.data[2] * matrix.data[6];
-
-	float determinant = -matrix.data[2] * matrix.data[4] * matrix.data[6] + matrix.data[1] * matrix.data[5] * matrix.data[6] * +matrix.data[2] * matrix.data[3] * matrix.data[7] -matrix.data[0] * matrix.data[5] * matrix.data[7] -matrix.data[1] * matrix.data[3] * matrix.data[8] + matrix.data[0] * matrix.data[4] * matrix.data[8];
+	float determinant = -matrix.data[2] * matrix.data[4] * matrix.data[6] + matrix.data[1] * matrix.data[5] * matrix.data[6] + matrix.data[2] * matrix.data[3] * matrix.data[7] - matrix.data[0] * matrix.data[5] * matrix.data[7] -matrix.data[1] * matrix.data[3] * matrix.data[8] + matrix.data[0] * matrix.data[4] * matrix.data[8];
 
 	if (determinant == 0.0f) return;
 
@@ -88,11 +80,11 @@ void Matrix3::setInverse(Matrix3& matrix)
 	data[1] = -(matrix.data[1] * matrix.data[8] - matrix.data[2] * matrix.data[7]) * inverseDeterminant;
 	data[2] = (matrix.data[1] * matrix.data[5] - matrix.data[2] * matrix.data[4]) * inverseDeterminant;
 	data[3] = -(matrix.data[3] * matrix.data[8] - matrix.data[5] * matrix.data[6]) * inverseDeterminant;
-	data[4] = (matrix.data[0] * matrix.data[8] - t6) * inverseDeterminant;
-	data[5] = -(t2 - t4) * inverseDeterminant;
+	data[4] = (matrix.data[0] * matrix.data[8] - matrix.data[2] * matrix.data[6]) * inverseDeterminant;
+	data[5] = -(matrix.data[0] * matrix.data[5] - matrix.data[2] * matrix.data[3]) * inverseDeterminant;
 	data[6] = (matrix.data[3] * matrix.data[7] - matrix.data[4] * matrix.data[6]) * inverseDeterminant;
-	data[7] = -(matrix.data[0] * matrix.data[7] - t5) * inverseDeterminant;
-	data[8] = (t1 - t3) * inverseDeterminant;
+	data[7] = -(matrix.data[0] * matrix.data[7] - matrix.data[1] * matrix.data[6]) * inverseDeterminant;
+	data[8] = (matrix.data[0] * matrix.data[4] - matrix.data[1] * matrix.data[3]) * inverseDeterminant;
 }
 
 Matrix3 Matrix3::inverse()
