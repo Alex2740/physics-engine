@@ -1,12 +1,15 @@
 #include "Contact.h"
 
-
-class CollisionData {
-
+class CollisionData
+{
 	// Array contenant tous les contacts
 	Contact* contacts;
 
+	int contactMax;
 
-	// Nombre max de contacts que l'array peut prendre
+public:
+	// Nombre de contacts disponible dans l'array
 	int contactsLeft;
+
+	void AddContact(Contact contact);
 };

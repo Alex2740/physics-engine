@@ -1,12 +1,10 @@
 #include "Vector3.h"
-#include "Rigidbody.h"
+#include "RigidBody.h"
 
 // Contient toutes les données concernant un contact
 class Contact {
-
-	// Contient 1 ou 2 rigifbody
-	// Peut être a remplacer par Primitive
-	RigidBody* bodies[2];
+public:
+	RigidBody* body[2];
 
 	Vector3 contactPoint;
 

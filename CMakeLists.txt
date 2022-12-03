@@ -23,6 +23,17 @@ set(ENGINES
     ./src/physics/contact/WallContactGenerator.cpp
     ./src/physics/contact/WallContactGenerator.h
 
+    ./src/physics/contact/CollisionData.h
+    ./src/physics/contact/CollisionData.cpp
+    ./src/physics/contact/CollisionDetector.cpp
+    ./src/physics/contact/CollisionDetector.h
+    ./src/physics/contact/Contact.h
+
+    ./src/physics/contact/primitive/Primitive.h
+    ./src/physics/contact/primitive/Sphere.h
+    ./src/physics/contact/primitive/Plane.h
+    ./src/physics/contact/primitive/Box.h
+
     ./src/physics/Rigidbody.cpp
     ./src/physics/Rigidbody.h
 
