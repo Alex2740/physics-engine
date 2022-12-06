@@ -3,9 +3,9 @@
 int CollisionDetector::SphereAndSphere(Sphere& one, Sphere& two, CollisionData* data)
 {
 	// Teste s'il reste de la place dans le tableau des contacts
-	if (data->contactsLeft <= 0) return 0;
+	if (data->contactsLeft <= 0) return 1;
 
-	// Récupération des positions des spheres
+	// Rï¿½cupï¿½ration des positions des spheres
 	Vector3 positionSphere1 = one.offset * one.body->position;
 	Vector3 positionSphere2 = two.offset * two.body->position;
 
@@ -29,5 +29,44 @@ int CollisionDetector::SphereAndSphere(Sphere& one, Sphere& two, CollisionData* 
 
 	data->AddContact(contact);
 	
+	return 1;
+}
+
+int BoxAndPlane(Box& one, Plane& two, CollisionData* data) {
+	// first step: get all the verties, so that I can test if any pair of vertices is crossing the plane "two"
+	std::array<Vector3, 8> vertices = one.getLocalCoordVertices();
+	std::vector<float> distances = std::vector<float>();
+	for(Vector3 v: vertices) {
+		distances.push_back(two.getDistanceToPoint(v));
+	}
+	std::sort(distances.begin(), distances.end());
+	if (distances.at(0) * distances.at(7) > 0) {
+		// every vertex at the same side; no collision
+		return 0;
+	}
+	// float penetration;
+	// if (std::abs(distances.at(0)) > std::abs(distances.at(7))) {
+	// 	penetration = -distances.at(0);
+	// }
+	// else {
+	// 	penetration = distances.at(7);
+	// }
+	two.normal = Vector3::Normalized(two.normal);
+	if (two.normal == Vector3::Zero()) {
+		throw std::runtime_error("invalid normal value for plane");
+	}
+
+	Contact contact;
+	contact.body[0] = one.body;
+	contact.body[1] = nullptr; // TODO: check this
+	contact.contactNormal = two.normal;
+	contact.penetration = std::max(std::abs(distances.at(0)), std::abs(distances.at(7)));
+	Vector3 cubeProjectionOnPlane = two.normal * two.offset + (one.body->position - Vector3::Cross(one.body->position, two.normal));
+	contact.contactPoint = cubeProjectionOnPlane;
+	contact.friction; //TODO
+	contact.restitution; // TODO
+
+	data->AddContact(contact);
+
 	return 1;
 }

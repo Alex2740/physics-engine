@@ -5,6 +5,10 @@
 #include "primitive/Box.h"
 #include "CollisionData.h"
 
+#include <vector>
+#include <algorithm> 
+#include <cmath>
+
 class CollisionDetector
 {
 public:
@@ -15,4 +19,5 @@ public:
 	static int BoxAndSphere(Box& one, Sphere& two, CollisionData* data);
 	static int BoxAndBox(Box& one, Box& two, CollisionData* data);
 	static int BoxAndPoint(Box& one, Vector3& two, CollisionData* data);
+	static int BoxAndPlane(Box& one, Plane& two, CollisionData* data);
 };

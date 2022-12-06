@@ -32,7 +32,9 @@ set(ENGINES
     ./src/physics/contact/primitive/Primitive.h
     ./src/physics/contact/primitive/Sphere.h
     ./src/physics/contact/primitive/Plane.h
+    ./src/physics/contact/primitive/Plane.cpp
     ./src/physics/contact/primitive/Box.h
+    ./src/physics/contact/primitive/Box.cpp
 
     ./src/physics/Rigidbody.cpp
     ./src/physics/Rigidbody.h
