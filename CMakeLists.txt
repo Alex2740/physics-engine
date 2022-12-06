@@ -154,6 +154,14 @@ target_link_directories(test_rigidbody PUBLIC src/imgui/libs/glfw/lib-vc2010-64 
 target_link_libraries(test_rigidbody PRIVATE opengl32.lib glfw3.lib)
 target_compile_features(test_rigidbody PRIVATE cxx_std_17)
 
+add_executable(test_collider ./src/test/test_collider.cpp ${ENGINES} ${IMGUI} ${GRAPHICS} ${CORE})
+target_include_directories(test_collider PUBLIC 
+src
+src/imgui/libs/glfw/include src/include)
+target_link_directories(test_collider PUBLIC src/imgui/libs/glfw/lib-vc2010-64 src/imgui/libs/glfw/lib-vc2010-32)
+target_link_libraries(test_collider PRIVATE opengl32.lib glfw3.lib)
+target_compile_features(test_collider PRIVATE cxx_std_17)
+
 add_executable(solar ./demo/solar.cpp ${ENGINES} ${IMGUI} ${GRAPHICS} ${CORE})
 target_include_directories(solar PUBLIC ${CMAKE_SOURCE_DIR}/src
 src/core

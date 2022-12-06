@@ -1,7 +1,7 @@
-#include "Vector3.h"
-#include "RigidBody.h"
+#include "core/Vector3.h"
+#include "physics/RigidBody.h"
 
-// Contient toutes les données concernant un contact
+// Contient toutes les donnï¿½es concernant un contact
 class Contact {
 public:
 	RigidBody* body[2];
