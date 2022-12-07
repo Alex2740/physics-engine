@@ -15,6 +15,8 @@ int CollisionDetector::SphereAndSphere(Sphere& one, Sphere& two, CollisionData* 
 	// Teste si les spheres sont en collision
 	if (distance >= one.radius + two.radius) return 0;
 
+	if (data == nullptr) return 1;
+
 	Vector3 normal = Vector3::Normalized(betweenSphere);
 
 	// Creation du contact
@@ -29,6 +31,130 @@ int CollisionDetector::SphereAndSphere(Sphere& one, Sphere& two, CollisionData* 
 
 	data->AddContact(contact);
 	
+	return 1;
+}
+
+int SphereAndHalfSpace(Sphere& one, Plane& two, CollisionData* data) {
+	float distance = two.getDistanceToPoint(one.body->position);
+	if (distance > one.radius) {
+		return 0;
+	}
+
+	if (data == nullptr) return 1;
+
+	Contact contact;
+	contact.body[0] = one.body;
+	contact.body[1] = nullptr;
+
+	contact.contactNormal = two.normal;
+	contact.contactPoint = one.body->position - two.normal * distance;
+	contact.penetration = std::abs(distance);
+
+	data->AddContact(contact);
+	return 1;
+}
+
+int SphereAndPlane(Sphere& one, Plane& two, CollisionData* data) {
+	float distance = two.getDistanceToPoint(one.body->position);
+	if (std::abs(distance) > one.radius) {
+		return 0;
+	}
+
+	if (data == nullptr) return 1;
+
+	Contact contact;
+	contact.body[0] = one.body;
+	contact.body[1] = nullptr;
+
+	contact.contactNormal = two.normal;
+	contact.contactPoint = one.body->position - two.normal * distance;
+	contact.penetration = std::abs(distance);
+
+	data->AddContact(contact);
+	return 1;
+}
+
+int BoxAndHalfSpace(Box& one, Plane& two, CollisionData* data) {
+	bool isCollided = false;
+	float distance = std::numeric_limits<float>::quiet_NaN();
+	Vector3 point;
+	for (auto p: one.getLocalCoordVertices()) {
+		if (two.isIncludePoint(p)) {
+			isCollided = true;
+			distance = two.getDistanceToPoint(p);
+			point = p;
+			break;
+		}
+	}
+
+	if (!(isCollided)) return 0;
+	if (data == nullptr) return 1;
+
+	Contact contact;
+	contact.body[0] = one.body;
+	contact.body[1] = nullptr;
+
+	contact.contactNormal = two.normal;
+	contact.penetration = std::abs(distance);
+	contact.contactPoint = point + two.normal * contact.penetration;
+
+	data->AddContact(contact);
+	return 1;
+}
+
+int BoxAndSphere(Box& one, Sphere& two, CollisionData* data) {
+	if ((one.body->position - two.body->position).getMagnitude() > (one.halfSize.getMagnitude() + two.radius)) {
+		return 0;
+	}
+
+	bool isCollision = false;
+	for (auto p: one.getLocalCoordVertices()) {
+		if ((p - two.body->position).getMagnitude() < two.radius) {
+			isCollision = true;
+			break;
+		}
+	}
+
+	if (!(isCollision)) return 0;
+
+	if (data == nullptr) return 1;
+
+	Contact contact;
+
+	contact.body[0] = one.body;
+	contact.body[1] = two.body;
+	contact.contactNormal = Vector3::Normalized(one.body->position - two.body->position);
+
+	data->AddContact(contact);
+	return 1;
+}
+
+int BoxAndBox(Box& one, Box& two, CollisionData* data) {
+	// first step: if the two boxes are enough far from each other, then no collision
+	if ((one.body->position - two.body->position).getMagnitude() > (one.halfSize.getMagnitude() + two.halfSize.getMagnitude())) {
+		return 0;
+	}
+	// otherwise I guess I have to test each point from one box, see if it's in the other
+	bool isCollision = false;
+	for (auto p: one.getLocalCoordVertices()) {
+		if (BoxAndPoint(two, p, nullptr) != 0) {
+			isCollision = true;
+			break;
+		} 
+	}
+
+	if (!(isCollision)) return 0;
+
+	if (data == nullptr) return 1;
+
+	Contact contact;
+	contact.body[0] = one.body;
+	contact.body[1] = two.body;
+
+	contact.contactNormal = Vector3::Normalized(one.body->position - two.body->position);
+
+	data->AddContact(contact);
+
 	return 1;
 }
 
@@ -51,6 +177,9 @@ int BoxAndPoint(Box& one, Vector3& two, CollisionData* data) {
 		// no collision if it is not in all the three projections
 		return 0;
 	}
+
+	if (data == nullptr) return 1;
+
 	Contact contact;
 	contact.body[0] = one.body;
 	contact.body[1] = nullptr;
@@ -74,6 +203,9 @@ int BoxAndPlane(Box& one, Plane& two, CollisionData* data) {
 		// every vertex at the same side; no collision
 		return 0;
 	}
+
+	if (data == nullptr) return 1;
+
 	// if there are two vertices on the different side, then collision
 
 	// float penetration;
@@ -87,7 +219,7 @@ int BoxAndPlane(Box& one, Plane& two, CollisionData* data) {
 	if (two.normal == Vector3::Zero()) {
 		throw std::runtime_error("invalid normal value for plane");
 	}
-
+	
 	Contact contact;
 	contact.body[0] = one.body;
 	contact.body[1] = nullptr; // TODO: check this
