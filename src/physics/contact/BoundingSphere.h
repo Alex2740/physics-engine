@@ -1,6 +1,6 @@
 #include "Vector3.h"
 
-class BoudingSphere {
+class BoundingSphere {
 
 private :
 
@@ -9,8 +9,10 @@ private :
 
 public :
 
-	BoudingSphere(Vector3 center, float radius);
+	BoundingSphere(Vector3 center, float radius);
+
+	BoundingSphere(const BoundingSphere& bs1, const BoundingSphere& bs2);
 
 	// Détermine si ce volume est en contact avec le volume other
-	bool overlaps(const BoudingSphere* other) const;
+	bool overlaps(const BoundingSphere* other) const;
 };

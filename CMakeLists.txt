@@ -22,6 +22,17 @@ set(ENGINES
     ./src/physics/contact/NaiveParticleContactGenerator.h
     ./src/physics/contact/WallContactGenerator.cpp
     ./src/physics/contact/WallContactGenerator.h
+    ./src/physics/contact/BoundingSphere.h
+    ./src/physics/contact/BoundingSphere.cpp
+    ./src/physics/contact/BoundingSphere.h
+    ./src/physics/contact/BVHNode.h
+    ./src/physics/contact/BVHNode.cpp
+    ./src/physics/contact/Contact.h
+    ./src/physics/contact/CollisionData.h
+    ./src/physics/contact/PotentialContact.h
+    ./src/physics/contact/PotentialContact.cpp
+
+
 
     ./src/physics/Rigidbody.cpp
     ./src/physics/Rigidbody.h
