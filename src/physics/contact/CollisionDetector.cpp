@@ -35,8 +35,12 @@ int CollisionDetector::SphereAndSphere(Sphere& one, Sphere& two, CollisionData* 
 }
 
 int CollisionDetector::SphereAndHalfSpace(Sphere& one, Plane& two, CollisionData* data) {
-	float distance = two.getDistanceToPoint(one.body->position);
-	if (distance > one.radius) {
+	
+	Vector3 spherePosition = one.offset * one.body->position;
+	
+	float distance = Vector3::Dot(two.normal, spherePosition) - one.radius - two.offset;
+
+	if (distance > 0) {
 		return 0;
 	}
 
@@ -47,28 +51,40 @@ int CollisionDetector::SphereAndHalfSpace(Sphere& one, Plane& two, CollisionData
 	contact.body[1] = nullptr;
 
 	contact.contactNormal = two.normal;
-	contact.contactPoint = one.body->position - two.normal * distance;
-	contact.penetration = std::abs(distance);
+	contact.contactPoint = one.body->position - two.normal * (distance + one.radius);
+	contact.penetration = -distance;
 
 	data->AddContact(contact);
 	return 1;
 }
 
 int CollisionDetector::SphereAndPlane(Sphere& one, Plane& two, CollisionData* data) {
-	float distance = two.getDistanceToPoint(one.body->position);
+	Vector3 spherePosition = one.offset * one.body->position;
+
+	float distance = two.normal * spherePosition - two.offset;
+	
 	if (std::abs(distance) > one.radius) {
 		return 0;
 	}
 
 	if (data == nullptr) return 1;
 
+	Vector3 normal = two.normal;
+	float penetration = -distance;
+
+	if (distance < 0) {
+		normal *= -1;
+		penetration *= -1
+	}
+	penetration += one.radius;
+
 	Contact contact;
 	contact.body[0] = one.body;
 	contact.body[1] = nullptr;
 
-	contact.contactNormal = two.normal;
+	contact.contactNormal = normal;
 	contact.contactPoint = one.body->position - two.normal * distance;
-	contact.penetration = std::abs(distance);
+	contact.penetration = penetration;
 
 	data->AddContact(contact);
 	return 1;
