@@ -23,6 +23,8 @@ set(ENGINES
     ./src/physics/contact/WallContactGenerator.cpp
     ./src/physics/contact/WallContactGenerator.h
 
+    ./src/physics/contact/CollisionInterpretor.h
+    ./src/physics/contact/CollisionInterpretor.cpp
     ./src/physics/contact/CollisionData.h
     ./src/physics/contact/CollisionData.cpp
     ./src/physics/contact/CollisionDetector.cpp

@@ -3,7 +3,7 @@
 int CollisionDetector::SphereAndSphere(Sphere& one, Sphere& two, CollisionData* data)
 {
 	// Teste s'il reste de la place dans le tableau des contacts
-	if (data->contactsLeft <= 0) return 1;
+	// if (data->contactsLeft <= 0) return 1;
 
 	// Récupération des positions des spheres
 	Vector3 positionSphere1 = one.offset * one.body->position;

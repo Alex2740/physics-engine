@@ -1,15 +1,13 @@
-#include "Contact.h"
+#include "physics/contact/Contact.h"
+
+#include <vector>
 
 class CollisionData
 {
 	// Array contenant tous les contacts
-	Contact* contacts;
-
-	int contactMax;
+	std::vector<Contact> contactList;
 
 public:
-	// Nombre de contacts disponible dans l'array
-	int contactsLeft;
-
 	void AddContact(Contact contact);
+	std::vector<Contact> getContactList();
 };
