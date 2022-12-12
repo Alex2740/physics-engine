@@ -14,6 +14,7 @@ public:
 			  // 5: box and sphere
 			  // 6: box and box
 			  // 7: box and point
+			  // 8: box and plane
 
 	RigidBody* body[2];
 

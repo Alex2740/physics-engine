@@ -41,12 +41,28 @@ void CollisionInterpretor::writeContact(Contact c) {
     case 7:
         contactType = "box and point";
         break;
+    case 8:
+        contactType = "box and plane";
+        break;
     
     default:
-        throw std::runtime_error("undetermined contact type def");
+        contactType = "undefined";
         break;
     }
-    out << "contact type: " << contactType << std::endl;
+    out << "\tcontact type: " << contactType << std::endl;
+    if (c.contactPoint == Vector3::Zero()) {
+        out << "\tcontact point: undefined" << std::endl;
+    }
+    else {
+        out << "\tcontact point: " << c.contactPoint << std::endl;
+    }
+    if (c.contactNormal == Vector3::Zero()) {
+        out << "\tcontact normal: undefined" << std::endl;
+    }
+    else {
+        out << "\tcontact normal: " << c.contactNormal << std::endl;
+    }
+    out << "\tpenetration: " << c.penetration << std::endl;
 }
 
 void CollisionInterpretor::dumpAll() {

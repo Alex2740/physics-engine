@@ -21,6 +21,7 @@ int CollisionDetector::SphereAndSphere(Sphere& one, Sphere& two, CollisionData* 
 
 	// Creation du contact
 	Contact contact;
+	contact.type = 0;
 	contact.body[0] = one.body;
 	contact.body[1] = two.body;
 	contact.contactNormal = normal;
@@ -47,6 +48,8 @@ int CollisionDetector::SphereAndHalfSpace(Sphere& one, Plane& two, CollisionData
 	if (data == nullptr) return 1;
 
 	Contact contact;
+	contact.type = 1;
+
 	contact.body[0] = one.body;
 	contact.body[1] = nullptr;
 
@@ -85,6 +88,8 @@ int CollisionDetector::SphereAndPlane(Sphere& one, Plane& two, CollisionData* da
 
 	// Creation du contact
 	Contact contact;
+	contact.type = 2;
+
 	contact.body[0] = one.body;
 	contact.body[1] = nullptr;
 
@@ -108,6 +113,8 @@ int CollisionDetector::SphereAndPoint(Sphere& one, Vector3& two, CollisionData* 
 	if (data == nullptr) return 1;
 
 	Contact contact;
+	contact.type = 3;
+
 	contact.body[0] = one.body;
 	contact.body[1] = nullptr;
 
@@ -131,6 +138,8 @@ int CollisionDetector::BoxAndHalfSpace(Box& one, Plane& two, CollisionData* data
 		// Creation du contact
 		if (distance <= two.offset) {
 			Contact contact;
+			contact.type = 4;
+
 			contact.body[0] = one.body;
 			contact.body[1] = nullptr;
 
@@ -178,6 +187,8 @@ int CollisionDetector::BoxAndSphere(Box& one, Sphere& two, CollisionData* data) 
 	
 	// Creation du contact
 	Contact contact;
+	contact.type = 5;
+
 	contact.body[0] = one.body;
 	contact.body[1] = two.body;
 	contact.contactNormal = Vector3::Normalized(contactPoint - spherePosition);
@@ -209,6 +220,7 @@ int CollisionDetector::BoxAndBox(Box& one, Box& two, CollisionData* data) {
 	if (data == nullptr) return 1;
 
 	Contact contact;
+	contact.type = 6;
 	contact.body[0] = one.body;
 	contact.body[1] = two.body;
 
@@ -238,12 +250,15 @@ int CollisionDetector::BoxAndPoint(Box& one, Vector3& two, CollisionData* data) 
 		// no collision if it is not in all the three projections
 		return 0;
 	}
+	float penetration = std::min({std::abs(one.halfSize.x) - std::abs(transformedPoint.x), std::abs(one.halfSize.y) - std::abs(transformedPoint.y), std::abs(one.halfSize.z) - std::abs(transformedPoint.z)});
 
 	if (data == nullptr) return 1;
 
 	Contact contact;
+	contact.type = 7;
 	contact.body[0] = one.body;
 	contact.body[1] = nullptr;
+	contact.penetration = penetration;
 	// TODO: check other data
 	contact.contactNormal = Vector3::Zero();
 
@@ -282,6 +297,7 @@ int CollisionDetector::BoxAndPlane(Box& one, Plane& two, CollisionData* data) {
 	}
 	
 	Contact contact;
+	contact.type = 8;
 	contact.body[0] = one.body;
 	contact.body[1] = nullptr; // TODO: check this
 	contact.contactNormal = two.normal;
