@@ -105,7 +105,7 @@ int CollisionDetector::SphereAndPoint(Sphere& one, Vector3& two, CollisionData* 
 
 	contact.contactNormal = Vector3::Normalized(one.body->position - two);
 	contact.contactPoint = two;
-	contact.penetration = one.radius - penetration;
+	contact.penetration = one.radius - (one.body->position - two).getMagnitude();
 
 	data->AddContact(contact);
 	return 1;
