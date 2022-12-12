@@ -61,7 +61,7 @@ int CollisionDetector::SphereAndHalfSpace(Sphere& one, Plane& two, CollisionData
 int CollisionDetector::SphereAndPlane(Sphere& one, Plane& two, CollisionData* data) {
 	Vector3 spherePosition = one.offset * one.body->position;
 
-	float distance = two.normal * spherePosition - two.offset;
+	float distance = Vector3::Dot(two.normal, spherePosition) - two.offset;
 	
 	if (std::abs(distance) > one.radius) {
 		return 0;
@@ -73,8 +73,8 @@ int CollisionDetector::SphereAndPlane(Sphere& one, Plane& two, CollisionData* da
 	float penetration = -distance;
 
 	if (distance < 0) {
-		normal *= -1;
-		penetration *= -1
+		normal = normal * -1;
+		penetration *= -1;
 	}
 	penetration += one.radius;
 
@@ -91,31 +91,27 @@ int CollisionDetector::SphereAndPlane(Sphere& one, Plane& two, CollisionData* da
 }
 
 int CollisionDetector::BoxAndHalfSpace(Box& one, Plane& two, CollisionData* data) {
-	bool isCollided = false;
-	float distance = std::numeric_limits<float>::quiet_NaN();
-	Vector3 point;
-	for (auto p: one.getLocalCoordVertices()) {
-		if (two.isIncludePoint(p)) {
-			isCollided = true;
-			distance = two.getDistanceToPoint(p);
-			point = p;
-			break;
+	int contactCreated = 0;
+
+	for (auto vertice : one.getLocalCoordVertices())
+	{
+		float distance = Vector3::Dot(vertice,two.normal);
+
+		if (distance <= two.offset) {
+			Contact contact;
+			contact.body[0] = one.body;
+			contact.body[1] = nullptr;
+
+			contact.contactNormal = two.normal;
+			contact.penetration = two.offset - distance;
+			contact.contactPoint = vertice + two.normal * (distance - two.offset);
+
+			data->AddContact(contact);
+			contactCreated++;
 		}
 	}
-
-	if (!(isCollided)) return 0;
-	if (data == nullptr) return 1;
-
-	Contact contact;
-	contact.body[0] = one.body;
-	contact.body[1] = nullptr;
-
-	contact.contactNormal = two.normal;
-	contact.penetration = std::abs(distance);
-	contact.contactPoint = point + two.normal * contact.penetration;
-
-	data->AddContact(contact);
-	return 1;
+	
+	return contactCreated;
 }
 
 int CollisionDetector::BoxAndSphere(Box& one, Sphere& two, CollisionData* data) {
