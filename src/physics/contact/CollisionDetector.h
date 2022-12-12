@@ -16,6 +16,7 @@ public:
 	static int SphereAndSphere(Sphere& one, Sphere& two, CollisionData* data);
 	static int SphereAndHalfSpace(Sphere& one, Plane& two, CollisionData* data);
 	static int SphereAndPlane(Sphere& one, Plane& two, CollisionData* data);
+	static int SphereAndPoint(Sphere& one, Vector3& two, CollisionData* data);
 	static int BoxAndHalfSpace(Box& one, Plane& two, CollisionData* data);
 	static int BoxAndSphere(Box& one, Sphere& two, CollisionData* data);
 	static int BoxAndBox(Box& one, Box& two, CollisionData* data);
