@@ -1,9 +1,9 @@
 #pragma once
 
-#include "primitive/Sphere.h"
-#include "primitive/Plane.h"
-#include "primitive/Box.h"
-#include "CollisionData.h"
+#include "physics/contact/primitive/Sphere.h"
+#include "physics/contact/primitive/Plane.h"
+#include "physics/contact/primitive/Box.h"
+#include "physics/contact/CollisionData.h"
 
 #include <vector>
 #include <algorithm> 

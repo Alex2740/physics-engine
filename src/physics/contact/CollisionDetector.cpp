@@ -3,7 +3,7 @@
 int CollisionDetector::SphereAndSphere(Sphere& one, Sphere& two, CollisionData* data)
 {
 	// Teste s'il reste de la place dans le tableau des contacts
-	if (data->contactsLeft <= 0) return 1;
+	// if (data->contactsLeft <= 0) return 1;
 
 	// Récupération des positions des spheres
 	Vector3 positionSphere1 = one.offset * one.body->position;
@@ -34,7 +34,7 @@ int CollisionDetector::SphereAndSphere(Sphere& one, Sphere& two, CollisionData* 
 	return 1;
 }
 
-int SphereAndHalfSpace(Sphere& one, Plane& two, CollisionData* data) {
+int CollisionDetector::SphereAndHalfSpace(Sphere& one, Plane& two, CollisionData* data) {
 	float distance = two.getDistanceToPoint(one.body->position);
 	if (distance > one.radius) {
 		return 0;
@@ -54,7 +54,7 @@ int SphereAndHalfSpace(Sphere& one, Plane& two, CollisionData* data) {
 	return 1;
 }
 
-int SphereAndPlane(Sphere& one, Plane& two, CollisionData* data) {
+int CollisionDetector::SphereAndPlane(Sphere& one, Plane& two, CollisionData* data) {
 	float distance = two.getDistanceToPoint(one.body->position);
 	if (std::abs(distance) > one.radius) {
 		return 0;
@@ -74,7 +74,7 @@ int SphereAndPlane(Sphere& one, Plane& two, CollisionData* data) {
 	return 1;
 }
 
-int BoxAndHalfSpace(Box& one, Plane& two, CollisionData* data) {
+int CollisionDetector::BoxAndHalfSpace(Box& one, Plane& two, CollisionData* data) {
 	bool isCollided = false;
 	float distance = std::numeric_limits<float>::quiet_NaN();
 	Vector3 point;
@@ -102,7 +102,7 @@ int BoxAndHalfSpace(Box& one, Plane& two, CollisionData* data) {
 	return 1;
 }
 
-int BoxAndSphere(Box& one, Sphere& two, CollisionData* data) {
+int CollisionDetector::BoxAndSphere(Box& one, Sphere& two, CollisionData* data) {
 	if ((one.body->position - two.body->position).getMagnitude() > (one.halfSize.getMagnitude() + two.radius)) {
 		return 0;
 	}
@@ -129,7 +129,7 @@ int BoxAndSphere(Box& one, Sphere& two, CollisionData* data) {
 	return 1;
 }
 
-int BoxAndBox(Box& one, Box& two, CollisionData* data) {
+int CollisionDetector::BoxAndBox(Box& one, Box& two, CollisionData* data) {
 	// first step: if the two boxes are enough far from each other, then no collision
 	if ((one.body->position - two.body->position).getMagnitude() > (one.halfSize.getMagnitude() + two.halfSize.getMagnitude())) {
 		return 0;
@@ -158,7 +158,7 @@ int BoxAndBox(Box& one, Box& two, CollisionData* data) {
 	return 1;
 }
 
-int BoxAndPoint(Box& one, Vector3& two, CollisionData* data) {
+int CollisionDetector::BoxAndPoint(Box& one, Vector3& two, CollisionData* data) {
 	// first step: if it is outside the box,
 	// 			   then surely no collision
 	if (two.getMagnitude() > one.halfSize.getMagnitude()) {
@@ -190,7 +190,7 @@ int BoxAndPoint(Box& one, Vector3& two, CollisionData* data) {
 	return 1;
 }
 
-int BoxAndPlane(Box& one, Plane& two, CollisionData* data) {
+int CollisionDetector::BoxAndPlane(Box& one, Plane& two, CollisionData* data) {
 	// first step: get all the verties, so that I can test if any pair of vertices is crossing the plane "two"
 	std::array<Vector3, 8> vertices = one.getLocalCoordVertices();
 	std::vector<float> distances = std::vector<float>();

@@ -2,10 +2,9 @@
 
 void CollisionData::AddContact(Contact contact)
 {
-	int positionContact = contactMax - contactsLeft;
+	this->contactList.push_back(contact);
+}
 
-	if (positionContact >= contactMax) return;
-
-	contacts[positionContact] = contact;
-	contactsLeft -= 1;
+std::vector<Contact> CollisionData::getContactList() {
+	return this->contactList;
 }
