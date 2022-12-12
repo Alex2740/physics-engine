@@ -137,7 +137,7 @@ int CollisionDetector::BoxAndBox(Box& one, Box& two, CollisionData* data) {
 	// otherwise I guess I have to test each point from one box, see if it's in the other
 	bool isCollision = false;
 	for (auto p: one.getLocalCoordVertices()) {
-		if (BoxAndPoint(two, p, nullptr) != 0) {
+		if (CollisionDetector::BoxAndPoint(two, p, nullptr) != 0) {
 			isCollision = true;
 			break;
 		} 
