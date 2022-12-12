@@ -171,7 +171,7 @@ int CollisionDetector::BoxAndSphere(Box& one, Sphere& two, CollisionData* data) 
 	if (spherePosInCubeCoord.z < -one.halfSize.z) contactPointInCubeCoord.z = -one.halfSize.z;
 
 	// Calcul de la distance entre la sphere et le point du cube
-	float distance = Vector3::Distance(contcontactPointInCubeCoordactPoint, spherePosInCubeCoord);
+	float distance = Vector3::Distance(contactPointInCubeCoord, spherePosInCubeCoord);
 	if (distance > two.radius) return 0;
 
 	Vector3 contactPoint = one.offset.transform(contactPointInCubeCoord);
