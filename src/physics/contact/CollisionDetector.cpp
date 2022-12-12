@@ -53,14 +53,18 @@ int CollisionDetector::SphereAndHalfSpace(Sphere& one, Plane& two, CollisionData
 	contact.contactNormal = two.normal;
 	contact.contactPoint = one.body->position - two.normal * (distance + one.radius);
 	contact.penetration = -distance;
+	contact.friction; //TODO
+	contact.restitution; // TODO
 
 	data->AddContact(contact);
 	return 1;
 }
 
 int CollisionDetector::SphereAndPlane(Sphere& one, Plane& two, CollisionData* data) {
+	// Recuperation de la position de la sphere
 	Vector3 spherePosition = one.offset * one.body->position;
 
+	// Calcul de la distance entre la sphere et le plan
 	float distance = Vector3::Dot(two.normal, spherePosition) - two.offset;
 	
 	if (std::abs(distance) > one.radius) {
@@ -69,6 +73,7 @@ int CollisionDetector::SphereAndPlane(Sphere& one, Plane& two, CollisionData* da
 
 	if (data == nullptr) return 1;
 
+	// Calcul de la normale et de la penetration
 	Vector3 normal = two.normal;
 	float penetration = -distance;
 
@@ -78,6 +83,7 @@ int CollisionDetector::SphereAndPlane(Sphere& one, Plane& two, CollisionData* da
 	}
 	penetration += one.radius;
 
+	// Creation du contact
 	Contact contact;
 	contact.body[0] = one.body;
 	contact.body[1] = nullptr;
@@ -85,6 +91,8 @@ int CollisionDetector::SphereAndPlane(Sphere& one, Plane& two, CollisionData* da
 	contact.contactNormal = normal;
 	contact.contactPoint = one.body->position - two.normal * distance;
 	contact.penetration = penetration;
+	contact.friction; //TODO
+	contact.restitution; // TODO
 
 	data->AddContact(contact);
 	return 1;
@@ -114,10 +122,13 @@ int CollisionDetector::SphereAndPoint(Sphere& one, Vector3& two, CollisionData* 
 int CollisionDetector::BoxAndHalfSpace(Box& one, Plane& two, CollisionData* data) {
 	int contactCreated = 0;
 
+	// Calcul de contact pour chaque sommet du cube
 	for (auto vertice : one.getLocalCoordVertices())
 	{
+		// Recuperation de la distance entre le sommet et le plan
 		float distance = Vector3::Dot(vertice,two.normal);
 
+		// Creation du contact
 		if (distance <= two.offset) {
 			Contact contact;
 			contact.body[0] = one.body;
@@ -126,6 +137,8 @@ int CollisionDetector::BoxAndHalfSpace(Box& one, Plane& two, CollisionData* data
 			contact.contactNormal = two.normal;
 			contact.penetration = two.offset - distance;
 			contact.contactPoint = vertice + two.normal * (distance - two.offset);
+			contact.friction; //TODO
+			contact.restitution; // TODO
 
 			data->AddContact(contact);
 			contactCreated++;
@@ -136,27 +149,42 @@ int CollisionDetector::BoxAndHalfSpace(Box& one, Plane& two, CollisionData* data
 }
 
 int CollisionDetector::BoxAndSphere(Box& one, Sphere& two, CollisionData* data) {
-	if ((one.body->position - two.body->position).getMagnitude() > (one.halfSize.getMagnitude() + two.radius)) {
+	// Recupere la position de la sphere dans les coordonnes du cube
+	Vector3 spherePosition = two.offset * two.body->position;
+	Vector3 spherePosInCubeCoord = one.offset.transformInverse(spherePosition);
+
+	if (std::abs(spherePosInCubeCoord.x) - two.radius > one.halfSize.x ||
+		std::abs(spherePosInCubeCoord.y) - two.radius > one.halfSize.y ||
+		std::abs(spherePosInCubeCoord.z) - two.radius > one.halfSize.z) {
 		return 0;
 	}
 
-	bool isCollision = false;
-	for (auto p: one.getLocalCoordVertices()) {
-		if ((p - two.body->position).getMagnitude() < two.radius) {
-			isCollision = true;
-			break;
-		}
-	}
+	// Calcul le point du cube le plus proche de la sphere
+	Vector3 contactPointInCubeCoord = Vector3();
+	if (spherePosInCubeCoord.x > one.halfSize.x) contactPointInCubeCoord.x = one.halfSize.x;
+	if (spherePosInCubeCoord.x < -one.halfSize.x) contactPointInCubeCoord.x = -one.halfSize.x;
 
-	if (!(isCollision)) return 0;
+	if (spherePosInCubeCoord.y > one.halfSize.y) contactPointInCubeCoord.y = one.halfSize.y;
+	if (spherePosInCubeCoord.y < -one.halfSize.y) contactPointInCubeCoord.y = -one.halfSize.y;
 
-	if (data == nullptr) return 1;
+	if (spherePosInCubeCoord.z > one.halfSize.z) contactPointInCubeCoord.z = one.halfSize.z;
+	if (spherePosInCubeCoord.z < -one.halfSize.z) contactPointInCubeCoord.z = -one.halfSize.z;
 
+	// Calcul de la distance entre la sphere et le point du cube
+	float distance = Vector3::Distance(contcontactPointInCubeCoordactPoint, spherePosInCubeCoord);
+	if (distance > two.radius) return 0;
+
+	Vector3 contactPoint = one.offset.transform(contactPointInCubeCoord);
+	
+	// Creation du contact
 	Contact contact;
-
 	contact.body[0] = one.body;
 	contact.body[1] = two.body;
-	contact.contactNormal = Vector3::Normalized(one.body->position - two.body->position);
+	contact.contactNormal = Vector3::Normalized(contactPoint - spherePosition);
+	contact.contactPoint = contactPoint;
+	contact.penetration = two.radius - distance;
+	contact.friction; //TODO
+	contact.restitution; // TODO
 
 	data->AddContact(contact);
 	return 1;
