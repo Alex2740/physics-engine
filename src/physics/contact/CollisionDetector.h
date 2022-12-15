@@ -4,6 +4,7 @@
 #include "physics/contact/primitive/Plane.h"
 #include "physics/contact/primitive/Box.h"
 #include "physics/contact/CollisionData.h"
+#include "physics/contact/Contact.h"
 
 #include <vector>
 #include <algorithm> 
