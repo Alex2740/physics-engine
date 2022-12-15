@@ -12,6 +12,10 @@
 
 class CollisionDetector
 {
+private:
+	static std::vector<Vector3> generateSATAllAxis(Box& one, Box& two);
+	static Contact createContactPointFace(Box& boxOfPoint, Box& boxOfFace, Vector3 axis, float interpenetration);
+
 public:
 	static int SphereAndSphere(Sphere& one, Sphere& two, CollisionData* data);
 	static int SphereAndHalfSpace(Sphere& one, Plane& two, CollisionData* data);

@@ -201,30 +201,143 @@ int CollisionDetector::BoxAndSphere(Box& one, Sphere& two, CollisionData* data) 
 	return 1;
 }
 
-int CollisionDetector::BoxAndBox(Box& one, Box& two, CollisionData* data) {
-	// first step: if the two boxes are enough far from each other, then no collision
-	if ((one.body->position - two.body->position).getMagnitude() > (one.halfSize.getMagnitude() + two.halfSize.getMagnitude())) {
-		return 0;
+std::vector<Vector3> CollisionDetector::generateSATAllAxis(Box& one, Box& two)
+{
+	std::vector<Vector3> axis;
+
+	// Generate axis from faces (6 axis)
+	for (int i = 0; i < 3; i++)
+	{
+		axis.push_back(Vector3::Normalized(one.getAxis(i)));
+		axis.push_back(Vector3::Normalized(two.getAxis(i)));
 	}
-	// otherwise I guess I have to test each point from one box, see if it's in the other
-	bool isCollision = false;
-	for (auto p: one.getLocalCoordVertices()) {
-		if (CollisionDetector::BoxAndPoint(two, p, nullptr) != 0) {
-			isCollision = true;
-			break;
-		} 
+	
+	// Generate axis from edges (9 axis);
+	for (int i = 0; i < 3; i++)
+	{
+		Vector3 edge1 = one.getAxis(i);
+		for (int i = 0; i < 3; i++)
+		{
+			Vector3 edge2 = two.getAxis(i);
+
+			axis.push_back(Vector3::Normalized(Vector3::Cross(edge1, edge2)));
+		}
 	}
 
-	if (!(isCollision)) return 0;
+	return std::vector<Vector3>();
+}
 
-	if (data == nullptr) return 1;
+Contact CollisionDetector::createContactPointFace(Box& face, Box& point, Vector3 axis, float interpenetration)
+{
+	Contact contact;
+
+	Vector3 faceToPoint = face.body->position - point.body->position;
+
+	// Get Face normal
+	Vector3 normal = axis;
+	if (Vector3::Dot(axis, faceToPoint) > 0) normal = normal * -1;
+
+	// Get point
+	Vector3 contactPoint = point.halfSize;
+	if (Vector3::Dot(point.getAxis(0), normal) < 0) contactPoint.x = -contactPoint.x;
+	if (Vector3::Dot(point.getAxis(1), normal) < 0) contactPoint.y = -contactPoint.y;
+	if (Vector3::Dot(point.getAxis(2), normal) < 0) contactPoint.z = -contactPoint.z;
+
+	// Transform local coord in world coord
+	Vector3 contactPointInWorld = point.offset.transform(contactPoint);
+
+	// Fill contact information
+	contact.body[0] = face.body;
+	contact.body[1] = point.body;
+	contact.contactNormal = normal;
+	contact.contactPoint = contactPointInWorld;
+	contact.penetration = interpenetration;
+	contact.friction; //TODO
+	contact.restitution; // TODO
+
+	return contact;
+}
+
+int CollisionDetector::BoxAndBox(Box& one, Box& two, CollisionData* data) 
+{
+	// Generate axis for SAT
+	std::vector<Vector3> axis = CollisionDetector::generateSATAllAxis(one, two);
+	
+	int bestIndexAxis = -1;
+	float bestInterpenetration = FP_INFINITE;
+
+	// Calcul interpenetration on all axis
+	for (int i = 0; i < axis.size(); i++)
+	{
+		auto axe = axis.at(i);
+		float oneProjection = one.projectOnAxis(axe);
+		float twoProjection = two.projectOnAxis(axe);
+
+		float distance = Vector3::Dot(two.body->position - one.body->position, axe);
+		float interpenetration = oneProjection + twoProjection - distance;
+
+		if (interpenetration < 0) return 0;
+
+		if (interpenetration < bestInterpenetration) {
+			bestInterpenetration = interpenetration;
+			bestIndexAxis = i;
+		}
+	}
 
 	Contact contact;
-	contact.type = 6;
-	contact.body[0] = one.body;
-	contact.body[1] = two.body;
 
-	contact.contactNormal = Vector3::Normalized(one.body->position - two.body->position);
+	// Check contact type
+	if (bestIndexAxis < 6) {
+		// point-face
+		if (bestIndexAxis % 2 == 0) {
+			// point two-face one
+			contact = createContactPointFace(two, one, axis.at(bestIndexAxis), bestInterpenetration);
+		}
+		else {
+			// point one-face two
+			contact = createContactPointFace(one, two, axis.at(bestIndexAxis), bestInterpenetration);
+		}
+	}
+	else {
+		// edge-edge
+
+		// Get axis of contact
+		int bestIndexAxisOnOne = (bestIndexAxis - 6) / 3;
+		Vector3 axisOne = one.getAxis(bestIndexAxisOnOne);
+		int bestIndexAxisOnTwo = (bestIndexAxis - 6) % 3;
+		Vector3 axisTwo = two.getAxis(bestIndexAxisOnTwo);
+
+		// Get contacts edges
+		Vector3 middleEdgeOne = one.halfSize;
+		Vector3 middleEdgeTwo = two.halfSize;
+		for (int i = 0; i < 3; i++)
+		{
+			if (i == bestIndexAxisOnOne) middleEdgeOne.setAxis(i, 0);
+			else if (Vector3::Dot(one.getAxis(i), axis.at(bestIndexAxis)) > 0) middleEdgeOne.setAxis(i, middleEdgeOne.getAxis(i) * -1);
+
+			if (i == bestIndexAxisOnTwo) middleEdgeTwo.setAxis(i, 0);
+			else if (Vector3::Dot(two.getAxis(i), axis.at(bestIndexAxis)) > 0) middleEdgeTwo.setAxis(i, middleEdgeTwo.getAxis(i) * -1);
+		}
+
+		// Transform edges local coords in wold coords
+		middleEdgeOne = one.offset.transform(middleEdgeOne);
+		middleEdgeTwo = two.offset.transform(middleEdgeTwo);
+
+		// Calculate contact point
+		Vector3 contactPoint;
+		contactPoint.x = (middleEdgeOne.x + middleEdgeTwo.x) / 2;
+		contactPoint.y = (middleEdgeOne.y + middleEdgeTwo.y) / 2;
+		contactPoint.z = (middleEdgeOne.z + middleEdgeTwo.z) / 2;
+
+		// Fill contact information
+		contact.body[0] = one.body;
+		contact.body[1] = two.body;
+		contact.contactNormal = axis.at(bestIndexAxis);
+		contact.contactPoint = contactPoint;
+		contact.penetration = bestInterpenetration;
+		contact.friction; //TODO
+		contact.restitution; // TODO
+	}
 
 	data->AddContact(contact);
 

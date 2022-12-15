@@ -22,3 +22,19 @@ std::array<Vector3, 8> Box::getLocalCoordVertices() {
 
     return ret;
 }
+
+Vector3 Box::getAxis(int i)
+{
+    return Vector3(offset.data[i], offset.data[i + 4], offset.data[i + 8]);
+}
+
+float Box::projectOnAxis(Vector3 axis)
+{
+    float projection = 0;
+    
+    projection += halfSize.x * fabs(Vector3::Dot(getAxis(0), axis));
+    projection += halfSize.y * fabs(Vector3::Dot(getAxis(1), axis));
+    projection += halfSize.z * fabs(Vector3::Dot(getAxis(2), axis));
+
+    return projection;
+}

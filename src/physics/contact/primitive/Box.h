@@ -11,4 +11,7 @@ public:
 	Vector3 halfSize;
 
 	std::array<Vector3, 8> getLocalCoordVertices();
+
+	Vector3 getAxis(int i);
+	float projectOnAxis(Vector3 axis);
 };

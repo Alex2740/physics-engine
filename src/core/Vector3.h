@@ -15,6 +15,9 @@ public:
 
     float getMagnitude();
 
+    float getAxis(int axis);
+    void setAxis(int axis, float value);
+
     Vector3 operator=(const Vector3& other);
     Vector3 operator+=(const Vector3& other);
     Vector3 operator+(const Vector3& other);
