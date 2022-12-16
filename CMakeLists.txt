@@ -24,7 +24,7 @@ set(ENGINES
     ./src/physics/contact/WallContactGenerator.h
     ./src/physics/contact/BoundingSphere.h
     ./src/physics/contact/BoundingSphere.cpp
-    ./src/physics/contact/BoundingSphere.h
+
     ./src/physics/contact/BVHNode.h
     ./src/physics/contact/BVHNode.cpp
     ./src/physics/contact/Contact.h
@@ -182,6 +182,12 @@ src/imgui/libs/glfw/include src/include)
 target_link_directories(solar PUBLIC src/imgui/libs/glfw/lib-vc2010-64 src/imgui/libs/glfw/lib-vc2010-32)
 target_link_libraries(solar PRIVATE opengl32.lib glfw3.lib)
 target_compile_features(solar PRIVATE cxx_std_17)
+
+add_executable(test_broad_phase ./src/test/test_broad_phase.cpp ${ENGINES} ${IMGUI} ${CORE})
+target_include_directories(test_broad_phase PUBLIC ${CMAKE_SOURCE_DIR}/src
+src/imgui/libs/glfw/include)
+target_link_directories(test_broad_phase PUBLIC src/imgui/libs/glfw/lib-vc2010-64 src/imgui/libs/glfw/lib-vc2010-32)
+target_link_libraries(test_broad_phase PRIVATE opengl32.lib glfw3.lib)
 
 add_custom_target(copy_resources ALL
         COMMAND ${CMAKE_COMMAND} -E copy_directory
