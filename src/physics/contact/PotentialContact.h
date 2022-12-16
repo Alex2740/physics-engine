@@ -1,4 +1,4 @@
-#include "Rigidbody.h"
+#include "physics/Rigidbody.h"
 
 class PotentialContact {
 

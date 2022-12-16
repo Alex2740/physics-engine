@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Vector3.h"
+#include "core/Vector3.h"
 
 class BoundingSphere {
 
@@ -18,7 +18,7 @@ public :
 
 	float getGrowth(const BoundingSphere &newVolume);
 
-	// Détermine si ce volume est en contact avec le volume other
+	// Dï¿½termine si ce volume est en contact avec le volume other
 	bool overlaps(const BoundingSphere& other) const;
 
 	float getSize() const;

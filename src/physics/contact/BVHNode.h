@@ -1,10 +1,10 @@
 #pragma once
 
 #include "BoundingSphere.h"
-#include "Rigidbody.h"
+#include "./physics/Rigidbody.h"
 #include "PotentialContact.h"
 
-// Arbre binaire pour contenir la hiérarchie des volumes englobants
+// Arbre binaire pour contenir la hiï¿½rarchie des volumes englobants
 
 class BVHNode {	
 
@@ -24,7 +24,7 @@ public :
 
 	BVHNode(BVHNode* parent, const BoundingSphere& newVolume, RigidBody* body);
 
-	// Détermine si le noeud est un feuille ou non
+	// Dï¿½termine si le noeud est un feuille ou non
 	bool isLeaf() const;
 
 	bool overlaps(const BVHNode* other)const;
@@ -37,7 +37,7 @@ public :
 
 	void insert(RigidBody* body, const BoundingSphere& volume);
 
-	// Affiche récursivement le BVH
+	// Affiche rï¿½cursivement le BVH
 	void print(int space);
 
 	BVHNode* getLeftChildren();
