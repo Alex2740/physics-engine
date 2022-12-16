@@ -9,6 +9,10 @@
 class RigidBody: public IForceAppliable {
 
 private:
+
+	static int comptId;
+
+	int id;
 	Quaternion orientation;
 	Vector3 rotation; // vitesse angulaire
 	Matrix4 transformMatrix;
@@ -43,4 +47,6 @@ public:
 	Vector3 getPointInWorldSpace(Vector3 point);
 
 	Quaternion getOrientation();
+
+	int getId();
 };

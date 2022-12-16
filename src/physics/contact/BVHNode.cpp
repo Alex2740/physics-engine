@@ -7,6 +7,8 @@ BVHNode::BVHNode(BVHNode* parent, const BoundingSphere& newVolume, RigidBody* bo
 	this->parent = parent;
 	volume = newVolume;
 	this->body = body;
+	children[0] = NULL;
+	children[1] = NULL;
 }
 
 
@@ -100,6 +102,8 @@ void BVHNode::insert(RigidBody* newBody, const BoundingSphere& newVolume)
 	// volume dans l'un d'eux
 
 	if (isLeaf()) {
+		
+
 		// Le 1er fils est une copie du corps actuel
 		children[0] = new BVHNode(this, volume, body);
 
@@ -111,11 +115,13 @@ void BVHNode::insert(RigidBody* newBody, const BoundingSphere& newVolume)
 		recalculateBoundingVolume();
 
 
+
 	}
 
 	// Si c'est une node, on ajoute le nouveau corps avec le fils 
 	// dont le volume englobant serait le plus petit
 	else {
+
 		if (children[0]->volume.getGrowth(newVolume) < children[1]->volume.getGrowth(newVolume)) {
 			children[0]->insert(newBody, newVolume);
 		}
@@ -131,6 +137,8 @@ BVHNode::~BVHNode()
 	// Suppression d'une node
 
 	// Si la node possède un parent
+
+
 	if (parent) {
 
 		BVHNode* sibling;
@@ -152,7 +160,10 @@ BVHNode::~BVHNode()
 		sibling->body = NULL;
 		sibling->children[0] = NULL;
 		sibling->children[1] = NULL;
+	
 		delete sibling;
+
+		
 
 		// On recalcule le bounding volume du parent
 		// Je ne comprends pas pq étant donné que le volume englobant du parent reprend celui de la node soeur donc je le commente pour l'instant
@@ -160,15 +171,40 @@ BVHNode::~BVHNode()
 	}
 
 	// On supprime simplement les enfants
-	
+
 		if (children[0]) {
 			children[0]->parent = NULL;
 			delete children[0];
 		}
 		if (children[1]) {
+
 			children[1]->parent = NULL;
 			delete children[1];
 		}
 
-	
 }
+
+void BVHNode::print(int space) {
+
+	space += 10;
+
+	if (isLeaf()) {
+		for (int i = 10; i < space; i++)
+			std::cout << " ";
+		std::cout << body->getId() << "\n";
+		return;
+	}
+
+	else {
+		children[1]->print(space);
+		for (int i = 10; i < space; i++)
+			std::cout << " ";
+		std::cout << "N" << "\n";
+
+		children[0]->print(space);
+	}
+
+}
+
+BVHNode* BVHNode::getLeftChildren() { return children[0];}
+BVHNode* BVHNode::getRightChildren() { return children[1];}

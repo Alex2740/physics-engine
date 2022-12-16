@@ -10,6 +10,7 @@
 #include "contact/ParticleContactGenerator.h"
 #include "contact/NaiveParticleContactGenerator.h"
 #include "contact/WallContactGenerator.h"
+#include "contact/BVHNode.h"
 
 class PhysicWorld
 {
@@ -39,6 +40,7 @@ public:
 
 	void AddContactGenerator(ParticleContactGenerator* generator);
 	
+	void BroadPhase(BVHNode* root);
 
 	void RunPhysics(float duration);
 };

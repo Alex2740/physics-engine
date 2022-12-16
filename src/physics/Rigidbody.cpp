@@ -13,7 +13,8 @@ RigidBody::RigidBody(Vector3 position, float a, float b, float c ,float masse, f
 	// a : longueur
 	// b : largeur
 	// c : hauteur
-
+	id = comptId;
+	comptId++;
 	Matrix3 inertie = Matrix3();
 	inertie.data[0] = (masse / 12)  * (powf(c, 2) + powf(b, 2));
 	inertie.data[4] = (masse / 12)  * (powf(a, 2) + powf(c, 2));
@@ -122,3 +123,7 @@ void RigidBody::CalculateDerivedData()
 Quaternion RigidBody::getOrientation() {
 	return this->orientation;
 }
+
+int RigidBody::getId() { return id; }
+
+int RigidBody::comptId = 0;

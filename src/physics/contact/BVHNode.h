@@ -1,3 +1,5 @@
+#pragma once
+
 #include "BoundingSphere.h"
 #include "Rigidbody.h"
 #include "PotentialContact.h"
@@ -34,6 +36,12 @@ public :
 	void recalculateBoundingVolume();
 
 	void insert(RigidBody* body, const BoundingSphere& volume);
+
+	// Affiche récursivement le BVH
+	void print(int space);
+
+	BVHNode* getLeftChildren();
+	BVHNode* getRightChildren();
 
 	~BVHNode();
 };
