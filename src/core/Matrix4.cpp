@@ -2,10 +2,14 @@
 
 Matrix4::Matrix4()
 {
+	// the default value is now "la matrice identité"
 	for (size_t i = 0; i < 12; i++)
 	{
 		data[i] = 0;
 	}
+	data[0] = 1;
+	data[5] = 1;
+	data[10] = 1;
 }
 
 Matrix4::Matrix4(Matrix3 matrix3, Vector3 vector)

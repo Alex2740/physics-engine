@@ -16,6 +16,43 @@ float Vector3::getMagnitude()
 	return sqrtf(Vector3::Dot(*this, *this));
 }
 
+float Vector3::getAxis(int axis)
+{
+	switch (axis)
+	{
+	case 0:
+		return x;
+		break;
+	case 1:
+		return y;
+		break;
+	case 2:
+		return z;
+		break;
+	default:
+		return NULL;
+		break;
+	}
+}
+
+void Vector3::setAxis(int axis, float value)
+{
+	switch (axis)
+	{
+	case 0:
+		x = value;
+		break;
+	case 1:
+		y = value;
+		break;
+	case 2:
+		z = value;
+		break;
+	default:
+		break;
+	}
+}
+
 Vector3 Vector3::operator=(const Vector3& other)
 {
 	x = other.x;

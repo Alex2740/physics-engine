@@ -1,12 +1,25 @@
-#include "Vector3.h"
-#include "Rigidbody.h"
+#pragma once
+#include "core/Vector3.h"
+#include "physics/RigidBody.h"
 
-// Contient toutes les données concernant un contact
+enum ContactType {
+	SphereSphere,
+	SphereHalfSpace,
+	SpherePlane,
+	SpherePoint,
+	BoxHalfSpace,
+	BoxSphere,
+	BoxBox,
+	BoxPoint,
+	BoxPlane
+};
+
+// Contient toutes les donnÃ©es concernant un contact
 class Contact {
+public:
+	ContactType type;
 
-	// Contient 1 ou 2 rigifbody
-	// Peut être a remplacer par Primitive
-	RigidBody* bodies[2];
+	RigidBody* body[2];
 
 	Vector3 contactPoint;
 
