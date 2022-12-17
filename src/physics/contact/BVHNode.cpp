@@ -10,8 +10,12 @@ BVHNode::BVHNode(BVHNode* parent, const BoundingSphere& newVolume, RigidBody* bo
 	children[1] = nullptr;
 }
 
-BVHNode::BVHNode(BVHNode* parent, Primitive objet) {
+BVHNode::BVHNode(BVHNode* parent, Primitive* objet) {
 	this->parent = parent;
+	volume = BoundingSphere(objet);
+	this->body = objet->body;
+	children[0] = nullptr;
+	children[1] = nullptr;
 }
 
 

@@ -38,3 +38,7 @@ float Box::projectOnAxis(Vector3 axis)
 
     return projection;
 }
+
+int Box::getType() {
+    return 0;
+}

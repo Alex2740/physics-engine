@@ -49,14 +49,45 @@ BoundingSphere::BoundingSphere(const BoundingSphere& bs1, const BoundingSphere& 
 	}
 }
 
+BoundingSphere::BoundingSphere(Primitive* primitive) {
+	BoundingSphere newBS;
+	switch (primitive->getType())
+	{
+	case 0:
+		// box
+		newBS = BoundingSphere(dynamic_cast<Box*>(primitive));
+		break;
+	case 1:
+		// sphere
+		newBS = BoundingSphere(dynamic_cast<Sphere*>(primitive));
+		break;
+	case 2:
+		// plane
+		newBS = BoundingSphere(dynamic_cast<Plane*>(primitive));
+		break;
+	default:
+		// other
+		throw std::runtime_error("wrong primitive type");
+	}
+	*this = newBS;
+}
+
+
 BoundingSphere::BoundingSphere(Box* box) {
 	this->center = box->body->position;
-	this->radius = std::max({box->halfSize.x, box->halfSize.y, box->halfSize.z});
+	this->radius = std::max({box->halfSize.x,
+							 box->halfSize.y,
+							 box->halfSize.z});
 }
 
 BoundingSphere::BoundingSphere(Sphere* sphere) {
 	this->center = sphere->body->position;
 	this->radius = sphere->radius;
+}
+
+BoundingSphere::BoundingSphere(Plane* plane) {
+	this->center = Vector3::Zero();
+	this->radius = std::numeric_limits<float>::infinity();
 }
 
 float BoundingSphere::getGrowth(const BoundingSphere& newVolume)

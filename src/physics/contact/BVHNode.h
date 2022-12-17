@@ -24,7 +24,7 @@ class BVHNode {
 public :
 
 	BVHNode(BVHNode* parent, const BoundingSphere& newVolume, RigidBody* body);
-	BVHNode(BVHNode* parent, Primitive objet);
+	BVHNode(BVHNode* parent, Primitive* objet);
 
 	// Détermine si le noeud est un feuille ou non
 	bool isLeaf() const;

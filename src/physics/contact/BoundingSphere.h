@@ -7,6 +7,8 @@
 
 #include "core/Vector3.h"
 
+#include <algorithm>
+
 class BoundingSphere {
 
 private :
@@ -19,16 +21,17 @@ public :
 
 	BoundingSphere(Vector3 center, float radius);
 
-	// BoundingSphere(Primitive* primitive);
+	BoundingSphere(Primitive* primitive);
 
 	BoundingSphere(Box* box);
 	BoundingSphere(Sphere* sphere);
+	BoundingSphere(Plane* plane);
 
 	BoundingSphere(const BoundingSphere& bs1, const BoundingSphere& bs2);
 
 	float getGrowth(const BoundingSphere &newVolume);
 
-	// D�termine si ce volume est en contact avec le volume other
+	// Détermine si ce volume est en contact avec le volume other
 	bool overlaps(const BoundingSphere& other) const;
 
 	float getSize() const;

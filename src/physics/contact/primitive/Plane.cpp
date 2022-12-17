@@ -17,3 +17,7 @@ float Plane::getDistanceToPoint(Vector3 point) {
     float distance = Vector3::Dot(point, normal);
     return distance - offset;
 }
+
+int Plane::getType() {
+    return 2;
+}
