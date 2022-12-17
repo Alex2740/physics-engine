@@ -104,22 +104,22 @@ void PhysicWorld::RunPhysics(float duration)
 	}
 }
 
-void PhysicWorld::BroadPhase(BVHNode* root) {
+PotentialContact** PhysicWorld::BroadPhase(BVHNode* root) {
 	// Si c'est une feuille il n'y a pas de noeud fils qui peuvent entrer en collision
 	if (root->isLeaf()) {
-		return;
+		return nullptr;
 	}
 	else {
-		PotentialContact* contacts = new PotentialContact();
-		root->getPotentialContacts(contacts, 10);
+		PotentialContact** contacts = static_cast<PotentialContact**>(calloc(CONTACT_LIMIT + 1, sizeof(PotentialContact*)));
+		root->getPotentialContacts(contacts, CONTACT_LIMIT);
 
-		if (contacts->bodies[0] != NULL && contacts->bodies[1] != NULL) {
-			std::cout << "Contact possible entre " << contacts->bodies[0]->getId() << " et " << contacts->bodies[1]->getId() << std::endl;
-		}
+		// if (contacts->bodies[0] != NULL && contacts->bodies[1] != NULL) {
+		// 	std::cout << "Contact possible entre " << contacts->bodies[0]->getId() << " et " << contacts->bodies[1]->getId() << std::endl;
+		// }
 
 		BroadPhase(root->getLeftChildren());
-
 		BroadPhase(root->getRightChildren());
-	}
 
+		return contacts;
+	}
 }

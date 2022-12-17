@@ -12,6 +12,10 @@
 #include "contact/WallContactGenerator.h"
 #include "contact/BVHNode.h"
 
+#include <stdlib.h>
+
+#define CONTACT_LIMIT 10
+
 class PhysicWorld
 {
 private:
@@ -40,7 +44,7 @@ public:
 
 	void AddContactGenerator(ParticleContactGenerator* generator);
 	
-	void BroadPhase(BVHNode* root);
+	PotentialContact** BroadPhase(BVHNode* root);
 
 	void RunPhysics(float duration);
 };

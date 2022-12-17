@@ -1,6 +1,8 @@
+// a single couple of potential of collision
+
 #include "PotentialContact.h"
 
 PotentialContact::PotentialContact() {
-	bodies[0] = NULL;
-	bodies[1] = NULL;
+	bodies[0] = nullptr;
+	bodies[1] = nullptr;
 }

@@ -25,9 +25,9 @@ bool BVHNode::overlaps(const BVHNode* other) const
 }
 
 
-unsigned BVHNode::getPotentialContacts(PotentialContact* contacts, unsigned limit) const
+int BVHNode::getPotentialContacts(PotentialContact** contacts, int limit) const
 {
-	// Si c'est une feuille ou qu'on a dépassé la limite de contact => on n'ajoute pas de contacts
+	// Si c'est une feuille ou qu'on a dÃ©passÃ© la limite de contact => on n'ajoute pas de contacts
 	if (isLeaf() || limit <= 0) {
 		return 0;
 	}
@@ -37,7 +37,7 @@ unsigned BVHNode::getPotentialContacts(PotentialContact* contacts, unsigned limi
 	}
 }
 
-unsigned BVHNode::getPotentialContactsWith(const BVHNode* other, PotentialContact* contacts, unsigned limit) const
+int BVHNode::getPotentialContactsWith(const BVHNode* other, PotentialContact** contacts, int limit) const
 {
 	// S'il n'y a pas d'overlap ou si la limite de contact potentiels est atteinte => on n'ajoute pas de contact
 	if (!overlaps(other) || limit <= 0) {
@@ -46,13 +46,15 @@ unsigned BVHNode::getPotentialContactsWith(const BVHNode* other, PotentialContac
 
 	// Sinon s'il y a chevauchement et que les 2 noeuds sont des feuilles, alors on ajoute le contact
 	else if (isLeaf() && other->isLeaf()) {
-		contacts->bodies[0] = body;
-		contacts->bodies[1] = other->body;
+		contacts[0] = static_cast<PotentialContact*>(calloc(1, sizeof(PotentialContact)));
+		contacts[0]->bodies[0] = body;
+		contacts[0]->bodies[1] = other->body;
 		return 1;
 	}
 
+	// TODO: i am sure that this can be bad in some cases, to be checked later (Wenhao)
 	if (other->isLeaf() || (!isLeaf() && volume.getSize() >= other->volume.getSize())) {
-		unsigned count = children[0]->getPotentialContactsWith(other, contacts, limit);
+		int count = children[0]->getPotentialContactsWith(other, contacts, limit);
 
 		if (limit > count) {
 			return count + children[1]->getPotentialContactsWith(other, contacts + count, limit - count);
@@ -64,7 +66,7 @@ unsigned BVHNode::getPotentialContactsWith(const BVHNode* other, PotentialContac
 	}
 
 	else {
-		unsigned count = getPotentialContactsWith(other->children[0], contacts, limit);
+		int count = getPotentialContactsWith(other->children[0], contacts, limit);
 
 		if (limit > count) {
 			return count + getPotentialContactsWith(other->children[1], contacts + count, limit - count);
@@ -72,7 +74,6 @@ unsigned BVHNode::getPotentialContactsWith(const BVHNode* other, PotentialContac
 		else {
 			return count;
 		}
-
 	}
 
 	return 0;
@@ -80,7 +81,7 @@ unsigned BVHNode::getPotentialContactsWith(const BVHNode* other, PotentialContac
 
 void BVHNode::recalculateBoundingVolume()
 {
-	// Pas sûr de l'implémentation, à corriger dans le futur selon les tests
+	// Pas sÃ»r de l'implÃ©mentation, Ã  corriger dans le futur selon les tests
 	// 
 	// On calcule le nouveau Bounding volume qui englobe les deux nodes filles
 
@@ -98,7 +99,7 @@ void BVHNode::recalculateBoundingVolume()
 
 void BVHNode::insert(RigidBody* newBody, const BoundingSphere& newVolume)
 {
-	// Si on est une feuille, on doit créer deux nouveau fils et placer le nouveau
+	// Si on est une feuille, on doit crÃ©er deux nouveau fils et placer le nouveau
 	// volume dans l'un d'eux
 
 	if (isLeaf()) {
@@ -136,7 +137,7 @@ BVHNode::~BVHNode()
 {
 	// Suppression d'une node
 
-	// Si la node possède un parent
+	// Si la node possÃ¨de un parent
 
 
 	if (parent) {
@@ -149,7 +150,7 @@ BVHNode::~BVHNode()
 			sibling = parent->children[0];
 		}
 
-		// On copie les données de la node soeur dans le parent
+		// On copie les donnÃ©es de la node soeur dans le parent
 		parent->volume = sibling->volume;
 		parent->body = sibling->body;
 		parent->children[0] = sibling->children[0];
@@ -166,7 +167,7 @@ BVHNode::~BVHNode()
 		
 
 		// On recalcule le bounding volume du parent
-		// Je ne comprends pas pq étant donné que le volume englobant du parent reprend celui de la node soeur donc je le commente pour l'instant
+		// Je ne comprends pas pq Ã©tant donnÃ© que le volume englobant du parent reprend celui de la node soeur donc je le commente pour l'instant
 		//parent->recalculateBoundingVolume();
 	}
 

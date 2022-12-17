@@ -4,7 +4,7 @@
 #include "./physics/Rigidbody.h"
 #include "PotentialContact.h"
 
-// Arbre binaire pour contenir la hi�rarchie des volumes englobants
+// Arbre binaire pour contenir la hiï¿½rarchie des volumes englobants
 
 class BVHNode {	
 
@@ -24,20 +24,20 @@ public :
 
 	BVHNode(BVHNode* parent, const BoundingSphere& newVolume, RigidBody* body);
 
-	// D�termine si le noeud est un feuille ou non
+	// Détermine si le noeud est un feuille ou non
 	bool isLeaf() const;
 
 	bool overlaps(const BVHNode* other)const;
 
-	unsigned getPotentialContacts(PotentialContact* contacts, unsigned limit) const;
+	int getPotentialContacts(PotentialContact** contacts, int limit) const;
 
-	unsigned getPotentialContactsWith(const BVHNode *other,PotentialContact* contacts, unsigned limit) const;
+	int getPotentialContactsWith(const BVHNode *other,PotentialContact** contacts, int limit) const;
 
 	void recalculateBoundingVolume();
 
 	void insert(RigidBody* body, const BoundingSphere& volume);
 
-	// Affiche r�cursivement le BVH
+	// Affiche récursivement le BVH
 	void print(int space);
 
 	BVHNode* getLeftChildren();

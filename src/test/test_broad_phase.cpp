@@ -35,31 +35,35 @@ int main() {
         rr3->update(dt);
        
         /*
-       printf("%d : ", rb1->getId());
-       rb1->position.print();
-       printf("%d : ", rb2->getId());
-       rb2->position.print();
-       printf("%d :", rb3->getId());
-       rb3->position.print();
-       */
+        printf("%d : ", rb1->getId());
+        rb1->position.print();
+        printf("%d : ", rb2->getId());
+        rb2->position.print();
+        printf("%d :", rb3->getId());
+        rb3->position.print();
+        */
 
 
-       BVHNode* root = new BVHNode(NULL, BoundingSphere(rb1->position, 2.0f), rb1);
+        BVHNode* root = new BVHNode(nullptr, BoundingSphere    (rb1->position, 2.0f), rb1);
 
-       root->insert(rb2, BoundingSphere(rb2->position,2.0f));
+        root->insert(rb2, BoundingSphere(rb2->position,2.0f));
 
-       root->insert(rb3, BoundingSphere(rb3->position, 2.0f)); 
-       root->print(0);
-       printf("\n\n");
-
-
-       // On appelle la broad phase avec sur le BVH root, c'est une fonction rÈcursive
-       p.BroadPhase(root);
+        root->insert(rb3, BoundingSphere(rb3->position, 2.0f)); 
+        // root->print(0);
+        // printf("\n\n");
 
 
-       system("pause");
+        // On appelle la broad phase avec sur le BVH root, c'est une fonction r√©cursive
+        auto list = p.BroadPhase(root);
+        for (int i = 0; list[i] != nullptr; i++) {
+            std::cout << "body1: " << list[i]->bodies[0]->getId();
+            std::cout << "\nbody2: " << list[i]->bodies[1]->getId();
+            std::cout << "\n" << std::endl;
+        }
 
-       delete root;
+        // system("pause");
+
+        delete root;
     }
     system("pause");
     
