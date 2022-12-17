@@ -22,7 +22,7 @@ BoundingSphere::BoundingSphere(const BoundingSphere& bs1, const BoundingSphere& 
 
 	float radiusDiff = bs1.radius - bs2.radius;
 
-	// On regarde si la plus grande sphère contient la plus petite
+	// On regarde si la plus grande sphÃ¨re contient la plus petite
 	if (radiusDiff * radiusDiff >= SquareDist) {
 		if (bs1.radius > bs2.radius) {
 			center = bs1.center;
@@ -39,8 +39,8 @@ BoundingSphere::BoundingSphere(const BoundingSphere& bs1, const BoundingSphere& 
 		float dist = Vector3::Distance(bs2.center, bs1.center);
 		radius = (dist + bs1.radius + bs2.radius) * 0.5f;
 
-		// Le nouveau centre est le centre de bs1 décalé vers le centre de bs2
-		// par une quantité proportionnel aux rayon des 2 sphères
+		// Le nouveau centre est le centre de bs1 dÃ©calÃ© vers le centre de bs2
+		// par une quantitÃ© proportionnel aux rayon des 2 sphÃ¨res
 
 		center = bs1.center;
 		if (dist > 0) {
@@ -51,15 +51,15 @@ BoundingSphere::BoundingSphere(const BoundingSphere& bs1, const BoundingSphere& 
 
 float BoundingSphere::getGrowth(const BoundingSphere& newVolume)
 {
-	// Calcul du rayon de la sphère englobant la sphère actuelle et la sphère newVolume
+	// Calcul du rayon de la sphÃ¨re englobant la sphÃ¨re actuelle et la sphÃ¨re newVolume
 
 	// On calcule d'abord la distance entre les deux centres
 	float dist = Vector3::Distance(center, newVolume.center);
 
-	// On ajoute à cette distance les 2 rayons pour obtenir le diamètre de la nouvelle sphère englobante
+	// On ajoute Ã  cette distance les 2 rayons pour obtenir le diamÃ¨tre de la nouvelle sphÃ¨re englobante
 	dist += radius + newVolume.radius;
 
-	// On retourne le rayon de la nouvelle sphère
+	// On retourne le rayon de la nouvelle sphÃ¨re
 	return dist / 2;
 }
 
