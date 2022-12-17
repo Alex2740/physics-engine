@@ -18,6 +18,8 @@ namespace fs = std::filesystem;
 #include "graphics/api.h"
 #include "graphics/renderer.h"
 
+#include <cstdlib>
+
 const unsigned int width = 1080;
 const unsigned int height = 720;
 
@@ -26,7 +28,7 @@ int main()
 	float dt = 0.001f;
 	
 	float timer = 0;
-	float timeBetweenSpawn = 1;
+	float timeBetweenSpawn = .5f;
 	float maxFallingCube = 20;
 	float fallingCube = 0;
 
@@ -118,8 +120,10 @@ int main()
 		timer += dt;
 
 		if (fallingCube < maxFallingCube && timer >= timeBetweenSpawn) {
+			float xPos = ((rand() % 200 - 100) / 100.0f); // -1 <> 1
+			xPos *= 2.5f; // -5 <> 5
 			RigidBody* fallingBox = new RigidBody(
-				Vector3(0.0f, 5.0f, 0.0f),
+				Vector3(xPos, 5.0f, 0.0f),
 				Vector3(.5f, .5f, .5f),
 				.05f,
 				.9f, .8f
@@ -131,11 +135,17 @@ int main()
 			fallingCube += 1;
 			timer -= timeBetweenSpawn;
 		}
+
+		for each (RigidBody * rb in physicWorld.GetRigidBodies())
+		{
+			if (rb->position.y < -10) {
+				physicWorld.DeleteRigidBody(rb);
+				fallingCube -= 1;
+			}
+		}
 		
 		// Updates and exports the camera matrix to the Vertex Shader
 		camera.Matrix(45.0f, 0.1f, 100.0f, shaderProgram, "camMatrix");
-
-		physicWorld.GetRigidBodies();
 
 		for each (RigidBody* rb in physicWorld.GetRigidBodies())
 		{
