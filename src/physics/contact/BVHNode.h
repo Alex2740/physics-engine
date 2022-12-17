@@ -1,8 +1,9 @@
 #pragma once
 
 #include "BoundingSphere.h"
-#include "./physics/Rigidbody.h"
 #include "PotentialContact.h"
+#include "physics/contact/primitive/Primitive.h"
+#include "physics/Rigidbody.h"
 
 // Arbre binaire pour contenir la hiï¿½rarchie des volumes englobants
 
@@ -23,6 +24,7 @@ class BVHNode {
 public :
 
 	BVHNode(BVHNode* parent, const BoundingSphere& newVolume, RigidBody* body);
+	BVHNode(BVHNode* parent, Primitive objet);
 
 	// Détermine si le noeud est un feuille ou non
 	bool isLeaf() const;

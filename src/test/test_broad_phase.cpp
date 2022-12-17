@@ -44,7 +44,7 @@ int main() {
         */
 
 
-        BVHNode* root = new BVHNode(nullptr, BoundingSphere    (rb1->position, 2.0f), rb1);
+        BVHNode* root = new BVHNode(nullptr, BoundingSphere(rb1->position, 2.0f), rb1);
 
         root->insert(rb2, BoundingSphere(rb2->position,2.0f));
 

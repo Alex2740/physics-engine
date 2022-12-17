@@ -1,16 +1,18 @@
 #include "BVHNode.h"
 
 
-
 BVHNode::BVHNode(BVHNode* parent, const BoundingSphere& newVolume, RigidBody* body)
 {
 	this->parent = parent;
 	volume = newVolume;
 	this->body = body;
-	children[0] = NULL;
-	children[1] = NULL;
+	children[0] = nullptr;
+	children[1] = nullptr;
 }
 
+BVHNode::BVHNode(BVHNode* parent, Primitive objet) {
+	this->parent = parent;
+}
 
 
 bool BVHNode::isLeaf() const
@@ -111,7 +113,7 @@ void BVHNode::insert(RigidBody* newBody, const BoundingSphere& newVolume)
 		children[1] = new BVHNode(this, newVolume, newBody);
 
 	
-		this->body = NULL;
+		this->body = nullptr;
 
 		recalculateBoundingVolume();
 
@@ -157,10 +159,10 @@ BVHNode::~BVHNode()
 		parent->children[1] = sibling->children[1];
 
 		// On supprime la node soeur;
-		sibling->parent = NULL;
-		sibling->body = NULL;
-		sibling->children[0] = NULL;
-		sibling->children[1] = NULL;
+		sibling->parent = nullptr;
+		sibling->body = nullptr;
+		sibling->children[0] = nullptr;
+		sibling->children[1] = nullptr;
 	
 		delete sibling;
 
