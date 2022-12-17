@@ -189,6 +189,12 @@ src/imgui/libs/glfw/include)
 target_link_directories(test_broad_phase PUBLIC src/imgui/libs/glfw/lib-vc2010-64 src/imgui/libs/glfw/lib-vc2010-32)
 target_link_libraries(test_broad_phase PRIVATE opengl32.lib glfw3.lib)
 
+add_executable(test_combined_phases ./src/test/test_combined_phases.cpp ${ENGINES} ${IMGUI} ${CORE})
+target_include_directories(test_combined_phases PUBLIC ${CMAKE_SOURCE_DIR}/src
+src/imgui/libs/glfw/include)
+target_link_directories(test_combined_phases PUBLIC src/imgui/libs/glfw/lib-vc2010-64 src/imgui/libs/glfw/lib-vc2010-32)
+target_link_libraries(test_combined_phases PRIVATE opengl32.lib glfw3.lib)
+
 add_custom_target(copy_resources ALL
         COMMAND ${CMAKE_COMMAND} -E copy_directory
         ${PROJECT_SOURCE_DIR}/resources
