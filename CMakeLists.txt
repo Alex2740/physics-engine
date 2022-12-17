@@ -99,6 +99,8 @@ set(GRAPHICS
     ./src/graphics/camera.h ./src/graphics/camera.cpp
 
     ./src/graphics/api.h ./src/graphics/api.cpp
+
+    ./src/graphics/renderer.cpp ./src/graphics/renderer.h
 )
 
 add_executable(test1 ./src/test/test1.cpp ${ENGINES} ${IMGUI} ${CORE})
@@ -188,6 +190,12 @@ target_include_directories(test_broad_phase PUBLIC ${CMAKE_SOURCE_DIR}/src
 src/imgui/libs/glfw/include)
 target_link_directories(test_broad_phase PUBLIC src/imgui/libs/glfw/lib-vc2010-64 src/imgui/libs/glfw/lib-vc2010-32)
 target_link_libraries(test_broad_phase PRIVATE opengl32.lib glfw3.lib)
+
+add_executable(whirlpool ./demo/whirlpool.cpp ${ENGINES} ${IMGUI} ${GRAPHICS} ${CORE})
+target_include_directories(whirlpool PUBLIC ${CMAKE_SOURCE_DIR}/src src/core src/physics src/graphics src/imgui/libs/glfw/include src/include)
+target_link_directories(whirlpool PUBLIC src/imgui/libs/glfw/lib-vc2010-64 src/imgui/libs/glfw/lib-vc2010-32)
+target_link_libraries(whirlpool PRIVATE opengl32.lib glfw3.lib)
+target_compile_features(whirlpool PRIVATE cxx_std_17)
 
 add_custom_target(copy_resources ALL
         COMMAND ${CMAKE_COMMAND} -E copy_directory

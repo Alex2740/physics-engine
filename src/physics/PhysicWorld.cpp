@@ -20,6 +20,11 @@ PhysicWorld::~PhysicWorld()
 	}
 }
 
+std::vector<RigidBody*> PhysicWorld::GetRigidBodies()
+{
+	return rigidBodies;
+}
+
 void PhysicWorld::AddParticule(Particule* particle)
 {
 	particules.push_back(particle);
