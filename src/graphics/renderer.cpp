@@ -1,6 +1,6 @@
 #include "renderer.h"
 
-void Renderer::Init()
+Renderer::Renderer()
 {
 	// Generates Vertex Array Object and binds it
 	vertexArrayObject = VAO();

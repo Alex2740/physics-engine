@@ -28,7 +28,7 @@ int main()
 
 	RigidBody bar = RigidBody(
 		Vector3(0.0f, 0.0f, 0.0f),
-		Vector3(2.0f, 1.0f, 1.0f),
+		Vector3(5.0f, .5f, .5f),
 		1.0f,
 		.9f, .9f
 	);
@@ -73,7 +73,7 @@ int main()
 	Matrix4 model = Matrix4::Identity();
 	shaderProgram.setMat4("model", model);
 
-	Renderer::Init();
+	Renderer renderer = Renderer();
 
 	// Texture
 	Texture brickTex("resources/textures/brick.png", GL_TEXTURE_2D, GL_TEXTURE0, GL_RGBA, GL_UNSIGNED_BYTE);
@@ -85,7 +85,7 @@ int main()
 	glEnable(GL_DEPTH_TEST);
 
 	// Creates camera object
-	Camera camera(width, height, Graphics::Api::Vector3ToOpenGL(Vector3(0.0f, 0.0f, 5.0f)));
+	Camera camera(width, height, Graphics::Api::Vector3ToOpenGL(Vector3(0.0f, 2.0f, 5.0f)));
 
 	// Main while loop
 	while (!glfwWindowShouldClose(window))
@@ -114,7 +114,7 @@ int main()
 
 		for each (RigidBody* rb in physicWorld.GetRigidBodies())
 		{
-			Renderer::RenderCube(*rb, shaderProgram, brickTex);
+			renderer.RenderCube(*rb, shaderProgram, brickTex);
 		}
 
 		// Swap the back buffer with the front buffer
@@ -124,7 +124,7 @@ int main()
 		glfwPollEvents();
 	}
 
-	Renderer::Delete();
+	renderer.Delete();
 	
 	brickTex.Delete();
 	shaderProgram.Delete();

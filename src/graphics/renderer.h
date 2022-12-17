@@ -7,9 +7,11 @@
 
 class Renderer
 {
+private:
+	VAO vertexArrayObject;
 public:
-	static VAO vertexArrayObject;
-	static void Init();
-	static void Delete();
-	static void RenderCube(RigidBody cube, Shader shaderProgram, Texture texture);
+	Renderer();
+
+	void Delete();
+	void RenderCube(RigidBody cube, Shader shaderProgram, Texture texture);
 };

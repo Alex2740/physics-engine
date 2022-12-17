@@ -31,6 +31,7 @@ RigidBody::RigidBody(Vector3 position, Vector3 size, float masse, float linearDa
 	this->inverseMasse = 1 / masse;
 	this->damping = linearDamping;
 	this->angularDamping = angularDamping;
+	this->size = size;
 
 	CalculateDerivedData();
 }
