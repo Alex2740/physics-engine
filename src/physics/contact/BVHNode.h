@@ -45,3 +45,5 @@ public :
 
 	~BVHNode();
 };
+
+void freePotentialContactList(PotentialContact** list);

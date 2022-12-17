@@ -117,8 +117,8 @@ PotentialContact** PhysicWorld::BroadPhase(BVHNode* root) {
 		// 	std::cout << "Contact possible entre " << contacts->bodies[0]->getId() << " et " << contacts->bodies[1]->getId() << std::endl;
 		// }
 
-		BroadPhase(root->getLeftChildren());
-		BroadPhase(root->getRightChildren());
+		// BroadPhase(root->getLeftChildren());
+		// BroadPhase(root->getRightChildren());
 
 		return contacts;
 	}

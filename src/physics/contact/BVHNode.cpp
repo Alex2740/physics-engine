@@ -209,3 +209,11 @@ void BVHNode::print(int space) {
 
 BVHNode* BVHNode::getLeftChildren() { return children[0];}
 BVHNode* BVHNode::getRightChildren() { return children[1];}
+
+void freePotentialContactList(PotentialContact** list) {
+	if (list == nullptr) return;
+	for (int i = 0; list[i] != nullptr; i++) {
+		free(list[i]);
+	}
+	free(list);
+}

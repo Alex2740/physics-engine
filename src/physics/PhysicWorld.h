@@ -44,7 +44,7 @@ public:
 
 	void AddContactGenerator(ParticleContactGenerator* generator);
 	
-	PotentialContact** BroadPhase(BVHNode* root);
+	static PotentialContact** BroadPhase(BVHNode* root);
 
 	void RunPhysics(float duration);
 };

@@ -54,12 +54,13 @@ int main() {
 
 
         // On appelle la broad phase avec sur le BVH root, c'est une fonction récursive
-        auto list = p.BroadPhase(root);
+        auto list = PhysicWorld::BroadPhase(root);
         for (int i = 0; list[i] != nullptr; i++) {
             std::cout << "body1: " << list[i]->bodies[0]->getId();
             std::cout << "\nbody2: " << list[i]->bodies[1]->getId();
             std::cout << "\n" << std::endl;
         }
+        freePotentialContactList(list);
 
         // system("pause");
 
