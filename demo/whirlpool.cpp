@@ -24,15 +24,25 @@ const unsigned int height = 720;
 int main()
 {
 	float dt = 0.001f;
+	
+	float timer = 0;
+	float timeBetweenSpawn = 1;
+	float maxFallingCube = 20;
+	float fallingCube = 0;
+
 	PhysicWorld physicWorld = PhysicWorld();
 
 	RigidBody bar = RigidBody(
 		Vector3(0.0f, 0.0f, 0.0f),
 		Vector3(5.0f, .5f, .5f),
 		1.0f,
-		.9f, .9f
+		.9f, .8f
 	);
+	bar.inverseMasse = 0;
 	physicWorld.AddRigidBody(&bar);
+
+	physicWorld.AddForceLocalPoint(&bar, new Force::FixAngleForce(&bar, Vector3(-1, 0, 0), Vector3(0, .4, 0)), Vector3(-1, 0, 0));
+	physicWorld.AddForceLocalPoint(&bar, new Force::FixAngleForce(&bar, Vector3(1, 0, 0), Vector3(0, -.4, 0)), Vector3(1, 0, 0));
 
 	// Initialize GLFW
 	glfwInit();
@@ -81,6 +91,8 @@ int main()
 	Texture iceTex("resources/textures/ice.png", GL_TEXTURE_2D, GL_TEXTURE0, GL_RGBA, GL_UNSIGNED_BYTE);
 	iceTex.texUnit(shaderProgram, "tex0", 0);
 
+	renderer.BindTexture(&bar, &brickTex);
+
 	// Enables the Depth Buffer
 	glEnable(GL_DEPTH_TEST);
 
@@ -103,18 +115,31 @@ int main()
 		camera.Inputs(window);
 
 		physicWorld.RunPhysics(dt);
+		timer += dt;
 
+		if (fallingCube < maxFallingCube && timer >= timeBetweenSpawn) {
+			RigidBody* fallingBox = new RigidBody(
+				Vector3(0.0f, 5.0f, 0.0f),
+				Vector3(.5f, .5f, .5f),
+				.05f,
+				.9f, .8f
+			);
+			physicWorld.AddRigidBody(fallingBox);
+			physicWorld.AddForce(fallingBox, new Force::Gravity(fallingBox));
+			renderer.BindTexture(fallingBox, &iceTex);
+
+			fallingCube += 1;
+			timer -= timeBetweenSpawn;
+		}
+		
 		// Updates and exports the camera matrix to the Vertex Shader
 		camera.Matrix(45.0f, 0.1f, 100.0f, shaderProgram, "camMatrix");
-
-		// Bind the VAO so OpenGL knows to use it
-		
 
 		physicWorld.GetRigidBodies();
 
 		for each (RigidBody* rb in physicWorld.GetRigidBodies())
 		{
-			renderer.RenderCube(*rb, shaderProgram, brickTex);
+			renderer.RenderCube(rb, shaderProgram);
 		}
 
 		// Swap the back buffer with the front buffer

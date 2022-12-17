@@ -5,13 +5,17 @@
 #include "graphics/vbo.h"
 #include "graphics/ebo.h"
 
+#include <map>
+
 class Renderer
 {
 private:
 	VAO vertexArrayObject;
+	std::map<RigidBody*, Texture*> textureMap;
 public:
 	Renderer();
 
 	void Delete();
-	void RenderCube(RigidBody cube, Shader shaderProgram, Texture texture);
+	void RenderCube(RigidBody* cube, Shader shaderProgram);
+	void BindTexture(RigidBody* rigidbody, Texture* texture);
 };

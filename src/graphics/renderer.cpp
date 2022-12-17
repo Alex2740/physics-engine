@@ -5,6 +5,9 @@ Renderer::Renderer()
 	// Generates Vertex Array Object and binds it
 	vertexArrayObject = VAO();
 	vertexArrayObject.Bind();
+
+	// Generate Texture Map
+	textureMap = std::map<RigidBody*, Texture*>();
 }
 
 void Renderer::Delete()
@@ -13,7 +16,7 @@ void Renderer::Delete()
 	vertexArrayObject.Delete();
 }
 
-void Renderer::RenderCube(RigidBody cube, Shader shaderProgram, Texture texture)
+void Renderer::RenderCube(RigidBody* cube, Shader shaderProgram)
 {
 	vertexArrayObject.Bind();
 
@@ -67,9 +70,9 @@ void Renderer::RenderCube(RigidBody cube, Shader shaderProgram, Texture texture)
 	{
 		int index = i * 8;
 
-		vertices[index] *= cube.size.x;
-		vertices[index + 1] *= cube.size.y;
-		vertices[index + 2] *= cube.size.z;
+		vertices[index] *= cube->size.x;
+		vertices[index + 1] *= cube->size.y;
+		vertices[index + 2] *= cube->size.z;
 	}
 
 	// Generates Vertex Buffer Object and links it to vertices
@@ -95,9 +98,9 @@ void Renderer::RenderCube(RigidBody cube, Shader shaderProgram, Texture texture)
 	vertexArrayObject.LinkAttrib(VBO1, 2, 2, GL_FLOAT, 8 * sizeof(float), (void*)(6 * sizeof(float)));
 
 	glm::mat4 model = glm::mat4(1.0f);
-	Vector3 tmp = Vector3(cube.position.x, cube.position.y, cube.position.z);
+	Vector3 tmp = Vector3(cube->position.x, cube->position.y, cube->position.z);
 	model = glm::translate(model, Graphics::Api::Vector3ToOpenGL(tmp));
-	Vector3 rotation = cube.getOrientation().toEuler();
+	Vector3 rotation = cube->getOrientation().toEuler();
 
 	// Rotation on Z-Axis
 	model = glm::rotate(model, rotation.z, glm::vec3(0.0f, 0.0f, 1.0f));
@@ -109,11 +112,16 @@ void Renderer::RenderCube(RigidBody cube, Shader shaderProgram, Texture texture)
 	model = glm::rotate(model, rotation.x, glm::vec3(1.0f, 0.0f, 0.0f));
 
 	glUniformMatrix4fv(glGetUniformLocation(shaderProgram.ID, "model"), 1, GL_FALSE, &model[0][0]);
-	texture.Bind();
+	textureMap[cube]->Bind();
 	glDrawArrays(GL_TRIANGLES, 0, 36);
 
 	vertexArrayObject.Unbind();
 
 	VBO1.Delete();
 	EBO1.Delete();
+}
+
+void Renderer::BindTexture(RigidBody* rigidbody, Texture* texture)
+{
+	textureMap[rigidbody] = texture;
 }
