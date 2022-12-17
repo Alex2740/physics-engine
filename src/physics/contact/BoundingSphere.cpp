@@ -49,6 +49,16 @@ BoundingSphere::BoundingSphere(const BoundingSphere& bs1, const BoundingSphere& 
 	}
 }
 
+BoundingSphere::BoundingSphere(Box* box) {
+	this->center = box->body->position;
+	this->radius = std::max({box->halfSize.x, box->halfSize.y, box->halfSize.z});
+}
+
+BoundingSphere::BoundingSphere(Sphere* sphere) {
+	this->center = sphere->body->position;
+	this->radius = sphere->radius;
+}
+
 float BoundingSphere::getGrowth(const BoundingSphere& newVolume)
 {
 	// Calcul du rayon de la sphère englobant la sphère actuelle et la sphère newVolume
