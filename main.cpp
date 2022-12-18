@@ -19,6 +19,10 @@ namespace fs = std::filesystem;
 
 #include<physics/Rigidbody.h>
 
+#include <imgui/imgui.h>
+#include <imgui/imgui_impl_glfw.h>
+#include <imgui/imgui_impl_opengl3.h>
+
 const unsigned int width = 1200;
 const unsigned int height = 800;
 
@@ -136,8 +140,39 @@ Vector3 cubePositions[] = {
 	Vector3(-1.3f,  1.0f, -1.5f),
 };
 
+static void glfw_error_callback(int error, const char* description)
+{
+	fprintf(stderr, "Glfw Error %d: %s\n", error, description);
+}
+
 int main()
 {
+	glfwSetErrorCallback(glfw_error_callback);
+	if (!glfwInit())
+		return 1;
+
+#if defined(IMGUI_IMPL_OPENGL_ES2)
+	// GL ES 2.0 + GLSL 100
+	const char* glsl_version = "#version 100";
+	glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 2);
+	glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 0);
+	glfwWindowHint(GLFW_CLIENT_API, GLFW_OPENGL_ES_API);
+#elif defined(__APPLE__)
+	// GL 3.2 + GLSL 150
+	const char* glsl_version = "#version 150";
+	glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
+	glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 2);
+	glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);  // 3.2+ only
+	glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);            // Required on Mac
+#else
+	// GL 3.0 + GLSL 130
+	const char* glsl_version = "#version 130";
+	glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
+	glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 0);
+	//glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);  // 3.2+ only
+	//glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);            // 3.0+ only
+#endif
+
 
 	Vector3 positionCubeFix = Vector3(0.0, 0.0, 0.0);
 	RigidBody fixCube = RigidBody(positionCubeFix, 1.0, 1.0, 1.0, 42.69, 1.0f, 1.0f);
@@ -153,8 +188,24 @@ int main()
 	// So that means we only have the modern functions
 	glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 
-	// Create a GLFWwindow object of 800 by 800 pixels, naming it "YoutubeOpenGL"
-	GLFWwindow* window = glfwCreateWindow(width, height, "Demo", NULL, NULL);
+	GLFWwindow* window = glfwCreateWindow(1280, 720, "Demo", NULL, NULL);
+	if (window == NULL)
+		return 1;
+	glfwMakeContextCurrent(window);
+	glfwSwapInterval(1); // Enable vsync
+
+	IMGUI_CHECKVERSION();
+	ImGui::CreateContext();
+	ImGuiIO& io = ImGui::GetIO(); (void)io;
+
+	// Setup Dear ImGui style
+	ImGui::StyleColorsDark();
+	//ImGui::StyleColorsLight();
+
+	// Setup Platform/Renderer backends
+	ImGui_ImplGlfw_InitForOpenGL(window, true);
+	ImGui_ImplOpenGL3_Init(glsl_version);
+
 
 	// Error check if the window fails to create
 	if (window == NULL)
@@ -286,15 +337,38 @@ int main()
 	// Main while loop
 	while (!glfwWindowShouldClose(window))
 	{
+		glfwPollEvents();
 		// Specify the color of the background
 		glClearColor(0.07f, 0.13f, 0.17f, 1.0f);
 
 		// Clean the back buffer and depth buffer
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-		// Tell OpenGL which Shader Program we want to use
-
 		
+
+		ImGui_ImplOpenGL3_NewFrame();
+		ImGui_ImplGlfw_NewFrame();
+		ImGui::NewFrame();
+
+
+		ImGui::Begin("Phase 4        ");                          
+
+		ImGui::Text("Demo          ");    
+
+		ImGui::Text("Données de collisions ");
+		ImGui::Button("Start");
+		ImGui::SameLine();
+		ImGui::Button("Pause");
+		ImGui::End();
+
+		ImGui::Render();
+		
+		
+		
+		
+		glClear(GL_COLOR_BUFFER_BIT);
+
+		ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
 
 		// Handles camera inputs
 		camera.Inputs(window);
@@ -355,6 +429,10 @@ int main()
 	}
 
 	// Delete all the objects we've created
+
+	ImGui_ImplOpenGL3_Shutdown();
+	ImGui_ImplGlfw_Shutdown();
+	ImGui::DestroyContext();
 	VAO1.Delete();
 	VBO1.Delete();
 	EBO1.Delete();
