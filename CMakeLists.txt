@@ -104,55 +104,6 @@ set(GRAPHICS
     ./src/graphics/renderer.cpp ./src/graphics/renderer.h
 )
 
-add_executable(test1 ./src/test/test1.cpp ${ENGINES} ${IMGUI} ${CORE})
-target_include_directories(test1 PUBLIC ${CMAKE_SOURCE_DIR}/src
-src/core
-src/physics
-src/imgui/libs/glfw/include)
-target_link_directories(test1 PUBLIC src/imgui/libs/glfw/lib-vc2010-64 src/imgui/libs/glfw/lib-vc2010-32)
-target_link_libraries(test1 PRIVATE opengl32.lib glfw3.lib)
-
-add_executable(test2 ./src/test/test2.cpp ${ENGINES} ${IMGUI} ${CORE})
-target_include_directories(test2 PUBLIC ${CMAKE_SOURCE_DIR}/src
-src/core
-src/physics
-src/imgui/libs/glfw/include)
-target_link_directories(test2 PUBLIC src/imgui/libs/glfw/lib-vc2010-64 src/imgui/libs/glfw/lib-vc2010-32)
-target_link_libraries(test2 PRIVATE opengl32.lib glfw3.lib)
-
-add_executable(test3 ./src/test/test3.cpp ${ENGINES} ${IMGUI} ${CORE})
-target_include_directories(test3 PUBLIC ${CMAKE_SOURCE_DIR}/src
-src/core
-src/physics
-src/imgui/libs/glfw/include)
-target_link_directories(test3 PUBLIC src/imgui/libs/glfw/lib-vc2010-64 src/imgui/libs/glfw/lib-vc2010-32)
-target_link_libraries(test3 PRIVATE opengl32.lib glfw3.lib)
-
-add_executable(test_quat ./src/test/test_quat.cpp ${ENGINES} ${IMGUI} ${CORE})
-target_include_directories(test_quat PUBLIC 
-${CMAKE_SOURCE_DIR}/src
-src/physics
-src/core
-src/imgui/libs/glfw/include)
-target_link_directories(test_quat PUBLIC src/imgui/libs/glfw/lib-vc2010-64 src/imgui/libs/glfw/lib-vc2010-32)
-target_link_libraries(test_quat PRIVATE opengl32.lib glfw3.lib)
-
-add_executable(pool ./demo/pool.cpp ${ENGINES} ${IMGUI} ${CORE})
-target_include_directories(pool PUBLIC ${CMAKE_SOURCE_DIR}/src
-src/core
-src/physics
-src/imgui/libs/glfw/include)
-target_link_directories(pool PUBLIC src/imgui/libs/glfw/lib-vc2010-64 src/imgui/libs/glfw/lib-vc2010-32)
-target_link_libraries(pool PRIVATE opengl32.lib glfw3.lib)
-
-add_executable(amas ./demo/amas.cpp ${ENGINES} ${IMGUI} ${CORE})
-target_include_directories(amas PUBLIC ${CMAKE_SOURCE_DIR}/src
-src/core
-src/physics
-src/imgui/libs/glfw/include)
-target_link_directories(amas PUBLIC src/imgui/libs/glfw/lib-vc2010-64 src/imgui/libs/glfw/lib-vc2010-32)
-target_link_libraries(amas PRIVATE opengl32.lib glfw3.lib)
-
 add_executable(main ./main.cpp ${ENGINES} ${IMGUI} ${GRAPHICS} ${CORE})
 target_include_directories(main PUBLIC ${CMAKE_SOURCE_DIR}/src
 src/core
@@ -167,12 +118,6 @@ target_include_directories(whirlpool PUBLIC ${CMAKE_SOURCE_DIR}/src src/core src
 target_link_directories(whirlpool PUBLIC src/imgui/libs/glfw/lib-vc2010-64 src/imgui/libs/glfw/lib-vc2010-32)
 target_link_libraries(whirlpool PRIVATE opengl32.lib glfw3.lib)
 target_compile_features(whirlpool PRIVATE cxx_std_17)
-
-add_executable(test_combined_phases ./src/test/test_combined_phases.cpp ${ENGINES} ${IMGUI} ${CORE})
-target_include_directories(test_combined_phases PUBLIC ${CMAKE_SOURCE_DIR}/src
-src/imgui/libs/glfw/include)
-target_link_directories(test_combined_phases PUBLIC src/imgui/libs/glfw/lib-vc2010-64 src/imgui/libs/glfw/lib-vc2010-32)
-target_link_libraries(test_combined_phases PRIVATE opengl32.lib glfw3.lib)
 
 add_custom_target(copy_resources ALL
         COMMAND ${CMAKE_COMMAND} -E copy_directory

@@ -14,7 +14,7 @@
 
 #include <stdlib.h>
 
-#define CONTACT_LIMIT 10
+#define CONTACT_LIMIT 500
 
 class PhysicWorld
 {
@@ -46,7 +46,8 @@ public:
 
 	void AddContactGenerator(ParticleContactGenerator* generator);
 	
-	static PotentialContact** BroadPhase(BVHNode* root);
+	static std::vector<PotentialContact> BroadPhase(BVHNode* root);
 
+	void RunPhysicsParticule(float duration);
 	void RunPhysics(float duration);
 };

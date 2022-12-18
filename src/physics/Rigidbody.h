@@ -1,17 +1,17 @@
 #pragma once
 
-// #include "physics/contact/primitive/Primitive.h"
+//#include "physics/contact/primitive/Primitive.h"
 
 #include "physics/IForceAppliable.h"
 #include "core/Vector3.h"
 #include "core/Quaternion.h"
 #include "core/Matrix4.h"
 #include "core/Matrix3.h"
+#include "physics/contact/BoundingSphere.h"
 
 class RigidBody: public IForceAppliable {
 
 private:
-
 	static int comptId;
 
 	int id;
@@ -27,6 +27,9 @@ private:
 	Matrix3 inverseInertiaTensorWorld;
 
 	void CalculateDerivedData();
+
+	bool dirtyRadiusBS;
+	float radiusBS;
 
 public:
 	// Vector3 position;
@@ -52,6 +55,9 @@ public:
 	Quaternion getOrientation();
 
 	int getId();
+
+	float getRadiusBoundingSphere();
+	BoundingSphere createBoundingSphere();
 
 	void* primitive;
 };

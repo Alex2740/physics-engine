@@ -1,8 +1,9 @@
 #pragma once
 
+#include <vector>
 #include "BoundingSphere.h"
 #include "PotentialContact.h"
-#include "physics/contact/primitive/Primitive.h"
+//#include "physics/contact/primitive/Primitive.h"
 #include "physics/Rigidbody.h"
 
 // Arbre binaire pour contenir la hiï¿½rarchie des volumes englobants
@@ -24,24 +25,24 @@ class BVHNode {
 public :
 
 	BVHNode(BVHNode* parent, const BoundingSphere& newVolume, RigidBody* body);
-	BVHNode(BVHNode* parent, Primitive* objet);
+	//BVHNode(BVHNode* parent, Primitive* objet);
 
 	// Détermine si le noeud est un feuille ou non
 	bool isLeaf() const;
 
 	bool overlaps(const BVHNode* other)const;
 
-	int getPotentialContacts(PotentialContact** contacts, int limit) const;
+	std::vector<PotentialContact> getPotentialContacts();
 
-	int getPotentialContactsWith(const BVHNode *other,PotentialContact** contacts, int limit) const;
+	std::vector<PotentialContact> getPotentialContactsWith(const BVHNode *other);
 
 	void recalculateBoundingVolume();
 
 	void insert(RigidBody* body, const BoundingSphere& volume);
-	void insert(Primitive* primitive);
+	//void insert(Primitive* primitive);
 
 	// Affiche récursivement le BVH
-	void print(int space);
+	void print();
 
 	BVHNode* getLeftChildren();
 	BVHNode* getRightChildren();
@@ -49,4 +50,4 @@ public :
 	~BVHNode();
 };
 
-void freePotentialContactList(PotentialContact** list);
+void freePotentialContactList(std::vector<PotentialContact> list);

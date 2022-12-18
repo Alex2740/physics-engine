@@ -49,7 +49,7 @@ BoundingSphere::BoundingSphere(const BoundingSphere& bs1, const BoundingSphere& 
 	}
 }
 
-BoundingSphere::BoundingSphere(Primitive* primitive) {
+/*BoundingSphere::BoundingSphere(Primitive* primitive) {
 	BoundingSphere newBS;
 	switch (primitive->getType())
 	{
@@ -86,7 +86,7 @@ BoundingSphere::BoundingSphere(Sphere* sphere) {
 BoundingSphere::BoundingSphere(Plane* plane) {
 	this->center = Vector3::Zero();
 	this->radius = std::numeric_limits<float>::infinity();
-}
+}*/
 
 float BoundingSphere::getGrowth(const BoundingSphere& newVolume)
 {

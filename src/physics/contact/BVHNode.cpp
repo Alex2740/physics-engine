@@ -10,13 +10,13 @@ BVHNode::BVHNode(BVHNode* parent, const BoundingSphere& newVolume, RigidBody* bo
 	children[1] = nullptr;
 }
 
-BVHNode::BVHNode(BVHNode* parent, Primitive* objet) {
+/*BVHNode::BVHNode(BVHNode* parent, Primitive* objet) {
 	this->parent = parent;
 	volume = BoundingSphere(objet);
 	this->body = objet->body;
 	children[0] = nullptr;
 	children[1] = nullptr;
-}
+}*/
 
 
 bool BVHNode::isLeaf() const
@@ -31,58 +31,56 @@ bool BVHNode::overlaps(const BVHNode* other) const
 }
 
 
-int BVHNode::getPotentialContacts(PotentialContact** contacts, int limit) const
+std::vector<PotentialContact> BVHNode::getPotentialContacts()
 {
 	// Si c'est une feuille ou qu'on a dépassé la limite de contact => on n'ajoute pas de contacts
-	if (isLeaf() || limit <= 0) {
-		return 0;
+	if (isLeaf()) {
+		return std::vector<PotentialContact>();
 	}
 	// Sinon, on regarde les contacts potentiels du noeuf fils gauche avec le noeud fils droite 
 	else {
-		return children[0]->getPotentialContactsWith(children[1], contacts, limit);
+		return children[0]->getPotentialContactsWith(children[1]);
 	}
 }
 
-int BVHNode::getPotentialContactsWith(const BVHNode* other, PotentialContact** contacts, int limit) const
+std::vector<PotentialContact> BVHNode::getPotentialContactsWith(const BVHNode* other)
 {
+	std::vector<PotentialContact> contacts = std::vector<PotentialContact>();
 	// S'il n'y a pas d'overlap ou si la limite de contact potentiels est atteinte => on n'ajoute pas de contact
-	if (!overlaps(other) || limit <= 0) {
-		return 0;
+	if (!overlaps(other)) {
+		return contacts;
 	}
 
 	// Sinon s'il y a chevauchement et que les 2 noeuds sont des feuilles, alors on ajoute le contact
-	else if (isLeaf() && other->isLeaf()) {
-		contacts[0] = static_cast<PotentialContact*>(calloc(1, sizeof(PotentialContact)));
-		contacts[0]->bodies[0] = body;
-		contacts[0]->bodies[1] = other->body;
-		return 1;
+	if (isLeaf() && other->isLeaf()) {
+		PotentialContact pc = PotentialContact();
+		pc.bodies[0] = body;
+		pc.bodies[1] = other->body;
+		contacts.push_back(pc);
+		return contacts;
 	}
 
 	// TODO: i am sure that this can be bad in some cases, to be checked later (Wenhao)
 	if (other->isLeaf() || (!isLeaf() && volume.getSize() >= other->volume.getSize())) {
-		int count = children[0]->getPotentialContactsWith(other, contacts, limit);
+		
+		std::vector<PotentialContact> leftPC = children[0]->getPotentialContactsWith(other);
+		contacts.insert(contacts.end(), leftPC.begin(), leftPC.end());
 
-		if (limit > count) {
-			return count + children[1]->getPotentialContactsWith(other, contacts + count, limit - count);
-		}
-		else {
-			return count;
-		}
-
+		std::vector<PotentialContact> rightPC = children[1]->getPotentialContactsWith(other);
+		contacts.insert(contacts.end(), rightPC.begin(), rightPC.end());
+		return contacts;
 	}
 
 	else {
-		int count = getPotentialContactsWith(other->children[0], contacts, limit);
+		std::vector<PotentialContact> leftPC = getPotentialContactsWith(other->children[0]);
+		contacts.insert(contacts.end(), leftPC.begin(), leftPC.end());
 
-		if (limit > count) {
-			return count + getPotentialContactsWith(other->children[1], contacts + count, limit - count);
-		}
-		else {
-			return count;
-		}
+		std::vector<PotentialContact> rightPC = getPotentialContactsWith(other->children[1]);
+		contacts.insert(contacts.end(), rightPC.begin(), rightPC.end());
+		return contacts;
 	}
 
-	return 0;
+	return contacts;
 }
 
 void BVHNode::recalculateBoundingVolume()
@@ -130,9 +128,9 @@ void BVHNode::insert(RigidBody* newBody, const BoundingSphere& newVolume)
 	}
 }
 
-void BVHNode::insert(Primitive* primitive) {
+/*void BVHNode::insert(Primitive* primitive) {
 	this->insert(primitive->body, BoundingSphere(primitive));
-}
+}*/
 
 BVHNode::~BVHNode()
 {
@@ -182,26 +180,19 @@ BVHNode::~BVHNode()
 
 }
 
-void BVHNode::print(int space) {
-
-	space += 10;
+void BVHNode::print() {
 
 	if (isLeaf()) {
-		for (int i = 10; i < space; i++)
-			std::cout << " ";
-		std::cout << body->getId() << "\n";
-		return;
+		std::cout << body->getId();
 	}
 
 	else {
-		children[1]->print(space);
-		for (int i = 10; i < space; i++)
-			std::cout << " ";
-		std::cout << "N" << "\n";
-
-		children[0]->print(space);
+		std::cout << "{";
+		children[1]->print();
+		std::cout << ", ";
+		children[0]->print();
+		std::cout << "}";
 	}
-
 }
 
 BVHNode* BVHNode::getLeftChildren() { return children[0];}

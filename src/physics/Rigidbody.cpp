@@ -33,6 +33,9 @@ RigidBody::RigidBody(Vector3 position, Vector3 size, float masse, float linearDa
 	this->angularDamping = angularDamping;
 	this->size = size;
 
+	dirtyRadiusBS = true;
+	radiusBS = -1;
+
 	CalculateDerivedData();
 }
 
@@ -127,5 +130,22 @@ Quaternion RigidBody::getOrientation() {
 }
 
 int RigidBody::getId() { return id; }
+
+float RigidBody::getRadiusBoundingSphere()
+{
+	if (dirtyRadiusBS) {
+		Vector3 halfSize = size / 2;
+		radiusBS = halfSize.getMagnitude();
+
+		dirtyRadiusBS = false;
+	}
+
+	return radiusBS;
+}
+
+BoundingSphere RigidBody::createBoundingSphere()
+{
+	return BoundingSphere(position, getRadiusBoundingSphere());
+}
 
 int RigidBody::comptId = 0;

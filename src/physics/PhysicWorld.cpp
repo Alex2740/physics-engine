@@ -80,16 +80,10 @@ void PhysicWorld::AddContactGenerator(ParticleContactGenerator* generator)
 	contactGenerators.push_back(generator);
 }
 
-void PhysicWorld::RunPhysics(float duration)
+void PhysicWorld::RunPhysicsParticule(float duration)
 {
 	// Intégration des forces particules
 	for (auto registry : particuleRegistries) {
-		registry.second.update(duration);
-	}
-
-
-	// Intégration des forces rigidbodies
-	for (auto registry : rigidBodyRegistries) {
 		registry.second.update(duration);
 	}
 
@@ -110,22 +104,70 @@ void PhysicWorld::RunPhysics(float duration)
 	}
 }
 
-PotentialContact** PhysicWorld::BroadPhase(BVHNode* root) {
+void PhysicWorld::RunPhysics(float duration)
+{
+	// Intégration des forces rigidbodies
+	for (auto registry : rigidBodyRegistries) {
+		registry.second.update(duration);
+	}
+
+	// Détection des contacts
+
+	// Broad Phase
+
+	// Construction du BVH
+	int rbCount = rigidBodies.size();
+	if (rbCount == 0) return;
+
+	BVHNode* root = new BVHNode(nullptr, rigidBodies.at(0)->createBoundingSphere(), rigidBodies.at(0));
+
+	if (rbCount == 1) return;
+
+	for (int i = 1; i < rbCount; i++)
+	{
+		root->insert(rigidBodies.at(i), rigidBodies.at(i)->createBoundingSphere());
+	}
+
+	/*root->print();
+	std::cout << "\n";*/
+
+	auto listPotentialContact = PhysicWorld::BroadPhase(root);
+
+	/*for each (PotentialContact pc in list)
+	{
+		std::cout << "body1: " << pc.bodies[0]->getId();
+		std::cout << "\nbody2: " << pc.bodies[1]->getId();
+		std::cout << std::endl;
+	}
+
+	std::cout << "-------" << std::endl;*/
+
+	delete root;
+
+	// Narrow Phase
+}
+
+std::vector<PotentialContact> PhysicWorld::BroadPhase(BVHNode* root) {
 	// Si c'est une feuille il n'y a pas de noeud fils qui peuvent entrer en collision
 	if (root->isLeaf()) {
-		return nullptr;
+		return std::vector<PotentialContact>();
 	}
 	else {
-		PotentialContact** contacts = static_cast<PotentialContact**>(calloc(CONTACT_LIMIT + 1, sizeof(PotentialContact*)));
-		root->getPotentialContacts(contacts, CONTACT_LIMIT);
+		std::vector<PotentialContact> potentialContacts = std::vector<PotentialContact>();
 
 		// if (contacts->bodies[0] != NULL && contacts->bodies[1] != NULL) {
 		// 	std::cout << "Contact possible entre " << contacts->bodies[0]->getId() << " et " << contacts->bodies[1]->getId() << std::endl;
 		// }
 
-		// BroadPhase(root->getLeftChildren());
-		// BroadPhase(root->getRightChildren());
+		std::vector<PotentialContact> rootPC = root->getPotentialContacts();
+		potentialContacts.insert(potentialContacts.end(), rootPC.begin(), rootPC.end());
 
-		return contacts;
+		std::vector<PotentialContact> leftPC = BroadPhase(root->getLeftChildren());
+		potentialContacts.insert(potentialContacts.end(), leftPC.begin(), leftPC.end());
+
+		std::vector<PotentialContact> rightPC = BroadPhase(root->getRightChildren());
+		potentialContacts.insert(potentialContacts.end(), rightPC.begin(), rightPC.end());
+
+		return potentialContacts;
 	}
 }
