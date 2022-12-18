@@ -29,6 +29,8 @@ public:
 	PhysicWorld();
 	~PhysicWorld();
 
+	std::vector<RigidBody*> GetRigidBodies();
+
 	void AddParticule(Particule* particule);
 	void DeleteParticule(Particule* particule);
 

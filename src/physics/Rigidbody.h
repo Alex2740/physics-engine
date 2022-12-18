@@ -32,10 +32,11 @@ public:
 	// Vector3 position;
 	// Vector3 velocity;
 	// Vector3 acceleration;
+	Vector3 size;
 	Vector3 torqueAccum = Vector3::Zero();
 
 
-	RigidBody(Vector3 position, float a, float b, float c ,float masse, float linearDamping, float angularDamping);
+	RigidBody(Vector3 position, Vector3 size, float masse, float linearDamping, float angularDamping);
 
 	void integrate(float dt) override;
 

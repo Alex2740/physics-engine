@@ -7,18 +7,19 @@ Vector3 RigidBody::getPointInWorldSpace(Vector3 point)
 	return Matrix4::localToWorld(point, transformMatrix);
 }
 
-RigidBody::RigidBody(Vector3 position, float a, float b, float c ,float masse, float linearDamping, float angularDamping)
+RigidBody::RigidBody(Vector3 position, Vector3 size, float masse, float linearDamping, float angularDamping)
 {
 	// Rigidbody : parallélépipède rectangle 
-	// a : longueur
-	// b : largeur
-	// c : hauteur
+	// a : longueur x
+	// b : largeur z
+	// c : hauteur y
 	id = comptId;
 	comptId++;
+
 	Matrix3 inertie = Matrix3();
-	inertie.data[0] = (masse / 12)  * (powf(c, 2) + powf(b, 2));
-	inertie.data[4] = (masse / 12)  * (powf(a, 2) + powf(c, 2));
-	inertie.data[8] = (masse / 12) * (powf(a, 2) + powf(b, 2));
+	inertie.data[0] = (masse / 12)  * (powf(size.z, 2) + powf(size.y, 2));
+	inertie.data[4] = (masse / 12)  * (powf(size.x, 2) + powf(size.y, 2));
+	inertie.data[8] = (masse / 12) * (powf(size.x, 2) + powf(size.z, 2));
 	
 	// Calcul du tenseur d'inertie inverse
 	inverseInertiaTensorLocal = inertie.inverse();
@@ -30,6 +31,7 @@ RigidBody::RigidBody(Vector3 position, float a, float b, float c ,float masse, f
 	this->inverseMasse = 1 / masse;
 	this->damping = linearDamping;
 	this->angularDamping = angularDamping;
+	this->size = size;
 
 	CalculateDerivedData();
 }

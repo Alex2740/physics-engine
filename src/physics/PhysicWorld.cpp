@@ -20,6 +20,11 @@ PhysicWorld::~PhysicWorld()
 	}
 }
 
+std::vector<RigidBody*> PhysicWorld::GetRigidBodies()
+{
+	return rigidBodies;
+}
+
 void PhysicWorld::AddParticule(Particule* particle)
 {
 	particules.push_back(particle);
@@ -39,6 +44,7 @@ void PhysicWorld::AddRigidBody(RigidBody* rb)
 
 void PhysicWorld::DeleteRigidBody(RigidBody* rb)
 {
+	rigidBodies.erase(std::remove(rigidBodies.begin(), rigidBodies.end(), rb), rigidBodies.end());
 	rigidBodyRegistries.erase(rb);
 }
 
