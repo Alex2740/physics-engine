@@ -15,5 +15,5 @@ public:
 	Vector3 getAxis(int i);
 	float projectOnAxis(Vector3 axis);
 
-	int getType() override;
+	PrimitiveType getType() override;
 };

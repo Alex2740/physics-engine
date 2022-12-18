@@ -30,5 +30,6 @@ public:
 	static int BoxAndPlane(Box& one, Plane& two, CollisionData* data);
 
 	static int AnyAndAny(Primitive& one, Primitive& two, CollisionData* data);
-	static int detectList(PotentialContact** src, CollisionData* data);
+	static int detectList(std::vector<PotentialContact> src, CollisionData* data);
+	static Primitive* CreatePrimitive(RigidBody* body);
 };

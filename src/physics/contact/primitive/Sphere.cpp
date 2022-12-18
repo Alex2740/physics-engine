@@ -1,5 +1,5 @@
 #include "Sphere.h"
 
-int Sphere::getType() {
-    return 1;
+PrimitiveType Sphere::getType() {
+    return PrimitiveType::PrimitiveSphere;
 }

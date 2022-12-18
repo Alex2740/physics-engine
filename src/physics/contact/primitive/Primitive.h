@@ -2,6 +2,12 @@
 
 #include "physics/Rigidbody.h"
 
+enum PrimitiveType {
+	PrimitiveBox,
+	PrimitiveSphere,
+	PrimitivePlane
+};
+
 class Primitive
 {
 public:
@@ -11,8 +17,5 @@ public:
 	// Offset entre la position du body et le centre de la primitive
 	Matrix4 offset;
 
-	// box = 0
-	// sphere = 1
-	// plane = 2
-	virtual int getType() = 0;
+	virtual PrimitiveType getType() = 0;
 };

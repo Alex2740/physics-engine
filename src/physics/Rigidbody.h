@@ -1,7 +1,5 @@
 #pragma once
 
-//#include "physics/contact/primitive/Primitive.h"
-
 #include "physics/IForceAppliable.h"
 #include "core/Vector3.h"
 #include "core/Quaternion.h"
@@ -15,7 +13,7 @@ private:
 	static int comptId;
 
 	int id;
-	Quaternion orientation;
+
 	Vector3 rotation; // vitesse angulaire
 	Matrix4 transformMatrix;
 
@@ -35,6 +33,7 @@ public:
 	// Vector3 position;
 	// Vector3 velocity;
 	// Vector3 acceleration;
+	Quaternion orientation;
 	Vector3 size;
 	Vector3 torqueAccum = Vector3::Zero();
 
@@ -58,6 +57,4 @@ public:
 
 	float getRadiusBoundingSphere();
 	BoundingSphere createBoundingSphere();
-
-	void* primitive;
 };

@@ -116,7 +116,7 @@ void PhysicWorld::RunPhysics(float duration)
 	// Broad Phase
 
 	// Construction du BVH
-	int rbCount = rigidBodies.size();
+	size_t rbCount = rigidBodies.size();
 	if (rbCount == 0) return;
 
 	BVHNode* root = new BVHNode(nullptr, rigidBodies.at(0)->createBoundingSphere(), rigidBodies.at(0));
@@ -145,6 +145,11 @@ void PhysicWorld::RunPhysics(float duration)
 	delete root;
 
 	// Narrow Phase
+	CollisionData data = PhysicWorld::NarrowPhase(listPotentialContact);
+
+	if (data.getContactList().size() > 0) {
+		system("pause");
+	}
 }
 
 std::vector<PotentialContact> PhysicWorld::BroadPhase(BVHNode* root) {
@@ -170,4 +175,13 @@ std::vector<PotentialContact> PhysicWorld::BroadPhase(BVHNode* root) {
 
 		return potentialContacts;
 	}
+}
+
+CollisionData PhysicWorld::NarrowPhase(std::vector<PotentialContact> potentialContacts)
+{
+	CollisionData data = CollisionData();
+
+	CollisionDetector::detectList(potentialContacts, &data);
+	
+	return data;
 }

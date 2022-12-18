@@ -18,5 +18,5 @@ public:
 	// get distance (with negative as the other side of normal) to a certain point in space
 	float getDistanceToPoint(Vector3 point);
 
-	int getType() override;
+	PrimitiveType getType() override;
 };

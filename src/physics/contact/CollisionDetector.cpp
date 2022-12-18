@@ -433,32 +433,32 @@ int CollisionDetector::BoxAndPlane(Box& one, Plane& two, CollisionData* data) {
 int CollisionDetector::AnyAndAny(Primitive& one, Primitive&two, CollisionData* data) {
 	switch (one.getType())
 	{
-	case 0:
+	case PrimitiveBox:
 		switch (two.getType())
 		{
-		case 0:
+		case PrimitiveBox:
 			return BoxAndBox(dynamic_cast<Box&>(one), 
 							 dynamic_cast<Box&>(two), data);
-		case 1:
+		case PrimitiveSphere:
 			return BoxAndSphere(dynamic_cast<Box&>(one), 
 							    dynamic_cast<Sphere&>(two), data);
-		case 2:
+		case PrimitivePlane:
 			return BoxAndPlane(dynamic_cast<Box&>(one), 
 							   dynamic_cast<Plane&>(two), data);
 		default:
 			break;
 		}
 		break;
-	case 1:
+	case PrimitiveSphere:
 		switch (two.getType())
 		{
-		case 0:
+		case PrimitiveBox:
 			return BoxAndSphere(dynamic_cast<Box&>(two),
 								dynamic_cast<Sphere&>(one), data);
-		case 1:
+		case PrimitiveSphere:
 			return SphereAndSphere(dynamic_cast<Sphere&>(one), 
 							       dynamic_cast<Sphere&>(two), data);
-		case 2:
+		case PrimitivePlane:
 			return SphereAndPlane(dynamic_cast<Sphere&>(one), 
 							   	  dynamic_cast<Plane&>(two), data);
 		default:
@@ -471,15 +471,32 @@ int CollisionDetector::AnyAndAny(Primitive& one, Primitive&two, CollisionData* d
 	return 0;
 }
 
-int CollisionDetector::detectList(PotentialContact** src, CollisionData* data) {
+Primitive* CollisionDetector::CreatePrimitive(RigidBody* body)
+{
+	Box* primitive = new Box();
+	primitive->halfSize = body->size / 2;
+	primitive->body = body;
+	primitive->offset = Matrix4::Identity();
+
+	primitive->offset.setOrientationPosition(body->orientation, Vector3::Zero());
+
+	return (Primitive*)primitive;
+}
+
+int CollisionDetector::detectList(std::vector<PotentialContact> src, CollisionData* data)
+{
 	int ret = 0;
-	for (int i = 0; src[i] != nullptr; i++) {
-		auto potential = src[i];
-		Primitive *one, *two;
-		one = (Primitive*)(potential->bodies[0]->primitive);
-		two = (Primitive*)(potential->bodies[1]->primitive);
+
+	for each (PotentialContact potentialContact in src)
+	{
+		Primitive* one, * two;
+		one = CollisionDetector::CreatePrimitive(potentialContact.bodies[0]);
+		two = CollisionDetector::CreatePrimitive(potentialContact.bodies[1]);
 
 		ret += AnyAndAny(*one, *two, data);
+
+		delete one;
+		delete two;
 	}
 
 	return ret;

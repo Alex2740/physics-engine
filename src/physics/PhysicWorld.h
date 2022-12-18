@@ -11,6 +11,8 @@
 #include "contact/NaiveParticleContactGenerator.h"
 #include "contact/WallContactGenerator.h"
 #include "contact/BVHNode.h"
+#include "contact/CollisionData.h"
+#include "contact/CollisionDetector.h"
 
 #include <stdlib.h>
 
@@ -47,6 +49,7 @@ public:
 	void AddContactGenerator(ParticleContactGenerator* generator);
 	
 	static std::vector<PotentialContact> BroadPhase(BVHNode* root);
+	static CollisionData NarrowPhase(std::vector<PotentialContact> potentialContacts);
 
 	void RunPhysicsParticule(float duration);
 	void RunPhysics(float duration);

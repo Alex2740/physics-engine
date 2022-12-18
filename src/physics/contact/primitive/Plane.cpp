@@ -18,6 +18,6 @@ float Plane::getDistanceToPoint(Vector3 point) {
     return distance - offset;
 }
 
-int Plane::getType() {
-    return 2;
+PrimitiveType Plane::getType() {
+    return PrimitiveType::PrimitivePlane;
 }

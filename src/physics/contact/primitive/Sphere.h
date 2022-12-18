@@ -8,5 +8,5 @@ public:
 	// Radius de la sphere
 	float radius;
 
-	int getType() override;
+	PrimitiveType getType() override;
 };

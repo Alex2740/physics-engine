@@ -43,8 +43,8 @@ int main()
 	bar.inverseMasse = 0;
 	physicWorld.AddRigidBody(&bar);
 
-	physicWorld.AddForceLocalPoint(&bar, new Force::FixAngleForce(&bar, Vector3(-1, 0, 0), Vector3(0, .4, 0)), Vector3(-1, 0, 0));
-	physicWorld.AddForceLocalPoint(&bar, new Force::FixAngleForce(&bar, Vector3(1, 0, 0), Vector3(0, -.4, 0)), Vector3(1, 0, 0));
+	physicWorld.AddForceLocalPoint(&bar, new Force::FixAngleForce(&bar, Vector3(-1, 0, 0), Vector3(0, .4f, 0)), Vector3(-1, 0, 0));
+	physicWorld.AddForceLocalPoint(&bar, new Force::FixAngleForce(&bar, Vector3(1, 0, 0), Vector3(0, -.4f, 0)), Vector3(1, 0, 0));
 
 	// Initialize GLFW
 	glfwInit();
@@ -99,7 +99,8 @@ int main()
 	glEnable(GL_DEPTH_TEST);
 
 	// Creates camera object
-	Camera camera(width, height, Graphics::Api::Vector3ToOpenGL(Vector3(0.0f, 2.0f, 5.0f)));
+	//Camera camera(width, height, Graphics::Api::Vector3ToOpenGL(Vector3(0.0f, 2.0f, 5.0f)));
+	Camera camera(width, height, Graphics::Api::Vector3ToOpenGL(Vector3(0.0f, 0.0f, 5.0f)));
 
 	// Main while loop
 	while (!glfwWindowShouldClose(window))

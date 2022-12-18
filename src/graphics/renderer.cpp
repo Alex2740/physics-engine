@@ -103,7 +103,7 @@ void Renderer::RenderCube(RigidBody* cube, Shader shaderProgram)
 	Vector3 rotation = cube->getOrientation().toEuler();
 
 	// Rotation on Z-Axis
-	model = glm::rotate(model, rotation.z, glm::vec3(0.0f, 0.0f, 1.0f));
+	model = glm::rotate(model, -rotation.z, glm::vec3(0.0f, 0.0f, 1.0f)); // PSEUDO FIX
 
 	// Rotation on Y-Axis
 	model = glm::rotate(model, rotation.y, glm::vec3(0.0f, 1.0f, 0.0f));
