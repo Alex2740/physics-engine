@@ -5,6 +5,7 @@
 #include "physics/contact/primitive/Box.h"
 #include "physics/contact/CollisionData.h"
 #include "physics/contact/Contact.h"
+#include "physics/contact/BVHNode.h"
 
 #include <vector>
 #include <algorithm> 
@@ -27,4 +28,7 @@ public:
 	static int BoxAndBox(Box& one, Box& two, CollisionData* data);
 	static int BoxAndPoint(Box& one, Vector3& two, CollisionData* data);
 	static int BoxAndPlane(Box& one, Plane& two, CollisionData* data);
+
+	static int AnyAndAny(Primitive& one, Primitive& two, CollisionData* data);
+	static int detectList(PotentialContact** src, CollisionData* data);
 };

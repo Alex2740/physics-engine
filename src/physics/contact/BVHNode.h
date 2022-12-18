@@ -38,6 +38,7 @@ public :
 	void recalculateBoundingVolume();
 
 	void insert(RigidBody* body, const BoundingSphere& volume);
+	void insert(Primitive* primitive);
 
 	// Affiche récursivement le BVH
 	void print(int space);

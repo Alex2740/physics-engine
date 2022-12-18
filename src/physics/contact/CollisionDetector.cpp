@@ -224,7 +224,7 @@ std::vector<Vector3> CollisionDetector::generateSATAllAxis(Box& one, Box& two)
 		}
 	}
 
-	return std::vector<Vector3>();
+	return axis;
 }
 
 Contact CollisionDetector::createContactPointFace(Box& face, Box& point, Vector3 axis, float interpenetration)
@@ -284,6 +284,8 @@ int CollisionDetector::BoxAndBox(Box& one, Box& two, CollisionData* data)
 			bestIndexAxis = i;
 		}
 	}
+
+	if (data == nullptr) return 1;
 
 	Contact contact;
 
@@ -426,4 +428,59 @@ int CollisionDetector::BoxAndPlane(Box& one, Plane& two, CollisionData* data) {
 	data->AddContact(contact);
 
 	return 1;
+}
+
+int CollisionDetector::AnyAndAny(Primitive& one, Primitive&two, CollisionData* data) {
+	switch (one.getType())
+	{
+	case 0:
+		switch (two.getType())
+		{
+		case 0:
+			return BoxAndBox(dynamic_cast<Box&>(one), 
+							 dynamic_cast<Box&>(two), data);
+		case 1:
+			return BoxAndSphere(dynamic_cast<Box&>(one), 
+							    dynamic_cast<Sphere&>(two), data);
+		case 2:
+			return BoxAndPlane(dynamic_cast<Box&>(one), 
+							   dynamic_cast<Plane&>(two), data);
+		default:
+			break;
+		}
+		break;
+	case 1:
+		switch (two.getType())
+		{
+		case 0:
+			return BoxAndSphere(dynamic_cast<Box&>(two),
+								dynamic_cast<Sphere&>(one), data);
+		case 1:
+			return SphereAndSphere(dynamic_cast<Sphere&>(one), 
+							       dynamic_cast<Sphere&>(two), data);
+		case 2:
+			return SphereAndPlane(dynamic_cast<Sphere&>(one), 
+							   	  dynamic_cast<Plane&>(two), data);
+		default:
+			break;
+		}
+		break;
+	default:
+		break;
+	}
+	return 0;
+}
+
+int CollisionDetector::detectList(PotentialContact** src, CollisionData* data) {
+	int ret = 0;
+	for (int i = 0; src[i] != nullptr; i++) {
+		auto potential = src[i];
+		Primitive *one, *two;
+		one = (Primitive*)(potential->bodies[0]->primitive);
+		two = (Primitive*)(potential->bodies[1]->primitive);
+
+		ret += AnyAndAny(*one, *two, data);
+	}
+
+	return ret;
 }

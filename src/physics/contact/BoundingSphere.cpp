@@ -75,9 +75,7 @@ BoundingSphere::BoundingSphere(Primitive* primitive) {
 
 BoundingSphere::BoundingSphere(Box* box) {
 	this->center = box->body->position;
-	this->radius = std::max({box->halfSize.x,
-							 box->halfSize.y,
-							 box->halfSize.z});
+	this->radius = std::sqrt(box->halfSize.getMagnitude());
 }
 
 BoundingSphere::BoundingSphere(Sphere* sphere) {
@@ -107,7 +105,7 @@ float BoundingSphere::getGrowth(const BoundingSphere& newVolume)
 bool BoundingSphere::overlaps(const BoundingSphere& other) const
 {
 	float distanceSquared = Vector3::Distance(center, other.center) * Vector3::Distance(center, other.center);
-	return distanceSquared < (radius + other.radius)* (radius + other.radius);
+	return distanceSquared < (radius + other.radius) * (radius + other.radius);
 
 }
 

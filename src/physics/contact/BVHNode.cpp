@@ -109,20 +109,12 @@ void BVHNode::insert(RigidBody* newBody, const BoundingSphere& newVolume)
 	// volume dans l'un d'eux
 
 	if (isLeaf()) {
-		
-
 		// Le 1er fils est une copie du corps actuel
 		children[0] = new BVHNode(this, volume, body);
-
 		children[1] = new BVHNode(this, newVolume, newBody);
-
-	
 		this->body = nullptr;
 
 		recalculateBoundingVolume();
-
-
-
 	}
 
 	// Si c'est une node, on ajoute le nouveau corps avec le fils 
@@ -136,7 +128,10 @@ void BVHNode::insert(RigidBody* newBody, const BoundingSphere& newVolume)
 			children[1]->insert(newBody, newVolume);
 		}
 	}
+}
 
+void BVHNode::insert(Primitive* primitive) {
+	this->insert(primitive->body, BoundingSphere(primitive));
 }
 
 BVHNode::~BVHNode()
@@ -144,8 +139,6 @@ BVHNode::~BVHNode()
 	// Suppression d'une node
 
 	// Si la node possède un parent
-
-
 	if (parent) {
 
 		BVHNode* sibling;
@@ -169,8 +162,6 @@ BVHNode::~BVHNode()
 		sibling->children[1] = nullptr;
 	
 		delete sibling;
-
-		
 
 		// On recalcule le bounding volume du parent
 		// Je ne comprends pas pq étant donné que le volume englobant du parent reprend celui de la node soeur donc je le commente pour l'instant

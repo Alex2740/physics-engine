@@ -29,6 +29,6 @@ int main() {
 
     CollisionData list = CollisionData();
     CollisionDetector::BoxAndPoint(b, pointInclude, &list);
-    CollisionInterpretor intp = CollisionInterpretor(&list, std::string("./analyse"));
-    intp.dumpAll();
+    CollisionInterpretor intp = CollisionInterpretor(&list);
+    intp.dumpAll("./result");
 }

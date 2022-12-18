@@ -1,5 +1,7 @@
 #pragma once
 
+// #include "physics/contact/primitive/Primitive.h"
+
 #include "physics/IForceAppliable.h"
 #include "core/Vector3.h"
 #include "core/Quaternion.h"
@@ -49,4 +51,6 @@ public:
 	Quaternion getOrientation();
 
 	int getId();
+
+	void* primitive;
 };

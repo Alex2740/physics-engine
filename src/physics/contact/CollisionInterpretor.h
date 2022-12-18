@@ -13,10 +13,12 @@ private:
     // CollisionInterpretor& operator=(const CollisionInterpretor);
     CollisionData* data = nullptr;
     void writeContact(Contact c);
-    std::ofstream out;
+    std::streambuf* out;
 
 public:
-    CollisionInterpretor(CollisionData* collisionData, std::string filename);
+    CollisionInterpretor(CollisionData* collisionData);
+
     void dumpAll();
+    void dumpAll(std::string filename);
     ~CollisionInterpretor();
 };
