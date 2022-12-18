@@ -1,0 +1,92 @@
+﻿'main.exe' (Win32) : Chargé 'C:\Users\Utilisateur\Documents\GitHub\physics-engine\out\build\windows-default\main.exe'. Les symboles ont été chargés.
+'main.exe' (Win32) : Chargé 'C:\Windows\System32\ntdll.dll'. 
+'main.exe' (Win32) : Chargé 'C:\Windows\System32\kernel32.dll'. 
+'main.exe' (Win32) : Chargé 'C:\Windows\System32\KernelBase.dll'. 
+'main.exe' (Win32) : Chargé 'C:\Windows\System32\user32.dll'. 
+'main.exe' (Win32) : Chargé 'C:\Windows\System32\win32u.dll'. 
+'main.exe' (Win32) : Chargé 'C:\Windows\System32\gdi32.dll'. 
+'main.exe' (Win32) : Chargé 'C:\Windows\System32\gdi32full.dll'. 
+'main.exe' (Win32) : Chargé 'C:\Windows\System32\msvcp_win.dll'. 
+'main.exe' (Win32) : Chargé 'C:\Windows\System32\ucrtbase.dll'. 
+'main.exe' (Win32) : Chargé 'C:\Windows\System32\shell32.dll'. 
+'main.exe' (Win32) : Chargé 'C:\Windows\System32\imm32.dll'. 
+'main.exe' (Win32) : Chargé 'C:\Windows\System32\msvcp140d.dll'. 
+'main.exe' (Win32) : Chargé 'C:\Windows\System32\vcruntime140d.dll'. 
+'main.exe' (Win32) : Chargé 'C:\Windows\System32\vcruntime140_1d.dll'. 
+'main.exe' (Win32) : Chargé 'C:\Windows\System32\ucrtbased.dll'. 
+Le thread 0x18d4 s'est arrêté avec le code 0 (0x0).
+'main.exe' (Win32) : Chargé 'C:\Windows\System32\uxtheme.dll'. 
+'main.exe' (Win32) : Chargé 'C:\Windows\System32\msvcrt.dll'. 
+'main.exe' (Win32) : Chargé 'C:\Windows\System32\combase.dll'. 
+'main.exe' (Win32) : Chargé 'C:\Windows\System32\rpcrt4.dll'. 
+'main.exe' (Win32) : Chargé 'C:\Windows\System32\winmm.dll'. 
+'main.exe' (Win32) : Chargé 'C:\Windows\System32\dinput8.dll'. 
+'main.exe' (Win32) : Chargé 'C:\Windows\System32\advapi32.dll'. 
+'main.exe' (Win32) : Chargé 'C:\Windows\System32\sechost.dll'. 
+'main.exe' (Win32) : Chargé 'C:\Windows\System32\XInput1_4.dll'. 
+'main.exe' (Win32) : Chargé 'C:\Windows\System32\cfgmgr32.dll'. 
+'main.exe' (Win32) : Chargé 'C:\Windows\System32\devobj.dll'. 
+'main.exe' (Win32) : Chargé 'C:\Windows\System32\dwmapi.dll'. 
+'main.exe' (Win32) : Chargé 'C:\Windows\System32\SHCore.dll'. 
+'main.exe' (Win32) : Chargé 'C:\Windows\System32\InputHost.dll'. 
+'main.exe' (Win32) : Chargé 'C:\Windows\System32\oleaut32.dll'. 
+'main.exe' (Win32) : Chargé 'C:\Windows\System32\CoreMessaging.dll'. 
+'main.exe' (Win32) : Chargé 'C:\Windows\System32\propsys.dll'. 
+'main.exe' (Win32) : Chargé 'C:\Windows\System32\ws2_32.dll'. 
+'main.exe' (Win32) : Chargé 'C:\Windows\System32\WinTypes.dll'. 
+'main.exe' (Win32) : Chargé 'C:\Windows\System32\bcryptprimitives.dll'. 
+'main.exe' (Win32) : Chargé 'C:\Windows\System32\CoreUIComponents.dll'. 
+'main.exe' (Win32) : Chargé 'C:\Windows\System32\ntmarta.dll'. 
+'main.exe' (Win32) : Chargé 'C:\Windows\System32\kernel.appcore.dll'. 
+'main.exe' (Win32) : Chargé 'C:\Windows\System32\kernel.appcore.dll'. 
+'main.exe' (Win32) : Déchargé 'C:\Windows\System32\kernel.appcore.dll'
+'main.exe' (Win32) : Chargé 'C:\Windows\System32\opengl32.dll'. 
+'main.exe' (Win32) : Chargé 'C:\Windows\System32\glu32.dll'. 
+'main.exe' (Win32) : Chargé 'C:\Windows\System32\hid.dll'. 
+'main.exe' (Win32) : Chargé 'C:\Windows\System32\setupapi.dll'. 
+'main.exe' (Win32) : Chargé 'C:\Windows\System32\bcrypt.dll'. 
+'main.exe' (Win32) : Chargé 'C:\Windows\System32\wintrust.dll'. 
+'main.exe' (Win32) : Chargé 'C:\Windows\System32\crypt32.dll'. 
+'main.exe' (Win32) : Chargé 'C:\Windows\System32\msasn1.dll'. 
+'main.exe' (Win32) : Chargé 'C:\Windows\System32\vulkan-1.dll'. 
+'main.exe' (Win32) : Chargé 'C:\Windows\System32\dxgi.dll'. 
+'main.exe' (Win32) : Chargé 'C:\Windows\System32\ResourcePolicyClient.dll'. 
+'main.exe' (Win32) : Déchargé 'C:\Windows\System32\ResourcePolicyClient.dll'
+'main.exe' (Win32) : Chargé 'C:\Windows\System32\DriverStore\FileRepository\iigd_dch.inf_amd64_2b1d9e395a05d1c9\igvk64.dll'. 
+'main.exe' (Win32) : Chargé 'C:\Windows\System32\shlwapi.dll'. 
+'main.exe' (Win32) : Chargé 'C:\Windows\System32\DriverStore\FileRepository\iigd_dch.inf_amd64_2b1d9e395a05d1c9\igdgmm64.dll'. 
+'main.exe' (Win32) : Chargé 'C:\Windows\System32\DriverStore\FileRepository\iigd_dch.inf_amd64_2b1d9e395a05d1c9\igc64.dll'. 
+'main.exe' (Win32) : Chargé 'C:\Windows\System32\ole32.dll'. 
+'main.exe' (Win32) : Chargé 'C:\Windows\System32\DriverStore\FileRepository\iigd_dch.inf_amd64_2b1d9e395a05d1c9\igdmd64.dll'. 
+'main.exe' (Win32) : Chargé 'C:\Windows\System32\msctf.dll'. 
+'main.exe' (Win32) : Chargé 'C:\Windows\System32\clbcatq.dll'. 
+'main.exe' (Win32) : Chargé 'C:\Windows\System32\AppXDeploymentClient.dll'. 
+'main.exe' (Win32) : Déchargé 'C:\Windows\System32\AppXDeploymentClient.dll'
+'main.exe' (Win32) : Chargé 'C:\Windows\System32\DriverStore\FileRepository\iigd_dch.inf_amd64_2b1d9e395a05d1c9\ig9icd64.dll'. 
+'main.exe' (Win32) : Chargé 'C:\Windows\System32\DriverStore\FileRepository\iigd_dch.inf_amd64_2b1d9e395a05d1c9\igdml64.dll'. 
+'main.exe' (Win32) : Chargé 'C:\Windows\System32\version.dll'. 
+'main.exe' (Win32) : Déchargé 'C:\Windows\System32\version.dll'
+'main.exe' (Win32) : Chargé 'C:\Windows\System32\powrprof.dll'. 
+'main.exe' (Win32) : Chargé 'C:\Windows\System32\umpdc.dll'. 
+Le thread 0x368 s'est arrêté avec le code 1 (0x1).
+'main.exe' (Win32) : Déchargé 'C:\Windows\System32\DriverStore\FileRepository\iigd_dch.inf_amd64_2b1d9e395a05d1c9\igdml64.dll'
+'main.exe' (Win32) : Chargé 'C:\Windows\System32\DriverStore\FileRepository\iigd_dch.inf_amd64_2b1d9e395a05d1c9\igdml64.dll'. 
+'main.exe' (Win32) : Chargé 'C:\Windows\System32\TextInputFramework.dll'. 
+Le thread 0x4598 s'est arrêté avec le code 0 (0x0).
+Le thread 0x3cc4 s'est arrêté avec le code 1 (0x1).
+'main.exe' (Win32) : Déchargé 'C:\Windows\System32\DriverStore\FileRepository\iigd_dch.inf_amd64_2b1d9e395a05d1c9\igdml64.dll'
+'main.exe' (Win32) : Déchargé 'C:\Windows\System32\DriverStore\FileRepository\iigd_dch.inf_amd64_2b1d9e395a05d1c9\igdmd64.dll'
+'main.exe' (Win32) : Déchargé 'C:\Windows\System32\shlwapi.dll'
+'main.exe' (Win32) : Déchargé 'C:\Windows\System32\DriverStore\FileRepository\iigd_dch.inf_amd64_2b1d9e395a05d1c9\igvk64.dll'
+'main.exe' (Win32) : Déchargé 'C:\Windows\System32\vulkan-1.dll'
+Le thread 0x2adc s'est arrêté avec le code 0 (0x0).
+Le thread 0x35ec s'est arrêté avec le code 0 (0x0).
+Le thread 0x4b90 s'est arrêté avec le code 0 (0x0).
+Le thread 0x3b14 s'est arrêté avec le code 0 (0x0).
+Le thread 0x2dac s'est arrêté avec le code 0 (0x0).
+Le thread 0xbd4 s'est arrêté avec le code 0 (0x0).
+Le thread 0x4b24 s'est arrêté avec le code 0 (0x0).
+Le thread 0x1fc8 s'est arrêté avec le code 0 (0x0).
+Le thread 0x4274 s'est arrêté avec le code 0 (0x0).
+Le thread 0x4c4c s'est arrêté avec le code 0 (0x0).
+Le programme '[11124] main.exe' s'est arrêté avec le code 0 (0x0).
