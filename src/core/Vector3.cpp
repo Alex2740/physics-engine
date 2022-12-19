@@ -176,6 +176,21 @@ void Vector3::print()
 	std::cout << "Vector3(" << x << "f, " << y << "f, " << z << "f)" << std::endl;
 }
 
+char* Vector3::toString()
+{
+	char buffer[100] = "x: ";
+	char bufNumber[100];
+	sprintf(bufNumber, "%f", x);
+	strcat_s(buffer, bufNumber);
+	strcat_s(buffer, ", y: ");
+	sprintf(bufNumber, "%f", y);
+	strcat_s(buffer, bufNumber);
+	strcat_s(buffer, ", z: ");
+	sprintf(bufNumber, "%f", z);
+	strcat_s(buffer, bufNumber);
+	return buffer;
+}
+
 std::ostream& operator<<(std::ostream& os, const Vector3& vector)
 {
 	os << "Vector3(" << vector.x << ", " << vector.y << ", " << vector.z << ')';

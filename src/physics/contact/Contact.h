@@ -11,7 +11,8 @@ enum ContactType {
 	BoxSphere,
 	BoxBox,
 	BoxPoint,
-	BoxPlane
+	BoxPlane,
+	ContactNull
 };
 
 // Contient toutes les données concernant un contact
@@ -30,4 +31,9 @@ public:
 	float restitution;
 
 	float friction;
+
+	static Contact ContactNull();
+
+	bool operator==(const Contact& other) const;
+	bool operator!=(const Contact& other) const;
 };

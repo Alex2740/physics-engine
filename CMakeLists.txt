@@ -37,6 +37,8 @@ set(ENGINES
     ./src/physics/contact/CollisionData.cpp
     ./src/physics/contact/CollisionDetector.cpp
     ./src/physics/contact/CollisionDetector.h
+
+    ./src/physics/contact/Contact.cpp
     ./src/physics/contact/Contact.h
 
     ./src/physics/contact/primitive/Primitive.h

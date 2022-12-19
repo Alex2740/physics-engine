@@ -38,4 +38,5 @@ public:
     static Vector3 Zero();
 
     void print();
+    char* toString();
 };

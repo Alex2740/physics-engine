@@ -36,13 +36,14 @@ void processInput(GLFWwindow* window)
 		glfwSetWindowShouldClose(window, true);
 
 	if (glfwGetKey(window, GLFW_KEY_1) == GLFW_PRESS) {
-		timerPause = timeBetweenPause;
 		runPhysics = true;
 	}
 }
 
 int main()
 {
+	Contact contactToDisplay = Contact::ContactNull();
+
 	float dt = 0.001f;
 	
 	float timer = 0;
@@ -160,12 +161,48 @@ int main()
 
 		ImGui_ImplOpenGL3_NewFrame();
 		ImGui_ImplGlfw_NewFrame();
+
 		ImGui::NewFrame();
 		{
-			ImGui::Begin("Shooter !");
+			ImGui::Begin("Contact Details");
+			if (contactToDisplay.type != ContactType::ContactNull) {
+				char buffer[100] = "Type: ";
+				char b[1];
+				strcat_s(buffer, "BoxBox");
+				ImGui::Text(buffer);
 
-			ImGui::Text("Choose the projectile.");
+				strcpy_s(buffer, "ID Body 1: ");
+				strcat_s(buffer, itoa(contactToDisplay.body[0]->getId(), b, 10));
+				ImGui::Text(buffer);
 
+				strcpy_s(buffer, "ID Body 2: ");
+				strcat_s(buffer, itoa(contactToDisplay.body[1]->getId(), b, 10));
+				ImGui::Text(buffer);
+
+				strcpy_s(buffer, "Position: ");
+				strcat_s(buffer, contactToDisplay.contactPoint.toString());
+				ImGui::Text(buffer);
+
+				strcpy_s(buffer, "Normal: ");
+				strcat_s(buffer, contactToDisplay.contactNormal.toString());
+				ImGui::Text(buffer);
+
+				strcpy_s(buffer, "Penetration: ");
+				strcat_s(buffer, itoa(contactToDisplay.penetration, b, 10));
+				ImGui::Text(buffer);
+
+				strcpy_s(buffer, "Restitution: ");
+				strcat_s(buffer, itoa(contactToDisplay.restitution, b, 10));
+				ImGui::Text(buffer);
+
+				strcpy_s(buffer, "Friction: ");
+				strcat_s(buffer, itoa(contactToDisplay.friction, b, 10));
+				ImGui::Text(buffer);
+
+			}
+			else {
+				ImGui::Text("No Contact");
+			}
 			ImGui::End();
 		}
 
@@ -184,10 +221,15 @@ int main()
 		shaderProgram.Activate();
 
 		// Handles camera inputs
-		camera.Inputs(window);
+		//camera.Inputs(window);
 
 		if (runPhysics) {
-			runPhysics = physicWorld.RunPhysics(dt);
+			contactToDisplay = physicWorld.RunPhysics(dt);
+
+			if (contactToDisplay.type != ContactType::ContactNull) {
+				runPhysics = false;
+			}
+
 			timer += dt;
 		}
 
