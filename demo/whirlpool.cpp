@@ -168,6 +168,7 @@ int main()
 			if (contactToDisplay.type != ContactType::ContactNull) {
 				char buffer[100] = "Type: ";
 				char b[1];
+				char buffNumber[100];
 				strcat_s(buffer, "BoxBox");
 				ImGui::Text(buffer);
 
@@ -188,15 +189,18 @@ int main()
 				ImGui::Text(buffer);
 
 				strcpy_s(buffer, "Penetration: ");
-				strcat_s(buffer, itoa(contactToDisplay.penetration, b, 10));
+				sprintf(buffNumber, "%f", contactToDisplay.penetration);
+				strcat_s(buffer, buffNumber);
 				ImGui::Text(buffer);
 
 				strcpy_s(buffer, "Restitution: ");
-				strcat_s(buffer, itoa(contactToDisplay.restitution, b, 10));
+				sprintf(buffNumber, "%f", contactToDisplay.penetration);
+				strcat_s(buffer, buffNumber);
 				ImGui::Text(buffer);
 
 				strcpy_s(buffer, "Friction: ");
-				strcat_s(buffer, itoa(contactToDisplay.friction, b, 10));
+				sprintf(buffNumber, "%f", contactToDisplay.penetration);
+				strcat_s(buffer, buffNumber);
 				ImGui::Text(buffer);
 			}
 			else {
