@@ -7,21 +7,20 @@ This is the repository of the school project "Construction d’un moteur physiqu
 - Wenhao Luo
 - Valentin Plantard-Wahl
 
-Now (the 25th of September), we have accomplished the phase 1 with the implementation of the particles, vectors, an integrator, and two demos. The code is written in C++.
+Today is 19 dec 2022, we just finished the phase 4 of project. The last update shows the example of calling functions in the `NarrowPhase`.
 
 ## How to compile our code
+
 The code should be launched on a Windows platform. Then the program can be build via Visual Studio or CMake.
 
 ### Necessary libraries
+
 To compile our code, the first step is to install the following libraries:
 
 - opengl32.lib
 - glfw3.lib
 
-Which should already be installed in the system. 
-
-### Build with Visual Studio
-We have already conclude a ```physics-engine.vcxproj``` file in the repository, which should enable the Visual Studio to automatically configure the build settings. Then by clicking the green button the first demo should be compiled then be launched.![](C:\Users\nemol\source\repos\Alex2740\physics-engine\doc-figures\visual-ui.png)
+Which should already be installed in the system.
 
 ### Build with ```CMake```
 
@@ -35,10 +34,15 @@ cmake ..
 cmake --build .
 ```
 
-This should build the files in the `./build/Debug` repository. For now the two demos are named as:
+This should build the files in the `./build/Debug` repository. For now the demo is named as:
 
-- shooter.exe
-- three_bodies.exe
+- whirlpool.exe
+
+Due to the problem of loading ressources with relateive path, the program should only be launched at the root directory. In another way: `<some paths>/src/..`.
+
+### Test files, demos, outdated files
+
+The current build file no longer contain the build target/configuration for the elder test files or the outdated demos. These files are still in the `./src/test` or `./demo`, they can be compiled if configuring the same way as current available compile targets, i.e. with the same include directories, etc.
 
 ## Brief explanation of our demo
 
@@ -86,6 +90,10 @@ This program demonstrate our code can simulate the different particles which are
 ### three_bodies.exe
 
 This program showing the interaction of three particles in the space. Their movements are bounded by a form of gravitation (much bigger than the real life value), and they are bounced from the boarder of screen.
+
+## Brief introcution to the test file for `NarrowPhase`
+
+To show the functions written in the `NarrowPhase` that are not available in our final demo, a build target `test_collider` is added in the `./src/test`. This test create several `Primitive` from scratch, and do the detection of collisions by calling the detection functions directly.
 
 ----
 
