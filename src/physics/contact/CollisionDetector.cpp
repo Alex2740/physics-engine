@@ -265,7 +265,7 @@ int CollisionDetector::BoxAndBox(Box& one, Box& two, CollisionData* data)
 	std::vector<Vector3> axis = CollisionDetector::generateSATAllAxis(one, two);
 	
 	int bestIndexAxis = -1;
-	float bestInterpenetration = FP_INFINITE;
+	float bestInterpenetration = std::numeric_limits<float>::max();
 
 	// Calcul interpenetration on all axis
 	for (int i = 0; i < axis.size(); i++)
