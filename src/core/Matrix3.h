@@ -24,4 +24,6 @@ public:
 	Matrix3 transpose();
 
 	void setOrientation(Quaternion &quaternion);
+
+	static Matrix3 eye();
 };
