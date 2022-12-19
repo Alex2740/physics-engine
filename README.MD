@@ -47,10 +47,19 @@ The demo that we have shown in the first part is no longer available due to our 
 ```diff
 - shooter.exe 
 - three_bodies.exe
-+ amas.exe
-+ pool.exe
-+ solar.exe
+- amas.exe
+- pool.exe
+- solar.exe
++ whirlpool.exe
 ```
+
+### whirlpool.exe
+
+This program shows our implmentation of the collision detection between our rigid bodies. 
+
+In the demo, there is a bar rotating and cubes spawning above and falling thanks to gravity. Whenever a collision happens between two rigid bodies, the simulation is paused. Then, a window shows different data about the collision (the bodies involved, the position, the type of collision etc.). 
+
+To resume the simulation, press 1.
 
 ### solar.exe
 
