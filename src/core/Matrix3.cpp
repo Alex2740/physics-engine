@@ -8,6 +8,16 @@ Matrix3::Matrix3()
 	}
 }
 
+Matrix3 Matrix3::eye()
+{
+	Matrix3 m = Matrix3();
+	m.data[0] = 1;
+	m.data[4] = 1;
+	m.data[8] = 1;
+
+	return m;
+}
+
 Vector3 Matrix3::operator*(const Vector3& vector)
 {
 	return Vector3(
