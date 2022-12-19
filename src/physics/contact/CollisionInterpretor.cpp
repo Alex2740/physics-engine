@@ -19,33 +19,33 @@ void CollisionInterpretor::writeContact(Contact c) {
     static int count = 0;
     std::cout << "contact #" << count++ << std::endl;
     std::string contactType;
-    switch (-1)
+    switch (c.type)
     {
-    case 0:
+    case SphereSphere:
         contactType = "sphere & sphere";
         break;
-    case 1:
+    case SphereHalfSpace:
         contactType = "sphere and halfspace";
         break;
-    case 2:
+    case SpherePlane:
         contactType = "sphere and plane";
         break;
-    case 3:
+    case SpherePoint:
         contactType = "sphere and point";
         break;
-    case 4:
+    case BoxHalfSpace:
         contactType = "box and half space";
         break;
-    case 5:
+    case BoxSphere:
         contactType = "box and sphere";
         break;
-    case 6:
+    case BoxBox:
         contactType = "box and box";
         break;
-    case 7:
+    case BoxPoint:
         contactType = "box and point";
         break;
-    case 8:
+    case BoxPlane:
         contactType = "box and plane";
         break;
     
