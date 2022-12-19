@@ -52,5 +52,5 @@ public:
 	static CollisionData NarrowPhase(std::vector<PotentialContact> potentialContacts);
 
 	void RunPhysicsParticule(float duration);
-	void RunPhysics(float duration);
+	bool RunPhysics(float duration);
 };

@@ -18,10 +18,28 @@ namespace fs = std::filesystem;
 #include "graphics/api.h"
 #include "graphics/renderer.h"
 
+#include <imgui/imgui.h>
+#include <imgui/imgui_impl_glfw.h>
+#include <imgui/imgui_impl_opengl3.h>
+
 #include <cstdlib>
 
-const unsigned int width = 1080;
-const unsigned int height = 720;
+const unsigned int width = 1920;
+const unsigned int height = 1080;
+
+
+bool runPhysics = true;
+
+void processInput(GLFWwindow* window)
+{
+	if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS)
+		glfwSetWindowShouldClose(window, true);
+
+	if (glfwGetKey(window, GLFW_KEY_1) == GLFW_PRESS) {
+		timerPause = timeBetweenPause;
+		runPhysics = true;
+	}
+}
 
 int main()
 {
@@ -49,14 +67,28 @@ int main()
 	// Initialize GLFW
 	glfwInit();
 
-	// Tell GLFW what version of OpenGL we are using 
-	// In this case we are using OpenGL 3.3
+	// Decide GL+GLSL versions
+#if defined(IMGUI_IMPL_OPENGL_ES2)
+	// GL ES 2.0 + GLSL 100
+	const char* glsl_version = "#version 100";
+	glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 2);
+	glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 0);
+	glfwWindowHint(GLFW_CLIENT_API, GLFW_OPENGL_ES_API);
+#elif defined(__APPLE__)
+	// GL 3.2 + GLSL 150
+	const char* glsl_version = "#version 150";
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
-	glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
-
-	// Tell GLFW we are using the CORE profile
-	// So that means we only have the modern functions
-	glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
+	glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 2);
+	glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);  // 3.2+ only
+	glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);            // Required on Mac
+#else
+	// GL 3.0 + GLSL 130
+	const char* glsl_version = "#version 130";
+	glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
+	glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 0);
+	//glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);  // 3.2+ only
+	//glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);            // 3.0+ only
+#endif
 
 	// Create a GLFWwindow object of 800 by 800 pixels, naming it "YoutubeOpenGL"
 	GLFWwindow* window = glfwCreateWindow(width, height, "Demo", NULL, NULL);
@@ -71,6 +103,24 @@ int main()
 
 	// Introduce the window into the current context
 	glfwMakeContextCurrent(window);
+
+	// Setup Dear ImGui context
+	IMGUI_CHECKVERSION();
+	ImGui::CreateContext();
+	ImGuiIO& io = ImGui::GetIO(); (void)io;
+	//io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;     // Enable Keyboard Controls
+	//io.ConfigFlags |= ImGuiConfigFlags_NavEnableGamepad;      // Enable Gamepad Controls
+
+	// Setup Dear ImGui style
+	ImGui::StyleColorsDark();
+	//ImGui::StyleColorsLight();
+
+	// Setup Platform/Renderer backends
+	ImGui_ImplGlfw_InitForOpenGL(window, true);
+	ImGui_ImplOpenGL3_Init(glsl_version);
+
+	// Our state
+	ImVec4 clear_color = ImVec4(0.0f, 0.0f, 0.0f, 0.0f);
 
 	//Load GLAD so it configures OpenGL
 	gladLoadGL();
@@ -105,11 +155,30 @@ int main()
 	// Main while loop
 	while (!glfwWindowShouldClose(window))
 	{
+		processInput(window);
+		glfwPollEvents();
+
+		ImGui_ImplOpenGL3_NewFrame();
+		ImGui_ImplGlfw_NewFrame();
+		ImGui::NewFrame();
+		{
+			ImGui::Begin("Shooter !");
+
+			ImGui::Text("Choose the projectile.");
+
+			ImGui::End();
+		}
+
+		// Rendering
+		ImGui::Render();
+
 		// Specify the color of the background
 		glClearColor(0.07f, 0.13f, 0.17f, 1.0f);
 
 		// Clean the back buffer and depth buffer
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+		ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
 
 		// Tell OpenGL which Shader Program we want to use
 		shaderProgram.Activate();
@@ -117,8 +186,10 @@ int main()
 		// Handles camera inputs
 		camera.Inputs(window);
 
-		physicWorld.RunPhysics(dt);
-		timer += dt;
+		if (runPhysics) {
+			runPhysics = physicWorld.RunPhysics(dt);
+			timer += dt;
+		}
 
 		if (fallingCube < maxFallingCube && timer >= timeBetweenSpawn) {
 			float xPos = ((rand() % 200 - 100) / 100.0f); // -1 <> 1
@@ -164,6 +235,11 @@ int main()
 	
 	brickTex.Delete();
 	shaderProgram.Delete();
+
+	// Cleanup
+	ImGui_ImplOpenGL3_Shutdown();
+	ImGui_ImplGlfw_Shutdown();
+	ImGui::DestroyContext();
 
 	// Delete window before ending the program
 	glfwDestroyWindow(window);
