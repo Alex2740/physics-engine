@@ -198,7 +198,6 @@ int main()
 				strcpy_s(buffer, "Friction: ");
 				strcat_s(buffer, itoa(contactToDisplay.friction, b, 10));
 				ImGui::Text(buffer);
-
 			}
 			else {
 				ImGui::Text("No Contact");

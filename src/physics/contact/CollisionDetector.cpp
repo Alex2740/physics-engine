@@ -220,7 +220,11 @@ std::vector<Vector3> CollisionDetector::generateSATAllAxis(Box& one, Box& two)
 		{
 			Vector3 edge2 = two.getAxis(i);
 
-			axis.push_back(Vector3::Normalized(Vector3::Cross(edge1, edge2)));
+			Vector3 newAxis = Vector3::Normalized(Vector3::Cross(edge1, edge2));
+
+			if (newAxis == Vector3::Zero()) continue;
+
+			axis.push_back(newAxis);
 		}
 	}
 
