@@ -194,12 +194,12 @@ int main()
 				ImGui::Text(buffer);
 
 				strcpy_s(buffer, "Restitution: ");
-				sprintf(buffNumber, "%f", contactToDisplay.penetration);
+				sprintf(buffNumber, "%f", contactToDisplay.restitution);
 				strcat_s(buffer, buffNumber);
 				ImGui::Text(buffer);
 
 				strcpy_s(buffer, "Friction: ");
-				sprintf(buffNumber, "%f", contactToDisplay.penetration);
+				sprintf(buffNumber, "%f", contactToDisplay.friction);
 				strcat_s(buffer, buffNumber);
 				ImGui::Text(buffer);
 			}
